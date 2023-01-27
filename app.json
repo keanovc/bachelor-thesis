@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "bachelor-thesis",
+    "name": "Bachelor Thesis",
     "slug": "bachelor-thesis",
+    "description": "Bachelor Thesis App for the University of Artevelde Ghent",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
