@@ -1,8 +1,11 @@
 import { View, Text, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import ThemeContext from '../context/ThemeContext'
 
 const HomeScreen = () => {
+    const theme = useContext(ThemeContext)
+
     const clearOnBoarding = async () => {
         try {
             await AsyncStorage.removeItem('@viewedOnBoarding')
@@ -12,8 +15,13 @@ const HomeScreen = () => {
     }
 
     return (
-        <View className="flex-1 items-center justify-center bg-white">
-            <Text className="text-2xl font-bold">Home Screen</Text>
+        <View 
+            className="flex-1 items-center justify-center"
+            style={{
+                backgroundColor: theme.background,
+            }}
+        >
+            <Text className="text-2xl font-bold" style={{ color: theme.text }}>Home Screen</Text>
 
             <TouchableOpacity
                 className="bg-indigo-500 px-4 py-2 rounded-lg mt-4"

@@ -3,8 +3,12 @@ import React from 'react'
 
 const PostScreen = () => {
     return (
-        <View>
-            <Text>PostScreen</Text>
+        <View
+            className="flex-1 items-center justify-center"
+        >
+            <Text
+                className="text-2xl font-bold"
+            >PostScreen</Text>
         </View>
     )
 }

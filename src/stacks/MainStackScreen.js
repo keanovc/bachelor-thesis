@@ -1,15 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons'
+import ThemeContext from '../context/ThemeContext'
 
 import HomeScreen from '../screens/HomeScreen'
 import MessageScreen from '../screens/MessageScreen'
 import PostScreen from '../screens/PostScreen'
 import NotificationScreen from '../screens/NotificationScreen'
-import ProfileScreen from '../screens/ProfileScreen'
+import SettingsScreen from '../screens/SettingsScreen'
 
 const MainStackScreen = () => {
     const MainStack = createBottomTabNavigator()
+    const theme = useContext(ThemeContext)
 
     const screenOptions = ({ route }) => ({
         headerShown: false,
@@ -18,7 +20,7 @@ const MainStackScreen = () => {
         tabBarShowLabel: false,
         tabBarStyle: {
             showLabel: false,
-            backgroundColor: '#FEFEFE',
+            backgroundColor: theme.background,
             height: 80,
         },
 
@@ -35,8 +37,8 @@ const MainStackScreen = () => {
                 case 'Notification':
                     iconName = focused ? 'notifications' : 'notifications-outline';
                     break;
-                case 'Profile':
-                    iconName = focused ? 'person' : 'person-outline';
+                case 'Settings':
+                    iconName = focused ? 'settings' : 'settings-outline';
                     break;
             }
 
@@ -64,7 +66,7 @@ const MainStackScreen = () => {
             <MainStack.Screen name="Message" component={MessageScreen} />
             <MainStack.Screen name="Post" component={PostScreen} />
             <MainStack.Screen name="Notification" component={NotificationScreen} />
-            <MainStack.Screen name="Profile" component={ProfileScreen} />
+            <MainStack.Screen name="Settings" component={SettingsScreen} />
         </MainStack.Navigator>
     )
 }

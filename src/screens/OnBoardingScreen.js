@@ -3,7 +3,7 @@ import React, { useState, useRef } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 
-import slides from '../../slides'
+import slides from '../data/Slides'
 import OnBoardingItem from '../components/onBoarding/OnBoardingItem'
 import Paginator from '../components/onBoarding/Paginator'
 import NextButton from '../components/onBoarding/NextButton'
@@ -26,7 +26,7 @@ const OnBoardingScreen = () => {
         } else {
             try {
                 AsyncStorage.setItem('@viewedOnBoarding', 'true')
-                navigation.navigate('Home')
+                navigation.navigate('Auth')
             } catch (e) {
                 console.log(e)
             }
