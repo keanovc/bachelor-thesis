@@ -11,8 +11,13 @@ const FireBase = {
     createUserWithEmailAndPassword: async (user) => {
         try {
             await firebase.auth().createUserWithEmailAndPassword(user.email, user.password);
-            const profilePicture = await FireBase.uploadProfilePicture(user.profilePicture);
-            const profilePictureUrl = await profilePicture.ref.getDownloadURL();
+            let profilePictureUrl = "default"
+
+            if (user.profilePicture !== undefined) {
+                const profilePicture = await FireBase.uploadProfilePicture(user.profilePicture);
+                profilePictureUrl = await profilePicture.ref.getDownloadURL();
+            }
+            
             const uid = FireBase.getCurrentUser().uid;
 
             await firebase.firestore().collection('users').doc(uid).set({

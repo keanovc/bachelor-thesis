@@ -45,11 +45,11 @@ const NextButton = ({ percentage, scrollTo }) => {
             <Svg width={size} height={size} >
                 <G rotation="-90" origin={center}>
                     <Circle stroke="#e2e8f0" cx={center} cy={center} r={radius} strokeWidth={strokeWidth} />
-                    <Circle ref={progressRef} stroke="#667eea" cx={center} cy={center} r={radius} strokeWidth={strokeWidth} strokeDasharray={circumference} />
+                    <Circle ref={progressRef} stroke="#4D7A80" cx={center} cy={center} r={radius} strokeWidth={strokeWidth} strokeDasharray={circumference} />
                 </G>
             </Svg>
 
-            <TouchableOpacity onPress={scrollTo} className="absolute bg-indigo-500 rounded-full p-6" activeOpacity={0.6}>
+            <TouchableOpacity onPress={scrollTo} className="absolute bg-[#4D7A80] rounded-full p-6" activeOpacity={0.6}>
                 <AntDesign name="arrowright" size={32} color="white" />
             </TouchableOpacity>
         </View>

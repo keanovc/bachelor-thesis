@@ -4,6 +4,7 @@ import { EventRegister } from 'react-native-event-listeners'
 import ThemeContext from '../context/ThemeContext'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import { useForm, Controller } from "react-hook-form";
 
 import { UserContext } from '../context/UserContext'
 import { FireBaseContext } from '../context/FireBaseContext'
@@ -20,7 +21,14 @@ const SettingsScreen = () => {
     const [loading, setLoading] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
 
-    const signIn = async () => {
+    const { control, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: {
+            email: '',
+            password: '',
+        }
+    });
+
+    const onSubmit = async () => {
         setLoading(true)
 
         try {
@@ -88,43 +96,87 @@ const SettingsScreen = () => {
                         </View>
 
                         <View className="mt-6">
-                            <Text className="text-lg font-semibold" style={{ color: theme.text }}>Email</Text>
-                            <TextInput
-                                className="border-b border-gray-300 w-full py-2"
-                                placeholder="Email"
-                                placeholderTextColor={theme.text}
-                                autoCapitalize='none'
-                                autoCompleteType='email'
-                                autoCorrect={false}
-                                autoFocus={true}
-                                style={{ color: theme.text }}
-                                value={email}
-                                onChangeText={setEmail}
+                            <Text className="text-xs text-gray-400 mb-2 uppercase">Email</Text>
+                            <Controller
+                                control={control}
+                                rules={{
+                                    required: true,
+                                    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                }}
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <TextInput
+                                        className="border-b border-gray-300 w-full py-2"
+                                        onBlur={onBlur}
+                                        onChangeText={
+                                            value => {
+                                                onChange(value)
+                                                setEmail(value)
+                                            }
+                                        }
+                                        value={value}
+                                        placeholder="Email"
+                                        placeholderTextColor="#A9A9A9"
+                                        autoCapitalize='none'
+                                        autoCompleteType='email'
+                                        autoCorrect={false}
+                                        autoFocus={true}
+                                        style={{ color: theme.text }}
+                                    />
+                                )}
+                                name="email"
                             />
+                            {errors.email && <Text className="text-red-500">
+                                {errors.email.type === "required" && "This is required."}
+                                {errors.email.type === "pattern" && "Please enter a valid email."}
+                            </Text>}
                         </View>
 
                         <View className="mt-6">
-                            <Text className="text-lg font-semibold" style={{ color: theme.text }}>Password</Text>
-                            <TextInput
-                                className="border-b border-gray-300 w-full py-2"
-                                placeholder="Password"
-                                placeholderTextColor={theme.text}
-                                style={{ color: theme.text }}
-                                value={password}
-                                onChangeText={setPassword}
-                                autoCapitalize='none'
-                                autoCompleteType='password'
-                                autoCorrect={false}
-                                secureTextEntry={true}
+                            <Text className="text-xs text-gray-400 mb-2 uppercase">Password</Text>
+                            <Controller
+                                control={control}
+                                rules={{
+                                    required: true,
+                                    minLength: 8,
+                                    pattern: /^[^\s]+$/,
+                                }}
+                                render={({ field: { onChange, onBlur, value } }) => (
+                                    <TextInput
+                                        className="border-b border-gray-300 w-full py-2"
+                                        onBlur={onBlur}
+                                        onChangeText={
+                                            (value) => {
+                                                onChange(value)
+                                                setPassword(value)
+                                            }
+                                        }
+                                        value={value}
+                                        placeholder="Password"
+                                        placeholderTextColor="#A9A9A9"
+                                        autoCapitalize='none'
+                                        autoCompleteType='password'
+                                        autoCorrect={false}
+                                        secureTextEntry={true}
+                                        style={{ color: theme.text }}
+                                    />
+                                )}
+                                name="password"
                             />
+                            {errors.password && <Text className="text-red-500">
+                                {errors.password.type === "required" && "This is required."}
+                                {errors.password.type === "minLength" && "Password must be at least 8 characters."}
+                                {errors.password.type === "pattern" && "Password cannot contain spaces."}
+                            </Text>}
                         </View>
 
-                        <TouchableOpacity
-                            className="mt-10 bg-indigo-500 rounded-md py-2"
-                            onPress={signIn}
-                        >
-                            <Text className="text-lg font-semibold text-center text-white">Sign In</Text>
-                        </TouchableOpacity>
+                    <View className="mt-10">
+                            <TouchableOpacity
+                                className="bg-indigo-500 rounded-md py-2"
+                                onPress={handleSubmit(onSubmit)}
+                            >
+                                <Text className="text-center text-white font-semibold">Sign In</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
             </Modal>
@@ -145,7 +197,11 @@ const SettingsScreen = () => {
                     <View className="flex-row items-center">
                         <Image
                             className="w-16 h-16 rounded-full"
-                            source={{ uri: user.profilePicture }}
+                            source={{ uri: 
+                                user.profilePicture === "default" 
+                                    ? "https://firebasestorage.googleapis.com/v0/b/bachelorthesis-e377a.appspot.com/o/placeholderPictures%2Fplaceholder-person.jpeg?alt=media&token=90a1ac16-40af-45e8-ba17-211cda672ef2"
+                                    : user.profilePicture
+                            }}
                         />
 
                         <View className="ml-4">

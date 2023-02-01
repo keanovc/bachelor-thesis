@@ -5,19 +5,19 @@ const OnBoardingItem = ({ item }) => {
     const { width } = useWindowDimensions()
 
     return (
-        <View className="flex-1 items-center justify-center" style={{ width }} >
+        <View className="flex-1 items-center justify-center space-y-10 pt-10" style={{ width }} >
             <Image
                 source={item.image}
-                className="justify-center flex-[0.7]"
+                className="flex-[0.7]"
                 style={{
                     width,
                     resizeMode: 'contain'
                 }}
             />
 
-            <View className="flex-[0.3]" >
-                <Text className="text-2xl font-extrabold mb-2 text-indigo-500 text-center" >{item.title}</Text>
-                <Text className="text-xs text-gray-500 text-center px-16" >{item.description}</Text>
+            <View className="flex-[0.3] pb-10">
+                <Text className="text-2xl font-extrabold mb-2 text-[#4D7A80] text-center px-6" >{item.title}</Text>
+                <Text className="text-xs text-gray-400 text-center px-16" >{item.description}</Text>
             </View>
         </View>
     )

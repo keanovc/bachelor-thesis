@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, Image, Animated } from 'react-native'
 import React, { useEffect, useContext } from 'react'
 import LotteView from 'lottie-react-native'
 
@@ -8,6 +8,9 @@ import { FireBaseContext } from '../context/FireBaseContext'
 const LoadingScreen = () => {
     const [_, setUser] = useContext(UserContext)
     const firebase = useContext(FireBaseContext)
+
+    const fadeInAnimation = new Animated.Value(0)
+    const fadeOutAnimation = new Animated.Value(1)
 
     useEffect(() => {
         setTimeout(async () => {
@@ -27,21 +30,54 @@ const LoadingScreen = () => {
                 setUser(state => ({ ...state, isLoggedIn: false }))
             }
         }, 1500)
+
+        Animated.timing(fadeInAnimation, {
+            toValue: 1,
+            duration: 300,
+            useNativeDriver: true,
+        }).start()
+
+        Animated.timing(fadeOutAnimation, {
+            toValue: 0,
+            duration: 300,
+            useNativeDriver: true,
+        }).start()
     }, [])
 
     return (
         <View className="flex-1 items-center justify-center bg-white">
-            <Text className="text-indigo-500 text-4xl font-bold tracking-wider uppercase mb-10">Financer</Text>
-        
-            <LotteView
-                source={require('../../assets/animations/loading.json')}
-                autoPlay
-                loop
+            <Animated.View
+                // fade in and when done fade out
                 style={{
-                    width: 100,
-                    height: 100,
+                    opacity: fadeInAnimation,
+                    transform: [
+                        {
+                            scale: fadeInAnimation.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [0.5, 1],
+                            }),
+                        },
+                    ],
                 }}
-            />
+            >
+                <Image
+                    source={require('../../assets/images/logo.png')}
+                    style={{
+                        width: 200,
+                        height: 67,
+                    }}
+                />
+
+                <LotteView
+                    source={require('../../assets/animations/loading.json')}
+                    autoPlay
+                    loop
+                    style={{
+                        width: 100,
+                        height: 100,
+                    }}
+                />
+            </Animated.View>
         </View>
     )
 }

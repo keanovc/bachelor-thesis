@@ -4,6 +4,7 @@ import ThemeContext from '../context/ThemeContext'
 import { Ionicons } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
 import { useNavigation } from '@react-navigation/native'
+import { useForm, Controller } from "react-hook-form";
 
 import { UserContext } from '../context/UserContext'
 import { FireBaseContext } from '../context/FireBaseContext'
@@ -17,6 +18,13 @@ const ProfileScreen = () => {
     const [username, setUsername] = useState(user.username)
     const [profilePicture, setProfilePicture] = useState(user.profilePicture)
     const [email, setEmail] = useState(user.email)
+
+    const { control, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: {
+            username: user.username,
+            email: user.email,
+        }
+    });
 
     const addProfilePicture = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -46,7 +54,7 @@ const ProfileScreen = () => {
         }
     }
 
-    const updateProfile = () => {
+    const onSubmit = () => {
         firebase.updateProfile({
             username,
             email,
@@ -83,39 +91,91 @@ const ProfileScreen = () => {
                         onPress={addProfilePicture}
                         className="bg-gray-200 w-32 h-32 rounded-full self-center overflow-hidden"
                     >
-                        {profilePicture ? (
+                        {profilePicture !== "default" ? (
                             <Image source={{ uri: profilePicture }} className="flex-1" />
                         ) : (
                             <View className="items-center justify-center flex-1">
-                                <AntDesign name="plus" size={24} color="white" />
+                                <Ionicons name="add" size={48} color="lightgray" />
                             </View>
                         )}
                     </TouchableOpacity>
 
-                    <Text className="text-lg font-semibold mt-8" style={{ color: theme.text }}>Username</Text>
-                    <TextInput
-                        className="mt-2 px-4 py-2 rounded-md
-                            bg-gray-200
-                        "
-                        value={username}
-                        onChangeText={setUsername}
-                    />
+                    <View className="mt-8">
+                        <Text className="text-xs text-gray-400 mb-2 uppercase">Username</Text>
+                        <Controller
+                            control={control}
+                            rules={{
+                                required: true,
+                                pattern: /^[^\s]+$/,
+                            }}
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <TextInput
+                                    className="border-b border-gray-300 w-full py-2"
+                                    style={{ color: theme.text }}
+                                    onBlur={onBlur}
+                                    onChangeText={
+                                        (value) => {
+                                            onChange(value)
+                                            setUsername(value)
+                                        }
+                                    }
+                                    value={username}
+                                    placeholder="Enter your username"
+                                    autoCapitalize='none'
+                                    autoCompleteType='username'
+                                    autoCorrect={false}
+                                    autoFocus={true}
+                                />
+                            )}
+                            name="username"
+                        />
+                        {errors.username && <Text className="text-red-500">
+                            {errors.username.type === "required" && "Username is required"}
+                            {errors.username.type === "pattern" && "Username cannot contain spaces"}
+                        </Text>}
+                    </View>
 
-                    <Text className="text-lg font-semibold mt-4" style={{ color: theme.text }}>Email</Text>
-                    <TextInput  
-                        className="mt-2 px-4 py-2 rounded-md
-                            bg-gray-200
-                        "
-                        value={email}
-                        onChangeText={setEmail}
-                    />
+                    <View className="mt-8">
+                        <Text className="text-xs text-gray-400 mb-2 uppercase">Email</Text>
+                        <Controller
+                            control={control}
+                            rules={{
+                                required: true,
+                                pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                            }}
+                            render={({ field: { onChange, onBlur, value } }) => (
+                                <TextInput
+                                    className="border-b border-gray-300 w-full py-2"
+                                    style={{ color: theme.text }}
+                                    onBlur={onBlur}
+                                    onChangeText={
+                                        (value) => {
+                                            onChange(value)
+                                            setEmail(value)
+                                        }
+                                    }
+                                    value={email}
+                                    placeholder="Enter your email"
+                                    placeholderTextColor="#FEFEFE"
+                                    autoCapitalize='none'
+                                    autoCompleteType='email'
+                                    autoCorrect={false}
+                                />
+                            )}
+                            name="email"
+                        />
+                        {errors.email && <Text className="text-red-500">
+                            {errors.email.type === "required" && "This is required."}
+                            {errors.email.type === "pattern" && "Please enter a valid email."}
+                        </Text>}
+                    </View>
 
                     <TouchableOpacity
                         className="flex-row items-center justify-center
                             mt-10 px-4 py-2 rounded-md
                             bg-indigo-500
                         "
-                        onPress={updateProfile}
+                        onPress={handleSubmit(onSubmit)}
                     >
                         <Text className="text-lg font-semibold text-white">Update</Text>
                     </TouchableOpacity>
