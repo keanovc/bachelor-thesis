@@ -15,7 +15,7 @@ const MainStackScreen = () => {
 
     const screenOptions = ({ route }) => ({
         headerShown: false,
-        tabBarActiveTintColor: '#667eea',
+        tabBarActiveTintColor: theme.primary,
         tabBarInactiveTintColor: 'lightgray',
         tabBarShowLabel: false,
         tabBarStyle: {
@@ -44,8 +44,8 @@ const MainStackScreen = () => {
 
             if (route.name === 'Post') {
                 return (
-                    <Ionicons name="add-circle" size={size + 24} color="#667eea" style={{
-                        shadowColor: '#667eea',
+                    <Ionicons name="add-circle" size={size + 24} color={theme.primary} style={{
+                        shadowColor: theme.primary,
                         shadowOffset: {
                             width: 0,
                             height: 10,

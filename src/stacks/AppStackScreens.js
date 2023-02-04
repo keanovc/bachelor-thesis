@@ -6,9 +6,11 @@ import { UserContext } from '../context/UserContext';
 
 import AuthStackScreens from './AuthStackScreens';
 import MainStackScreen from './MainStackScreen';
+
 import LoadingScreen from '../screens/LoadingScreen';
 import OnBoardingScreen from '../screens/OnBoardingScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import LanguageSelectorScreen from '../screens/LanguageSelectorScreen';
 
 const AppStackScreens = () => {
     const AppStack = createStackNavigator();
@@ -43,6 +45,11 @@ const AppStackScreens = () => {
                 <>
                     <AppStack.Screen name="Main" component={MainStackScreen} />
                     <AppStack.Screen name="Profile" component={ProfileScreen} />
+                    <AppStack.Screen name="LanguageSelector" component={LanguageSelectorScreen} 
+                        options={{ 
+                            presentation: 'modal',
+                        }}
+                    />
                 </>
             ) : (
                 <AppStack.Screen name="Auth" component={AuthStackScreens} />

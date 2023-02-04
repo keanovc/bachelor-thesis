@@ -24,7 +24,8 @@ const HomeScreen = () => {
             <Text className="text-2xl font-bold" style={{ color: theme.text }}>Home Screen</Text>
 
             <TouchableOpacity
-                className="bg-indigo-500 px-4 py-2 rounded-lg mt-4"
+                className="px-4 py-2 rounded-lg mt-4"
+                style={{ backgroundColor: theme.primary }}
                 onPress={clearOnBoarding}
             >
                 <Text className="text-white font-bold text-center">Clear OnBoarding</Text>

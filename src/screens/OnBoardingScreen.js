@@ -7,7 +7,6 @@ import { Ionicons } from '@expo/vector-icons'
 import slides from '../data/Slides'
 import OnBoardingItem from '../components/onBoarding/OnBoardingItem'
 import Paginator from '../components/onBoarding/Paginator'
-import NextButton from '../components/onBoarding/NextButton'
 
 const OnBoardingScreen = () => {
     const [currentIndex, setCurrentIndex] = useState(0)

@@ -67,6 +67,7 @@ const SettingsScreen = () => {
                 backgroundColor: theme.background,
             }}
         >
+            {/* Modal */}
             <Modal
                 transparent={true}
                 visible={modalVisible}
@@ -186,6 +187,7 @@ const SettingsScreen = () => {
                     <Text className="text-3xl font-bold" style={{ color: theme.text }}>Settings</Text>
                 </View>
 
+                {/* Account Edit */}
                 <View className="mt-4">
                     <Text className="text-lg font-semibold" style={{ color: theme.text }}>Account</Text>
                 </View>
@@ -224,6 +226,7 @@ const SettingsScreen = () => {
                     <Text className="text-lg font-semibold" style={{ color: theme.text }}>Preferences</Text>
                 </View>
 
+                {/* Dark Mode */}
                 <View className="space-y-7 mt-6">
                     <View className="flex-row items-center justify-between px-4">
                         <View className="flex-row items-center">
@@ -249,7 +252,10 @@ const SettingsScreen = () => {
                                 setDarkMode(value)
                                 EventRegister.emit('toggleTheme', value)
                             }}
-                            trackColor={{ false: "#ffffff", true: "#667eea" }}
+                            trackColor={{ 
+                                false: "#ffffff", 
+                                true: theme.primary
+                            }}
                             ios_backgroundColor="#3e3e3e"
                             style={{
                                 transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }]
@@ -258,7 +264,11 @@ const SettingsScreen = () => {
                         />
                     </View>
 
-                    <View className="flex-row items-center justify-between px-4">
+                    {/* Language Selector */}
+                    <TouchableOpacity 
+                        onPress={() => navigation.navigate('LanguageSelector')}
+                        className="flex-row items-center justify-between px-4"
+                    >
                         <View className="flex-row items-center">
                             <View className="
                                 bg-green-200
@@ -266,25 +276,25 @@ const SettingsScreen = () => {
                                 flex-row items-center justify-center
                                 w-10 h-10 rounded-full
                             ">
-                                <Ionicons name="notifications" size={20} color="green" />
+                                <Ionicons name="language" size={20} color="green" />
                             </View>
 
                             <View className="ml-4">
-                                <Text className="text-lg font-regular" style={{ color: theme.text }}>Notifications</Text>
+                                <Text className="text-lg font-regular" style={{ color: theme.text }}>Language</Text>
                             </View>
                         </View>
-                        
-                        <Switch
-                            value={true}
-                            trackColor={{ false: "#ffffff", true: "#667eea" }}
-                            ios_backgroundColor="#3e3e3e"
-                            style={{
-                                transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }]
-                            }}
-                            className="-mr-1"
-                        />
-                    </View>
 
+                        <View className="
+                                flex-row items-center justify-center
+                                w-10 h-10 rounded-md
+                            "
+                            style={{ backgroundColor: theme.accent }}
+                        >
+                            <Ionicons name="chevron-forward" size={24} color="gray" />
+                        </View>
+                    </TouchableOpacity>
+                    
+                    {/* Log Out */}
                     <TouchableOpacity 
                         onPress={logOut}
                         className="flex-row items-center justify-between px-4"
