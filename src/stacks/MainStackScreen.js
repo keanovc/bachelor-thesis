@@ -2,12 +2,14 @@ import React, { useContext } from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Ionicons } from '@expo/vector-icons'
 import ThemeContext from '../context/ThemeContext'
+import 'react-native-gesture-handler'
 
-import HomeScreen from '../screens/HomeScreen'
-import MessageScreen from '../screens/MessageScreen'
-import PostScreen from '../screens/PostScreen'
-import NotificationScreen from '../screens/NotificationScreen'
-import SettingsScreen from '../screens/SettingsScreen'
+// Main Screens
+import HomeScreen from '../screens/main/home/HomeScreen'
+import BudgetScreen from '../screens/main/budget/BudgetScreen'
+import GoalsScreen from '../screens/main/achievements/GoalsScreen'
+import EducationalScreen from '../screens/main/educational/EducationalScreen'
+import SettingsScreen from '../screens/main/settings/SettingsScreen'
 
 const MainStackScreen = () => {
     const MainStack = createBottomTabNavigator()
@@ -20,8 +22,19 @@ const MainStackScreen = () => {
         tabBarShowLabel: false,
         tabBarStyle: {
             showLabel: false,
-            backgroundColor: theme.background,
+            backgroundColor: theme.nav,
             height: 80,
+            borderTopWidth: 0,
+            paddingTop: 10,
+            paddingHorizontal: 10,
+            shadowColor: theme.shadow,
+            shadowOffset: {
+                width: 0,
+                height: 10,
+            },
+            shadowOpacity: 0.53,
+            shadowRadius: 13.97,
+            elevation: 21,
         },
 
         tabBarIcon: ({ focused, color, size }) => {
@@ -29,31 +42,20 @@ const MainStackScreen = () => {
 
             switch (route.name) {
                 case 'Home':
-                    iconName = focused ? 'home' : 'home-outline';
+                    iconName = focused ? 'grid' : 'grid-outline';
                     break;
-                case 'Message':
-                    iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
+                case 'Budget':
+                    iconName = focused ? 'wallet' : 'wallet-outline';
                     break;
-                case 'Notification':
-                    iconName = focused ? 'notifications' : 'notifications-outline';
+                case 'Goals':
+                    iconName = focused ? 'golf' : 'golf-outline';
+                    break;
+                case 'Educational':
+                    iconName = focused ? 'school' : 'school-outline';
                     break;
                 case 'Settings':
                     iconName = focused ? 'settings' : 'settings-outline';
                     break;
-            }
-
-            if (route.name === 'Post') {
-                return (
-                    <Ionicons name="add-circle" size={size + 24} color={theme.primary} style={{
-                        shadowColor: theme.primary,
-                        shadowOffset: {
-                            width: 0,
-                            height: 10,
-                        },
-                        shadowRadius: 10,
-                        shadowOpacity: 0.3,
-                    }} />
-                );
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -63,9 +65,9 @@ const MainStackScreen = () => {
     return (
         <MainStack.Navigator screenOptions={screenOptions}>
             <MainStack.Screen name="Home" component={HomeScreen} />
-            <MainStack.Screen name="Message" component={MessageScreen} />
-            <MainStack.Screen name="Post" component={PostScreen} />
-            <MainStack.Screen name="Notification" component={NotificationScreen} />
+            <MainStack.Screen name="Budget" component={BudgetScreen} />
+            <MainStack.Screen name="Goals" component={GoalsScreen} />
+            <MainStack.Screen name="Educational" component={EducationalScreen} />
             <MainStack.Screen name="Settings" component={SettingsScreen} />
         </MainStack.Navigator>
     )

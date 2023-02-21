@@ -1,11 +1,10 @@
 import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, ScrollView, Image, SafeAreaView } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { useForm, Controller } from "react-hook-form";
-import { Ionicons } from '@expo/vector-icons'
-import ThemeContext from '../context/ThemeContext'
+import ThemeContext from '../../context/ThemeContext'
 
-import { UserContext } from '../context/UserContext'
-import { FireBaseContext } from '../context/FireBaseContext'
+import { UserContext } from '../../context/UserContext'
+import { FireBaseContext } from '../../context/FireBaseContext'
 
 const SignInScreen = ({ navigation }) => {
     const [email, setEmail] = useState('')
@@ -54,19 +53,19 @@ const SignInScreen = ({ navigation }) => {
                 bounces={false}
             >
                 <SafeAreaView className="flex-1">
-                    <View className="px-10">
-                        <View className="items-center justify-center mt-4">
+                    <View className="px-10 pt-36">
+                        {/* <View className="items-center justify-center mt-4">
                             <Image
-                                source={require('../../assets/images/logo.png')}
+                                source={require('../../../assets/images/logo.png')}
                                 style={{ width: 250, resizeMode: 'contain' }}
                             />
-                        </View>
+                        </View> */}
 
                         <View className="mt-6">
-                            <Text className="text-2xl font-light text-gray-800">
+                            <Text className="text-2xl text-gray-800" style={{ fontFamily: "Montserrat-Medium" }} >
                                 Welcome back.
                             </Text>
-                            <Text className="text-gray-400 text-xs">
+                            <Text className="text-gray-400 text-xs" style={{ fontFamily: "Montserrat-Regular" }}>
                                 Bring clarity to your financial future
                             </Text>
                         </View>
@@ -82,6 +81,7 @@ const SignInScreen = ({ navigation }) => {
                                     render={({ field: { onChange, onBlur, value } }) => (
                                         <TextInput
                                             className="bg-gray-100 rounded-lg w-full py-3 px-3 text-gray-700 leading-tight"
+                                            style={{ fontFamily: "Montserrat-Regular" }}
                                             onBlur={onBlur}
                                             onChangeText={
                                                 (value) => {
@@ -100,7 +100,7 @@ const SignInScreen = ({ navigation }) => {
                                     )}
                                     name="email"
                                 />
-                                {errors.email && <Text className="text-red-500 text-xs mt-1">
+                                {errors.email && <Text className="text-red-500 text-xs mt-1" style={{ fontFamily: "Montserrat-Regular" }}>
                                     {errors.email.type === "required" && "This is required."}
                                     {errors.email.type === "pattern" && "Please enter a valid email."}
                                 </Text>}
@@ -117,6 +117,7 @@ const SignInScreen = ({ navigation }) => {
                                     render={({ field: { onChange, onBlur, value } }) => (
                                         <TextInput  
                                             className="bg-gray-100 rounded-lg w-full py-3 px-3 text-gray-700 leading-tight"
+                                            style={{ fontFamily: "Montserrat-Regular" }}
                                             onBlur={onBlur}
                                             onChangeText={
                                                 (value) => {
@@ -135,7 +136,7 @@ const SignInScreen = ({ navigation }) => {
                                     )}
                                     name="password"
                                 />
-                                {errors.password && <Text className="text-red-500 text-xs mt-1">
+                                {errors.password && <Text className="text-red-500 text-xs mt-1" style={{ fontFamily: "Montserrat-Regular" }}>
                                     {errors.password.type === "required" && "This is required."}
                                     {errors.password.type === "minLength" && "Password must be at least 8 characters."}
                                     {errors.password.type === "pattern" && "Password cannot contain spaces."}
@@ -146,7 +147,7 @@ const SignInScreen = ({ navigation }) => {
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate('ForgotPassword')}
                                 >
-                                    <Text className="text-xs text-gray-400">
+                                    <Text className="text-xs text-gray-400" style={{ fontFamily: "Montserrat-Medium" }}>
                                         Forgot password?
                                     </Text>
                                 </TouchableOpacity>
@@ -162,17 +163,20 @@ const SignInScreen = ({ navigation }) => {
                                     {loading ? (
                                         <ActivityIndicator size="small" color="#fff" />
                                     ) : (
-                                        <Text className="text-white text-center text-md">Sign In</Text>
+                                        <Text className="text-white text-center text-md" style={{ fontFamily: "Montserrat-SemiBold" }}>Sign In</Text>
                                     )}
                                 </TouchableOpacity>
                             </View>
 
                             <View className="flex flex-row items-center justify-center mt-6">
                                 <TouchableOpacity onPress={() => navigation.navigate("SignUp")} className="flex-row">
-                                    <Text className="text-gray-400 text-xs">Don't have an account?</Text>
+                                    <Text className="text-gray-400 text-xs" style={{ fontFamily: "Montserrat-Regular" }}>Don't have an account?</Text>
                                     <Text 
                                         className="text-xs ml-1 font-bold"
-                                        style={{ color: theme.primary }}
+                                        style={{ 
+                                            color: theme.primary,
+                                            fontFamily: "Montserrat-Medium"
+                                        }}
                                     >
                                         Sign Up
                                     </Text>
@@ -182,11 +186,11 @@ const SignInScreen = ({ navigation }) => {
 
                         <View className="
                             -right-48
-                            -bottom-24
+                            -bottom-28
                             z-0
                         ">
                             <Image
-                                source={require('../../assets/images/hand-welcome.png')}
+                                source={require('../../../assets/images/hand-welcome.png')}
                                 className="
                                     absolute
                                     w-40

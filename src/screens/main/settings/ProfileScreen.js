@@ -1,13 +1,13 @@
 import { View, Text, Image, SafeAreaView, TextInput, TouchableOpacity } from 'react-native'
 import React, { useContext, useState } from 'react'
-import ThemeContext from '../context/ThemeContext'
+import ThemeContext from '../../../context/ThemeContext'
 import { Ionicons } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
 import { useNavigation } from '@react-navigation/native'
 import { useForm, Controller } from "react-hook-form";
 
-import { UserContext } from '../context/UserContext'
-import { FireBaseContext } from '../context/FireBaseContext'
+import { UserContext } from '../../../context/UserContext'
+import { FireBaseContext } from '../../../context/FireBaseContext'
 
 const ProfileScreen = () => {
     const [user, setUser] = useContext(UserContext)
@@ -83,7 +83,7 @@ const ProfileScreen = () => {
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Ionicons name="chevron-back" size={24} color={theme.text} />
                     </TouchableOpacity>
-                    <Text className="text-2xl font-semibold" style={{ color: theme.text }}>Account</Text>
+                    <Text className="text-2xl font-semibold" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>Account</Text>
                 </View>
 
                 <View className="mt-8 px-6">
@@ -101,7 +101,7 @@ const ProfileScreen = () => {
                     </TouchableOpacity>
 
                     <View className="mt-8">
-                        <Text className="text-xs text-gray-400 mb-2 uppercase">Username</Text>
+                        <Text className="text-xs text-gray-400 mb-2 uppercase" style={{ fontFamily: "Montserrat-Regular" }}>Username</Text>
                         <Controller
                             control={control}
                             rules={{
@@ -111,7 +111,7 @@ const ProfileScreen = () => {
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <TextInput
                                     className="border-b border-gray-300 w-full py-2"
-                                    style={{ color: theme.text }}
+                                    style={{ color: theme.text, fontFamily: "Montserrat-Regular" }}
                                     onBlur={onBlur}
                                     onChangeText={
                                         (value) => {
@@ -129,7 +129,7 @@ const ProfileScreen = () => {
                             )}
                             name="username"
                         />
-                        {errors.username && <Text className="text-red-500">
+                        {errors.username && <Text className="text-red-500" style={{ fontFamily: "Montserrat-Regular" }}>
                             {errors.username.type === "required" && "Username is required"}
                             {errors.username.type === "pattern" && "Username cannot contain spaces"}
                         </Text>}
@@ -146,7 +146,7 @@ const ProfileScreen = () => {
                             render={({ field: { onChange, onBlur, value } }) => (
                                 <TextInput
                                     className="border-b border-gray-300 w-full py-2"
-                                    style={{ color: theme.text }}
+                                    style={{ color: theme.text, fontFamily: "Montserrat-Regular" }}
                                     onBlur={onBlur}
                                     onChangeText={
                                         (value) => {
@@ -164,7 +164,7 @@ const ProfileScreen = () => {
                             )}
                             name="email"
                         />
-                        {errors.email && <Text className="text-red-500">
+                        {errors.email && <Text className="text-red-500" style={{ fontFamily: "Montserrat-Regular" }}>
                             {errors.email.type === "required" && "This is required."}
                             {errors.email.type === "pattern" && "Please enter a valid email."}
                         </Text>}
@@ -172,12 +172,13 @@ const ProfileScreen = () => {
 
                     <TouchableOpacity
                         className="flex-row items-center justify-center
-                            mt-10 px-4 py-2 rounded-md
+                            mt-10 px-4 py-3 rounded-md
                             bg-indigo-500
                         "
                         onPress={handleSubmit(onSubmit)}
+                        style={{ backgroundColor: theme.primary }}
                     >
-                        <Text className="text-lg font-semibold text-white">Update</Text>
+                        <Text className="text-md font-semibold text-white" style={{ fontFamily: "Montserrat-SemiBold" }}>Update</Text>
                     </TouchableOpacity>
                 </View>
             </View>

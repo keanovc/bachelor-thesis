@@ -4,9 +4,9 @@ import { Ionicons } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
 import { useForm, Controller } from "react-hook-form";
 
-import ThemeContext from '../context/ThemeContext'
-import { FireBaseContext } from '../context/FireBaseContext'
-import { UserContext } from '../context/UserContext'
+import ThemeContext from '../../context/ThemeContext'
+import { FireBaseContext } from '../../context/FireBaseContext'
+import { UserContext } from '../../context/UserContext'
 
 const SignUpScreen = ({ navigation }) => {
     const [username, setUsername] = useState('')
@@ -83,22 +83,22 @@ const SignUpScreen = ({ navigation }) => {
                 className="flex-1 bg-white"
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
         >
-            <ScrollView 
+            <ScrollView
                 bounces={false}
             >
                 <SafeAreaView className="flex-1">
-                    <View className="px-10">
-                        <View className="items-center justify-center mt-4">
+                    <View className="px-10 pt-36">
+                        {/* <View className="items-center justify-center mt-4">
                             <Image
-                                source={require('../../assets/images/logo.png')}
+                                source={require('../../../assets/images/logo.png')}
                                 style={{ width: 250, resizeMode: 'contain' }}
                             />
-                        </View>
+                        </View> */}
 
-                        <Text className="text-2xl font-light text-gray-800">
+                        <Text className="text-2xl font-light text-gray-800" style={{ fontFamily: "Montserrat-Medium" }}>
                             Create an account!
                         </Text>
-                        <Text className="text-gray-400 text-xs">
+                        <Text className="text-gray-400 text-xs" style={{ fontFamily: "Montserrat-Regular" }}>
                             Bring clarity to your financial future
                         </Text>
 
@@ -125,6 +125,7 @@ const SignUpScreen = ({ navigation }) => {
                                 render={({ field: { onChange, onBlur, value } }) => (
                                     <TextInput
                                         className="bg-gray-100 rounded-lg w-full py-3 px-3 text-gray-700 leading-tight"
+                                        style={{ fontFamily: "Montserrat-Regular" }}
                                         onBlur={onBlur}
                                         onChangeText={
                                             (value) => {
@@ -142,7 +143,7 @@ const SignUpScreen = ({ navigation }) => {
                                 )}
                                 name="username"
                             />
-                            {errors.username && <Text className="text-red-500 text-xs mt-1">
+                            {errors.username && <Text className="text-red-500 text-xs mt-1" style={{ fontFamily: "Montserrat-Regular" }}>
                                 {errors.username.type === "required" && "Username is required"}
                                 {errors.username.type === "pattern" && "Username cannot contain spaces"}
                             </Text>}
@@ -158,6 +159,7 @@ const SignUpScreen = ({ navigation }) => {
                                 render={({ field: { onChange, onBlur, value } }) => (
                                     <TextInput
                                         className="bg-gray-100 rounded-lg w-full py-3 px-3 text-gray-700 leading-tight"
+                                        style={{ fontFamily: "Montserrat-Regular" }}
                                         onBlur={onBlur}
                                         onChangeText={
                                             (value) => {
@@ -175,7 +177,7 @@ const SignUpScreen = ({ navigation }) => {
                                 )}
                                 name="email"
                             />
-                            {errors.email && <Text className="text-red-500 text-xs mt-1">
+                            {errors.email && <Text className="text-red-500 text-xs mt-1" style={{ fontFamily: "Montserrat-Regular" }}>
                                 {errors.email.type === "required" && "This is required."}
                                 {errors.email.type === "pattern" && "Please enter a valid email."}
                             </Text>}
@@ -192,6 +194,7 @@ const SignUpScreen = ({ navigation }) => {
                                 render={({ field: { onChange, onBlur, value } }) => (
                                     <TextInput
                                         className="bg-gray-100 rounded-lg w-full py-3 px-3 text-gray-700 leading-tight"
+                                        style={{ fontFamily: "Montserrat-Regular" }}
                                         onBlur={onBlur}
                                         onChangeText={
                                             (value) => {
@@ -210,7 +213,7 @@ const SignUpScreen = ({ navigation }) => {
                                 )}
                                 name="password"
                             />
-                            {errors.password && <Text className="text-red-500 text-xs mt-1">
+                            {errors.password && <Text className="text-red-500 text-xs mt-1" style={{ fontFamily: "Montserrat-Regular" }}>
                                 {errors.password.type === "required" && "This is required."}
                                 {errors.password.type === "minLength" && "Password must be at least 8 characters."}
                                 {errors.password.type === "pattern" && "Password cannot contain spaces"}
@@ -227,7 +230,7 @@ const SignUpScreen = ({ navigation }) => {
                                 {loading ? (
                                     <ActivityIndicator size="small" color="#fff" />
                                 ) : (
-                                    <Text className="text-white text-center text-md">Create</Text>
+                                    <Text className="text-white text-center text-md" style={{ fontFamily: "Montserrat-SemiBold" }}>Create</Text>
                                 )}
                             </TouchableOpacity>
                         </View>
@@ -237,7 +240,10 @@ const SignUpScreen = ({ navigation }) => {
                                 <Text className="text-gray-400 text-xs">Already have an account?</Text>
                                 <Text 
                                     className="text-xs ml-1 font-bold"
-                                    style={{ color: theme.primary }}
+                                    style={{ 
+                                        color: theme.primary,
+                                        fontFamily: 'Montserrat-Medium'
+                                    }}
                                 >
                                     Sign In
                                 </Text>
@@ -246,11 +252,11 @@ const SignUpScreen = ({ navigation }) => {
                     </View>
 
                     <View className="
-                        -bottom-4
+                        -bottom-8
                         z-0
                     ">
                         <Image
-                            source={require('../../assets/images/hand-create.png')}
+                            source={require('../../../assets/images/hand-create.png')}
                             className="
                                 absolute
                                 w-32

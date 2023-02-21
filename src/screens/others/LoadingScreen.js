@@ -2,8 +2,8 @@ import { View, Text, Image, Animated } from 'react-native'
 import React, { useEffect, useContext } from 'react'
 import LotteView from 'lottie-react-native'
 
-import { UserContext } from '../context/UserContext'
-import { FireBaseContext } from '../context/FireBaseContext'
+import { UserContext } from '../../context/UserContext'
+import { FireBaseContext } from '../../context/FireBaseContext'
 
 const LoadingScreen = () => {
     const [_, setUser] = useContext(UserContext)
@@ -29,7 +29,7 @@ const LoadingScreen = () => {
             } else {
                 setUser(state => ({ ...state, isLoggedIn: false }))
             }
-        }, 1500)
+        }, 1000)
 
         Animated.timing(fadeInAnimation, {
             toValue: 1,
@@ -61,22 +61,22 @@ const LoadingScreen = () => {
                 }}
             >
                 <Image
-                    source={require('../../assets/images/logo.png')}
+                    source={require('../../../assets/images/logo.png')}
                     style={{
                         width: 200,
                         height: 67,
                     }}
                 />
 
-                <LotteView
-                    source={require('../../assets/animations/loading.json')}
+                {/* <LotteView
+                    source={require('../../../assets/animations/loading.json')}
                     autoPlay
                     loop
                     style={{
                         width: 100,
                         height: 100,
                     }}
-                />
+                /> */}
             </Animated.View>
         </View>
     )

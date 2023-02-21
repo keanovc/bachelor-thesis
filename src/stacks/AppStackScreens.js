@@ -7,10 +7,12 @@ import { UserContext } from '../context/UserContext';
 import AuthStackScreens from './AuthStackScreens';
 import MainStackScreen from './MainStackScreen';
 
-import LoadingScreen from '../screens/LoadingScreen';
-import OnBoardingScreen from '../screens/OnBoardingScreen';
-import ProfileScreen from '../screens/ProfileScreen';
-import LanguageSelectorScreen from '../screens/LanguageSelectorScreen';
+import LoadingScreen from '../screens/others/LoadingScreen';
+import OnBoardingScreen from '../screens/others/OnBoardingScreen';
+
+import MessageScreen from '../screens/main/home/MessageScreen';
+import ProfileScreen from '../screens/main/settings/ProfileScreen';
+import LanguageSelectorScreen from '../screens/main/settings/LanguageSelectorScreen';
 
 const AppStackScreens = () => {
     const AppStack = createStackNavigator();
@@ -44,6 +46,9 @@ const AppStackScreens = () => {
             ) : user.isLoggedIn ? (
                 <>
                     <AppStack.Screen name="Main" component={MainStackScreen} />
+                    {/* Home */}
+                    <AppStack.Screen name="Message" component={MessageScreen} />
+                    {/* Settings */}
                     <AppStack.Screen name="Profile" component={ProfileScreen} />
                     <AppStack.Screen name="LanguageSelector" component={LanguageSelectorScreen} 
                         options={{ 
