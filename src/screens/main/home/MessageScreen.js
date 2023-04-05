@@ -12,8 +12,6 @@ const MessageScreen = () => {
     const API_KEY = env.API_KEY_CHATGPT
     const API_URL = env.API_URL_CHATGPT
 
-    console.log(API_KEY)
-
     const [data, setData] = useState([])
     const [message, setMessage] = useState('')
     const [loading, setLoading] = useState(false)

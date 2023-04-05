@@ -71,6 +71,8 @@ const SignUpScreen = ({ navigation }) => {
                 ...createdUser,
                 isLoggedIn: true
             })
+
+            // navigation.navigate('Walkthrough')
         } catch (error) {
             alert(error.message)
         } finally {

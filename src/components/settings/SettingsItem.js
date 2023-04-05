@@ -36,13 +36,14 @@ const SettingsItem = (
                 </View>
             </View>
 
-            <View className="
-                    bg-white
+            <View 
+                className="
                     flex-row items-center justify-center
                     w-9 h-9 rounded-full
                 "
+                style={{ backgroundColor: theme.accent }}
             >
-                <Ionicons name="chevron-forward" size={20} color={ theme.primary } />
+                <Ionicons name="chevron-forward" size={20} color="gray" />
             </View>
         </TouchableOpacity>
     )

@@ -13,13 +13,12 @@ const EducationalScreen = () => {
 
     const API_KEY = "env.RAPID_API_KEY"
 
-    const getLatestArticleIds = async () => {
+    const getLatestArticles = async () => {
         setLoading(true)
 
         const options = {
             method: 'GET',
             url: 'https://medium2.p.rapidapi.com/latestposts/blockchain',
-            params: {limit: '10'},
             headers: {
               'X-RapidAPI-Key': API_KEY,
               'X-RapidAPI-Host': 'medium2.p.rapidapi.com'
@@ -27,12 +26,36 @@ const EducationalScreen = () => {
         };
 
         axios.request(options).then(function (response) {
-            console.log(response.data);
-            setArticle(response.data)
-            setLoading(false)
+            const articleIds = response.data.latestposts.slice(0, 5)
+            getArticleDetails(articleIds)
         }).catch(function (error) {
             console.error(error);
         });
+    }
+
+    useEffect(() => {
+        getLatestArticles()
+    }, [])
+
+    const getArticleDetails = async (articleIds) => {
+        const articlePromises = articleIds.map(async (articleId) => {
+            const options = {
+                method: 'GET',
+                url: 'https://medium2.p.rapidapi.com/article/' + articleId,
+                headers: {
+                  'X-RapidAPI-Key': API_KEY,
+                  'X-RapidAPI-Host': 'medium2.p.rapidapi.com'
+                }
+            };
+
+            const article = await axios.request(options)
+            return article.data
+        })
+
+        const articles = await Promise.all(articlePromises)
+        setArticle(articles)
+        console.log(articles)
+        setLoading(false)
     }
 
     return (
@@ -54,14 +77,12 @@ const EducationalScreen = () => {
                             <ActivityIndicator size="large" color="#4D7A80" />
                         </View>
                     ) : (
-                        // articles?.map((article, index) => (
-                        //     <ArticleItem 
-                        //         key={index} 
-                        //         title={article.Title}
-                        //     />
-                        // ))
-
-                        <Text>Test</Text>
+                        article.map((article, index) => (
+                            <ArticleItem 
+                                key={index}
+                                title={article.title}
+                            />
+                        ))
                     )
                 }
             </ScrollView>
