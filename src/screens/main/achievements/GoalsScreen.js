@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { firebase } from '../../../config/firebase'
 import { useNavigation } from '@react-navigation/native'
 import Goals from '../../../components/achievements/Goals'
-import AddGoalModal from '../../../components/achievements/AddGoalModal'
+import GoalModal from '../../../components/achievements/GoalModal'
 
 const GoalsScreen = ({ route }) => {
     const [user, setUser] = useContext(UserContext)
@@ -18,6 +18,7 @@ const GoalsScreen = ({ route }) => {
     const [goals, setGoals] = useState([])
     const goalsRef = firebase.firestore().collection('users').doc(user.uid).collection('goalsCategories').doc(category.id).collection('goals')
     const [modalVisible, setModalVisible] = useState(false)
+    const [editVisible, setEditVisible] = useState(false)
 
     let completedGoals
     let totalGoals
@@ -84,23 +85,32 @@ const GoalsScreen = ({ route }) => {
     return (
         <SafeAreaView className="flex-1" style={{ backgroundColor: theme.background }}>
             <Modal animationType="slide" visible={modalVisible}>
-                <AddGoalModal category={category} closeModal={() => setModalVisible(false)} />
+                <GoalModal category={category} closeModal={() => setModalVisible(false)} />
             </Modal>
 
-            <View className="flex flex-row items-center mx-5 pt-5">
-                <TouchableOpacity className="bg-white rounded-md p-2" onPress={() => navigation.goBack()}>
-                    <Ionicons name="chevron-back-outline" size={30} color={theme.primary} />
-                </TouchableOpacity>
+            <View className="flex flex-row items-center justify-between mx-5 pt-5">
+                <View className="flex flex-row items-center">
+                    <TouchableOpacity className="bg-white rounded-md p-2" onPress={() => navigation.goBack()}>
+                        <Ionicons name="chevron-back-outline" size={30} color={theme.primary} />
+                    </TouchableOpacity>
 
-                <View className="flex flex-col">
-                    <Text className="text-2xl ml-4" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>
-                        {category.name}
-                    </Text>
+                    <View className="flex flex-col">
+                        <Text className="text-2xl ml-4" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>
+                            {category.name}
+                        </Text>
 
-                    <Text className="text-md ml-4" style={{ color: theme.text, fontFamily: "Montserrat-Light" }}>
-                        {completedGoals} of {totalGoals} goals completed
-                    </Text>
+                        <Text className="text-md ml-4" style={{ color: theme.text, fontFamily: "Montserrat-Light" }}>
+                            {completedGoals} of {totalGoals} goals completed
+                        </Text>
+                    </View>
                 </View>
+
+                <TouchableOpacity
+                    className="bg-white rounded-full p-2"
+                    onPress={() => setEditVisible(!editVisible)}
+                >
+                    <Ionicons name="pencil" size={16} color={theme.primary} />
+                </TouchableOpacity>
             </View>
 
             <View className="flex flex-row items-center justify-between mx-5">
@@ -137,7 +147,7 @@ const GoalsScreen = ({ route }) => {
                     goals
                 }
                 numColumns={1}
-                renderItem={({ item }) => <Goals goal={item} category={category} />}
+                renderItem={({ item }) => <Goals goal={item} category={category} edit={editVisible} />}
                 keyExtractor={(item) => item.id}
                 className="mt-4"
             />

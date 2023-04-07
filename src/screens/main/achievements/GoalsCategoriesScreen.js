@@ -4,13 +4,14 @@ import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
 import { Ionicons } from '@expo/vector-icons'
 import GoalsCategories from '../../../components/achievements/GoalsCategories'
-import AddCategoryModal from '../../../components/achievements/AddCategoryModal'
+import CategoryModal from '../../../components/achievements/CategoryModal'
 import { firebase } from '../../../config/firebase'
 
 const GoalsCategoriesScreen = () => {
     const theme = useContext(ThemeContext)
     const [user, setUser] = useContext(UserContext)
     const [modalVisible, setModalVisible] = useState(false)
+    const [editVisible, setEditVisible] = useState(false)
 
     const [goalsCategories, setGoalsCategories] = useState([])
     const goalsCategoriesRef = firebase.firestore().collection("users").doc(user.uid).collection('goalsCategories')
@@ -44,13 +45,20 @@ const GoalsCategoriesScreen = () => {
             style={{ backgroundColor: theme.background }}
         >
             <Modal animationType="slide" visible={modalVisible}>
-                <AddCategoryModal closeModal={() => setModalVisible(false)} />
+                <CategoryModal closeModal={() => setModalVisible(false)} />
             </Modal>
             
-            <View className="my-4 px-6">
+            <View className="my-4 px-6 flex flex-row items-center justify-between">
                 <Text className="text-3xl font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>Goals 
                     <Text className="text-3xl font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Regular" }}> Categories</Text>
                 </Text>
+
+                <TouchableOpacity
+                    className="bg-white rounded-full p-2"
+                    onPress={() => setEditVisible(!editVisible)}
+                >
+                    <Ionicons name="pencil" size={16} color={theme.primary} />
+                </TouchableOpacity>
             </View>
 
             <View className="flex flex-row items-center justify-between pl-6 pr-12 py-4 mx-6 mb-4 mt-2 bg-white rounded-2xl shadow-sm">
@@ -66,7 +74,7 @@ const GoalsCategoriesScreen = () => {
             <ScrollView className="flex mx-auto w-11/12">
                 <View className="flex flex-row items-center justify-start flex-wrap">
                     {goalsCategories.map((category, index) => (
-                        <GoalsCategories key={index} category={category} />
+                        <GoalsCategories key={index} category={category} edit={editVisible} />
                     ))}
                 </View>
             </ScrollView>

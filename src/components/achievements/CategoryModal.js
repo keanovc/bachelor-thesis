@@ -1,17 +1,19 @@
-import { View, Text, KeyboardAvoidingView, TouchableOpacity, SafeAreaView, TextInput, FlatList } from 'react-native'
+import { View, Text, KeyboardAvoidingView, TouchableOpacity, SafeAreaView, TextInput, FlatList, Alert } from 'react-native'
 import React, { useContext, useState } from 'react'
 import ThemeContext from '../../context/ThemeContext'
 import { UserContext } from '../../context/UserContext'
 import { Ionicons } from '@expo/vector-icons'
 import { firebase } from '../../config/firebase'
+import { useNavigation } from '@react-navigation/native'
 
-const AddCategoryModal = ({ closeModal }) => {
+const CategoryModal = ({ closeModal, category }) => {
     const [user, setUser] = useContext(UserContext)
     const theme = useContext(ThemeContext)
+    const navigation = useNavigation()
 
     const goalsCategoriesRef = firebase.firestore().collection("users").doc(user.uid).collection('goalsCategories')
 
-    const [categoryName, setCategoryName] = useState("")
+    const [categoryName, setCategoryName] = useState(category ? category.name : "")
 
     const backgroundColors = [
         "#9b5fe0",
@@ -23,7 +25,7 @@ const AddCategoryModal = ({ closeModal }) => {
         "#d64e12",
     ]
 
-    const [categoryColor, setCategoryColor] = useState(backgroundColors[0])
+    const [categoryColor, setCategoryColor] = useState(category ? category.color : backgroundColors[0])
 
     const iconNames = [
         "basketball",
@@ -43,7 +45,7 @@ const AddCategoryModal = ({ closeModal }) => {
         "images",
     ]
 
-    const [categoryIcon, setCategoryIcon] = useState(iconNames[0])
+    const [categoryIcon, setCategoryIcon] = useState(category ? category.icon : iconNames[0])
 
     const createCategory = () => {
         const timestamp = firebase.firestore.FieldValue.serverTimestamp()
@@ -56,6 +58,40 @@ const AddCategoryModal = ({ closeModal }) => {
         }
         goalsCategoriesRef
             .add(data)
+            .then(_doc => {
+                setCategoryName("")
+                closeModal()
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    const editCategory = () => {
+        const timestamp = firebase.firestore.FieldValue.serverTimestamp()
+        const data = {
+            name: categoryName,
+            color: categoryColor,
+            icon: categoryIcon,
+            userId: user.uid,
+            createdAt: timestamp,
+        }
+        goalsCategoriesRef
+            .doc(category.id)
+            .update(data)
+            .then(_doc => {
+                setCategoryName("")
+                closeModal()
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+    
+    const deleteCategory = () => {
+        goalsCategoriesRef
+            .doc(category.id)
+            .delete()
             .then(_doc => {
                 setCategoryName("")
                 closeModal()
@@ -152,20 +188,55 @@ const AddCategoryModal = ({ closeModal }) => {
                         />
                     </View>
 
-                    <View className="flex flex-row items-center justify-center">
-                        <TouchableOpacity 
-                            disabled={categoryName === ""}
-                            className="mt-8 p-4 w-80 bg-gray-300 rounded-md"
-                            style={{ backgroundColor: theme.primary, opacity: categoryName === "" ? 0.5 : 1 }}
-                            onPress={createCategory}
-                        >
-                            <Text className="text-center text-white" style={{ fontFamily: "Montserrat-Bold" }}>Create</Text>
-                        </TouchableOpacity>
-                    </View>
+                    {
+                        category ? (
+                            <View className="flex flex-col items-center justify-center">
+                                <TouchableOpacity
+                                    className="mt-8 w-80 h-12 rounded-md flex items-center justify-center"
+                                    style={{ backgroundColor: theme.primary }}
+                                    onPress={() => editCategory()}
+                                >
+                                    <Text className="text-center text-white" style={{ fontFamily: "Montserrat-Bold" }}>Update</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    className="mt-2 w-80 h-12 rounded-md flex items-center justify-center"
+                                    onPress={
+                                        () => Alert.alert(
+                                            "Delete Category",
+                                            "Are you sure you want to delete this category?",
+                                            [
+                                                {
+                                                    text: "Cancel",
+                                                    onPress: () => console.log("Cancel Pressed"),
+                                                    style: "cancel"
+                                                },
+                                                { text: "OK", onPress: () => deleteCategory() }
+                                            ],
+                                            { cancelable: false }
+                                        )
+                                    }
+                                >
+                                    <Text className="text-center text-red-500 underline" style={{ fontFamily: "Montserrat-Bold" }}>Delete</Text>
+                                </TouchableOpacity>
+                            </View>
+                        ) : (
+                            <View className="flex flex-row items-center justify-center">
+                                <TouchableOpacity 
+                                    disabled={categoryName === ""}
+                                    className="mt-8 p-4 w-80 bg-gray-300 rounded-md"
+                                    style={{ backgroundColor: theme.primary, opacity: categoryName === "" ? 0.5 : 1 }}
+                                    onPress={createCategory}
+                                >
+                                    <Text className="text-center text-white" style={{ fontFamily: "Montserrat-Bold" }}>Create</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )
+                    }
                 </View>
             </KeyboardAvoidingView>
         </SafeAreaView>
     )
 }
 
-export default AddCategoryModal
+export default CategoryModal

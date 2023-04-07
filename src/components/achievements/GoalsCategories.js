@@ -5,14 +5,27 @@ import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { UserContext } from '../../context/UserContext'
 import { firebase } from '../../config/firebase'
+import CategoryModal from './CategoryModal'
 
-const GoalsCategories = ({ category }) => {
+const GoalsCategories = ({ category, edit }) => {
     const [user, setUser] = useContext(UserContext)
     const theme = useContext(ThemeContext)
     const navigation = useNavigation()
+    
+    const [editVisible, setEditVisible] = useState(false)
 
     const goalsRef = firebase.firestore().collection('users').doc(user.uid).collection('goalsCategories').doc(category.id).collection('goals')
     const [goals, setGoals] = useState([])
+
+    const [completedGoals, setCompletedGoals] = useState(0)
+    const [totalGoals, setTotalGoals] = useState(0)
+    const [totalBalance, setTotalBalance] = useState(0)
+
+    useEffect(() => {
+        setCompletedGoals(goals.filter(goal => goal.completed).length)
+        setTotalGoals(goals.length)
+        setTotalBalance(goals.reduce((total, goal) => total + goal.money, 0))
+    }, [goals])
 
     useEffect(() => {
         goalsRef
@@ -39,25 +52,34 @@ const GoalsCategories = ({ category }) => {
             )
     }, [])
 
-    let completedGoals
-    let totalGoals
-    let totalBalance = 0
-
-    if (goals.length === 0) {
-        completedGoals = 0
-        totalGoals = 0
-    } else {
-        completedGoals = goals.filter(goal => goal.completed).length
-        totalGoals = goals.length
-        totalBalance = goals.reduce((total, goal) => total + goal.money, 0)
-    }
-
     return (
         <TouchableOpacity 
             className="flex flex-col items-center justify-center rounded-2xl shadow-sm w-[162px] h-48 m-2 bg-white"
-            onPress={() => navigation.navigate('Goals', { category })}
+            onPress={
+                edit ?
+                    () => setEditVisible(!editVisible)
+                :
+                    () => navigation.navigate('Goals', { category })
+            }
+            style={edit ? { opacity: 0.5, backgroundColor: "lightgray" } : {}}
         >
-            <View className="absolute top-0 right-0 m-4">
+            {
+                edit &&
+                    <View 
+                        className="flex flex-row items-center justify-center py-2 px-6 rounded-full absolute z-10"
+                        style={{ backgroundColor: theme.primary }}
+                    >
+                        <Text className="text-xs text-white" style={{ fontFamily: "Montserrat-Bold" }}>
+                            Edit
+                        </Text>
+                    </View>
+            }
+
+            <Modal animationType="slide" visible={editVisible}>
+                <CategoryModal closeModal={() => setEditVisible(false)} category={category}  />
+            </Modal>
+
+            <View className="absolute top-0 left-0 m-4">
                 <Text className="text-xs" style={{ fontFamily: "Montserrat-Bold" }}>
                     {completedGoals}/{totalGoals}
                 </Text>

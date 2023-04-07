@@ -1,4 +1,4 @@
-import { View, Text, KeyboardAvoidingView, TouchableOpacity, SafeAreaView, TextInput, FlatList, Modal } from 'react-native'
+import { View, Text, KeyboardAvoidingView, TouchableOpacity, SafeAreaView, TextInput, FlatList, Modal, Alert } from 'react-native'
 import React, { useContext, useState } from 'react'
 import ThemeContext from '../../context/ThemeContext'
 import { UserContext } from '../../context/UserContext'
@@ -7,16 +7,16 @@ import { firebase } from '../../config/firebase'
 import DatePicker, { getToday } from 'react-native-modern-datepicker'
 import NumericInput from 'react-native-numeric-input'
 
-const AddGoalModal = ({ category, closeModal }) => {
+const GoalModal = ({ category, closeModal, goal }) => {
     const [user, setUser] = useContext(UserContext)
     const theme = useContext(ThemeContext)
     const startDate = getToday()
 
     const goalsRef = firebase.firestore().collection("users").doc(user.uid).collection('goalsCategories').doc(category.id).collection('goals')
 
-    const [goalName, setGoalName] = useState("")
-    const [goalMoney, setGoalMoney] = useState(0)
-    const [goalDate, setGoalDate] = useState(startDate)
+    const [goalName, setGoalName] = useState(goal ? goal.name : "")
+    const [goalMoney, setGoalMoney] = useState(goal ? goal.money : 0)
+    const [goalDate, setGoalDate] = useState(goal ? goal.date : startDate)
 
     const [openDateModal, setOpenDateModal] = useState(false)
 
@@ -38,7 +38,7 @@ const AddGoalModal = ({ category, closeModal }) => {
         "images",
     ]
 
-    const [goalIcon, setGoalIcon] = useState(iconNames[0])
+    const [goalIcon, setGoalIcon] = useState(goal ? goal.icon : iconNames[0])
 
     const createGoal = () => {
         const timestamp = firebase.firestore.FieldValue.serverTimestamp()
@@ -53,6 +53,40 @@ const AddGoalModal = ({ category, closeModal }) => {
         }
         goalsRef
             .add(data)
+            .then(() => {
+                closeModal()
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    const editGoal = () => {
+        const timestamp = firebase.firestore.FieldValue.serverTimestamp()
+        const data = {
+            name: goalName,
+            icon: goalIcon,
+            money: goalMoney,
+            moneySaved: goal.moneySaved,
+            date: goalDate,
+            completed: goal.completed,
+            createdAt: timestamp,
+        }
+        goalsRef
+            .doc(goal.id)
+            .update(data)
+            .then(() => {
+                closeModal()
+            })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+    
+    const deleteGoal = () => {
+        goalsRef
+            .doc(goal.id)
+            .delete()
             .then(() => {
                 closeModal()
             })
@@ -180,20 +214,55 @@ const AddGoalModal = ({ category, closeModal }) => {
                         </View>
                     </Modal>
 
-                    <View className="flex flex-row mt-8 items-center justify-center">
-                        <TouchableOpacity 
-                            disabled={goalName === ""}
-                            className="p-4 w-80 bg-gray-300 rounded-md"
-                            style={{ backgroundColor: theme.primary, opacity: goalName === "" ? 0.5 : 1 }}
-                            onPress={createGoal}
-                        >
-                            <Text className="text-center text-white" style={{ fontFamily: "Montserrat-Bold" }}>Create</Text>
-                        </TouchableOpacity>
-                    </View>
+                    {
+                        goal ? (
+                            <View className="flex flex-col items-center justify-center">
+                                <TouchableOpacity
+                                    className="mt-8 w-80 h-12 rounded-md flex items-center justify-center"
+                                    style={{ backgroundColor: theme.primary }}
+                                    onPress={() => editGoal()}
+                                >
+                                    <Text className="text-center text-white" style={{ fontFamily: "Montserrat-Bold" }}>Update</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity
+                                    className="mt-2 w-80 h-12 rounded-md flex items-center justify-center"
+                                    onPress={
+                                        () => Alert.alert(
+                                            "Delete Goal",
+                                            "Are you sure you want to delete this goal?",
+                                            [
+                                                {
+                                                    text: "Cancel",
+                                                    onPress: () => console.log("Cancel Pressed"),
+                                                    style: "cancel"
+                                                },
+                                                { text: "OK", onPress: () => deleteGoal() }
+                                            ],
+                                            { cancelable: false }
+                                        )
+                                    }
+                                >
+                                    <Text className="text-center text-red-500 underline" style={{ fontFamily: "Montserrat-Bold" }}>Delete</Text>
+                                </TouchableOpacity>
+                            </View>
+                        ) : (
+                            <View className="flex flex-row mt-8 items-center justify-center">
+                                <TouchableOpacity 
+                                    disabled={goalName === ""}
+                                    className="p-4 w-80 bg-gray-300 rounded-md"
+                                    style={{ backgroundColor: theme.primary, opacity: goalName === "" ? 0.5 : 1 }}
+                                    onPress={createGoal}
+                                >
+                                    <Text className="text-center text-white" style={{ fontFamily: "Montserrat-Bold" }}>Create</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )
+                    }
                 </View>
             </KeyboardAvoidingView>
         </SafeAreaView>
     )
 }
 
-export default AddGoalModal
+export default GoalModal
