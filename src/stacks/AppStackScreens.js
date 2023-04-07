@@ -13,6 +13,7 @@ import OnBoardingScreen from '../screens/others/OnBoardingScreen';
 import WalkthroughScreen from '../screens/auth/WalkthroughScreen';
 import MessageScreen from '../screens/main/home/MessageScreen';
 import GoalsScreen from '../screens/main/achievements/GoalsScreen';
+import IndividualGoalScreen from '../screens/main/achievements/IndividualGoalScreen';
 import ProfileScreen from '../screens/main/settings/ProfileScreen';
 import LanguageSelectorScreen from '../screens/main/settings/LanguageSelectorScreen';
 
@@ -53,6 +54,11 @@ const AppStackScreens = () => {
                     <AppStack.Screen name="Message" component={MessageScreen} />
                     {/* Goals */}
                     <AppStack.Screen name="Goals" component={GoalsScreen} />
+                    <AppStack.Screen name="IndGoal" component={IndividualGoalScreen} 
+                        options={{
+                            presentation: 'modal',
+                        }}
+                    />
                     {/* Settings */}
                     <AppStack.Screen name="Profile" component={ProfileScreen} />
                     <AppStack.Screen name="LanguageSelector" component={LanguageSelectorScreen} 

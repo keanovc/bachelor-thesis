@@ -51,8 +51,6 @@ const AddCategoryModal = ({ closeModal }) => {
             name: categoryName,
             color: categoryColor,
             icon: categoryIcon,
-            totalBalance: 0,
-            goals: [],
             userId: user.uid,
             createdAt: timestamp,
         }
@@ -108,23 +106,25 @@ const AddCategoryModal = ({ closeModal }) => {
                     <Ionicons name="close" size={30} color={theme.primary} />
                 </TouchableOpacity>
 
-                <View className="flex flex-col items-center justify-center">
-                    <Text className="mt-8 text-lg" style={{ fontFamily: "Montserrat-Medium" }}>Category Name</Text>
+                <View className="flex flex-col">
+                    <Text className="ml-4 text-lg" style={{ fontFamily: "Montserrat-Medium" }}>Category Name</Text>
 
                     <View
                         className="w-80 bg-gray-300 mt-2"
                         style={{ height: 2, backgroundColor: theme.primary }}
                     />
 
-                    <TextInput 
-                        className="mt-4 w-80 h-12 rounded-md border-2 border-gray-300 pb-2 text-lg text-center" 
-                        placeholder="Ex: Household"
-                        style={{ color: theme.text, fontFamily: "Montserrat-Regular" }} 
-                        value={categoryName} 
-                        onChangeText={text => setCategoryName(text)}
-                    />
+                    <View className="flex flex-row items-center justify-center">
+                        <TextInput 
+                            className="mt-4 w-80 h-12 rounded-md border-2 border-gray-300 pb-2 text-lg text-center" 
+                            placeholder="Ex: Household"
+                            style={{ color: theme.text, fontFamily: "Montserrat-Regular" }} 
+                            value={categoryName} 
+                            onChangeText={text => setCategoryName(text)}
+                        />
+                    </View>
 
-                    <Text className="mt-8 text-lg" style={{ fontFamily: "Montserrat-Medium" }}>Select Color</Text>
+                    <Text className="mt-8 ml-4 text-lg" style={{ fontFamily: "Montserrat-Medium" }}>Select Color</Text>
 
                     <View 
                         className="w-80 bg-gray-300 mt-2" 
@@ -135,7 +135,7 @@ const AddCategoryModal = ({ closeModal }) => {
                         {renderColors()}
                     </View>
 
-                    <Text className="mt-8 text-lg" style={{ fontFamily: "Montserrat-Medium" }}>Select Icon</Text>
+                    <Text className="mt-8 ml-4 text-lg" style={{ fontFamily: "Montserrat-Medium" }}>Select Icon</Text>
 
                     <View
                         className="w-80 bg-gray-300 mt-2"
@@ -152,14 +152,16 @@ const AddCategoryModal = ({ closeModal }) => {
                         />
                     </View>
 
-                    <TouchableOpacity 
-                        disabled={categoryName === ""}
-                        className="mt-8 p-4 w-80 bg-gray-300 rounded-md"
-                        style={{ backgroundColor: theme.primary, opacity: categoryName === "" ? 0.5 : 1 }}
-                        onPress={createCategory}
-                    >
-                        <Text className="text-center text-white" style={{ fontFamily: "Montserrat-Bold" }}>Create</Text>
-                    </TouchableOpacity>
+                    <View className="flex flex-row items-center justify-center">
+                        <TouchableOpacity 
+                            disabled={categoryName === ""}
+                            className="mt-8 p-4 w-80 bg-gray-300 rounded-md"
+                            style={{ backgroundColor: theme.primary, opacity: categoryName === "" ? 0.5 : 1 }}
+                            onPress={createCategory}
+                        >
+                            <Text className="text-center text-white" style={{ fontFamily: "Montserrat-Bold" }}>Create</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </KeyboardAvoidingView>
         </SafeAreaView>

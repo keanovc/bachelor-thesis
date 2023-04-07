@@ -1,4 +1,4 @@
-import { View, Text, SafeAreaView, TouchableOpacity, FlatList, Modal, Keyboard } from 'react-native'
+import { View, Text, SafeAreaView, TouchableOpacity, FlatList, Modal, Keyboard, Pressable } from 'react-native'
 import React, { useContext, useState, useEffect } from 'react'
 import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { firebase } from '../../../config/firebase'
 import { useNavigation } from '@react-navigation/native'
 import Goals from '../../../components/achievements/Goals'
-import AddGoalsModal from '../../../components/achievements/AddGoalsModal'
+import AddGoalModal from '../../../components/achievements/AddGoalModal'
 
 const GoalsScreen = ({ route }) => {
     const [user, setUser] = useContext(UserContext)
@@ -17,30 +17,60 @@ const GoalsScreen = ({ route }) => {
 
     const [goals, setGoals] = useState([])
     const goalsRef = firebase.firestore().collection('users').doc(user.uid).collection('goalsCategories').doc(category.id).collection('goals')
-    const [addGoals, setAddGoals] = useState(false)
     const [modalVisible, setModalVisible] = useState(false)
 
     let completedGoals
     let totalGoals
 
-    if (category.goals === undefined) {
+    if (goals === undefined || goals.length === 0) {
         completedGoals = 0
         totalGoals = 0
     } else {
-        completedGoals = category.goals.filter(goal => goal.completed).length
-        totalGoals = category.goals.length
+        completedGoals = goals.filter(goal => goal.completed).length
+        totalGoals = goals.length
     }
+
+    const filter = [
+        {
+            id: 1,
+            name: "All",
+            icon: "list",
+        },
+        {
+            id: 2,
+            name: "New",
+            icon: "add-circle",
+        },
+        {
+            id: 3,
+            name: "In Progress",
+            icon: "time",
+        },
+        {
+            id: 4,
+            name: "Completed",
+            icon: "checkmark-circle",
+        }
+    ]
+
+    const [filterGoals, setFilterGoals] = useState(filter[0])
 
     useEffect(() => {
         goalsRef
+            .orderBy("createdAt", "desc")
             .onSnapshot(
                 querySnapshot => {
                     const newGoals = []
                     querySnapshot.forEach(doc => {
-                        const {name} = doc.data()
+                        const {name, money, moneySaved, completed, date, icon} = doc.data()
                         newGoals.push({
                             id: doc.id,
                             name,
+                            money,
+                            moneySaved,
+                            completed,
+                            date,
+                            icon
                         })
                     })
                     setGoals(newGoals)
@@ -51,82 +81,67 @@ const GoalsScreen = ({ route }) => {
             )
     }, [])
 
-    const deleteGoal = (goal) => {
-        goalsRef
-            .doc(goal.id)
-            .delete()
-            .then(() => {
-                alert("Goal deleted!")
-            })
-            .catch((error) => {
-                alert(error)
-            })
-    }
-
-    const addGoal = () => {
-        if (addGoals && addGoals.length > 0) {
-            const timestamp = firebase.firestore.FieldValue.serverTimestamp()
-            const data = {
-                name: addGoals,
-                userId: user.uid,
-                createdAt: timestamp,
-            }
-            goalsRef
-                .add(data)
-                .then(_doc => {
-                    setAddGoals("")
-                    Keyboard.dismiss()
-                })
-                .catch((error) => {
-                    alert(error)
-                })
-        }
-    }
-
     return (
         <SafeAreaView className="flex-1" style={{ backgroundColor: theme.background }}>
             <Modal animationType="slide" visible={modalVisible}>
-                <AddGoalsModal category={category} closeModal={() => setModalVisible(false)} />
+                <AddGoalModal category={category} closeModal={() => setModalVisible(false)} />
             </Modal>
 
-            <TouchableOpacity className="absolute top-16 left-4 m-4 z-10 bg-white rounded-md p-2" onPress={() => navigation.goBack()}>
-                <Ionicons name="chevron-back-outline" size={30} color={theme.primary} />
-            </TouchableOpacity>
+            <View className="flex flex-row items-center mx-5 pt-5">
+                <TouchableOpacity className="bg-white rounded-md p-2" onPress={() => navigation.goBack()}>
+                    <Ionicons name="chevron-back-outline" size={30} color={theme.primary} />
+                </TouchableOpacity>
 
-            <Text className="text-2xl pl-24 pt-4" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>
-                {category.name}
-            </Text>
+                <View className="flex flex-col">
+                    <Text className="text-2xl ml-4" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>
+                        {category.name}
+                    </Text>
 
-            <Text className="text-md pl-24" style={{ color: theme.text, fontFamily: "Montserrat-Light" }}>
-                {completedGoals} of {totalGoals} goals completed
-            </Text>
+                    <Text className="text-md ml-4" style={{ color: theme.text, fontFamily: "Montserrat-Light" }}>
+                        {completedGoals} of {totalGoals} goals completed
+                    </Text>
+                </View>
+            </View>
+
+            <View className="flex flex-row items-center justify-between mx-5">
+                <View className="flex flex-row items-center justify-center">
+                    <FlatList
+                        data={filter}
+                        renderItem={({ item }) => 
+                            <TouchableOpacity 
+                                className="flex flex-row items-center justify-center bg-white rounded-full py-2 px-4 shadow-sm m-1"
+                                onPress={() => {
+                                    setFilterGoals(item)
+                                    Keyboard.dismiss()
+                                }}
+                                style={{ backgroundColor: filterGoals.id === item.id ? theme.primary : "white" }}
+                            >
+                                <Ionicons name={item.icon} size={18} color={filterGoals.id === item.id ? theme.background : theme.primary} />
+                                <Text className="ml-1 text-sm" style={{ color: filterGoals.id === item.id ? theme.background : theme.primary, fontFamily: "Montserrat-Light" }}>{item.name}</Text>
+                            </TouchableOpacity>
+                        }
+                        keyExtractor={(item) => item.id}
+                        className="mt-4"
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                    />
+                </View>
+            </View>
 
             <FlatList
-                data={goals}
+                data={
+                    filterGoals.id === 1 ? goals :
+                    filterGoals.id === 2 ? goals.filter(goal => goal.moneySaved === 0) :
+                    filterGoals.id === 3 ? goals.filter(goal => goal.moneySaved > 0 && goal.moneySaved < goal.money) :
+                    filterGoals.id === 4 ? goals.filter(goal => goal.moneySaved === goal.money) :
+                    goals
+                }
                 numColumns={1}
-                renderItem={({ item }) => <Goals goal={item} />}
+                renderItem={({ item }) => <Goals goal={item} category={category} />}
                 keyExtractor={(item) => item.id}
                 className="mt-4"
             />
-
-            {/* <KeyboardAvoidingView behavior="padding">
-                <View className="flex flex-row items-center justify-between w-full h-16 px-6">
-                    <TextInput
-                        placeholder="Add a goal"
-                        placeholderTextColor={theme.text}
-                        style={{ color: theme.text, fontFamily: "Montserrat-Medium", fontSize: 16 }}
-                        className="border-b-2 border-gray-300 w-10/12 pb-2"
-                        value={addGoals}
-                        onChangeText={(name) => setAddGoals(name)}
-                    />
-                    <TouchableOpacity
-                        className="w-10 h-10 rounded-full bg-gray-300 items-center justify-center"
-                        onPress={addGoal}
-                    >
-                        <Ionicons name="add" size={30} color={theme.primary} />
-                    </TouchableOpacity>
-                </View>
-            </KeyboardAvoidingView> */}
+            
 
             <View className="absolute bottom-10 right-5 m-4">
                 <TouchableOpacity onPress={() => setModalVisible(true)}>

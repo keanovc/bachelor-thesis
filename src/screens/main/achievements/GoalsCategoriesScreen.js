@@ -63,8 +63,8 @@ const GoalsCategoriesScreen = () => {
                 </View>
             </View>
 
-            <ScrollView className="flex-1">
-                <View className="flex flex-row flex-wrap justify-center">
+            <ScrollView className="flex mx-auto w-11/12">
+                <View className="flex flex-row items-center justify-start flex-wrap">
                     {goalsCategories.map((category, index) => (
                         <GoalsCategories key={index} category={category} />
                     ))}
