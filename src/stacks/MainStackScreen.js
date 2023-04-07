@@ -47,7 +47,7 @@ const MainStackScreen = () => {
                 case 'Budget':
                     iconName = focused ? 'wallet' : 'wallet-outline';
                     break;
-                case 'Goals':
+                case 'GoalsCategories':
                     iconName = focused ? 'golf' : 'golf-outline';
                     break;
                 case 'Educational':
@@ -66,7 +66,7 @@ const MainStackScreen = () => {
         <MainStack.Navigator screenOptions={screenOptions}>
             <MainStack.Screen name="Home" component={HomeScreen} />
             <MainStack.Screen name="Budget" component={BudgetScreen} />
-            <MainStack.Screen name="Goals" component={GoalsCategoriesScreen} />
+            <MainStack.Screen name="GoalsCategories" component={GoalsCategoriesScreen} />
             <MainStack.Screen name="Educational" component={EducationalScreen} />
             <MainStack.Screen name="Settings" component={SettingsScreen} />
         </MainStack.Navigator>
