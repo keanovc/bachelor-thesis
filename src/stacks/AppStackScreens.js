@@ -12,6 +12,7 @@ import OnBoardingScreen from '../screens/others/OnBoardingScreen';
 
 import WalkthroughScreen from '../screens/auth/WalkthroughScreen';
 import MessageScreen from '../screens/main/home/MessageScreen';
+import GoalsScreen from '../screens/main/achievements/GoalsScreen';
 import ProfileScreen from '../screens/main/settings/ProfileScreen';
 import LanguageSelectorScreen from '../screens/main/settings/LanguageSelectorScreen';
 
@@ -46,11 +47,12 @@ const AppStackScreens = () => {
                 </>
             ) : user.isLoggedIn ? (
                 <>
-                    {/* <AppStack.Screen name="Walkthrough" component={WalkthroughScreen} /> */}
                     {/* Main */}
                     <AppStack.Screen name="Main" component={MainStackScreen} />
                     {/* Home */}
                     <AppStack.Screen name="Message" component={MessageScreen} />
+                    {/* Goals */}
+                    <AppStack.Screen name="Goals" component={GoalsScreen} />
                     {/* Settings */}
                     <AppStack.Screen name="Profile" component={ProfileScreen} />
                     <AppStack.Screen name="LanguageSelector" component={LanguageSelectorScreen} 

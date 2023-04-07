@@ -7,7 +7,7 @@ import 'react-native-gesture-handler'
 // Main Screens
 import HomeScreen from '../screens/main/home/HomeScreen'
 import BudgetScreen from '../screens/main/budget/BudgetScreen'
-import GoalsScreen from '../screens/main/achievements/GoalsScreen'
+import GoalsCategoriesScreen from '../screens/main/achievements/GoalsCategoriesScreen'
 import EducationalScreen from '../screens/main/educational/EducationalScreen'
 import SettingsScreen from '../screens/main/settings/SettingsScreen'
 
@@ -66,7 +66,7 @@ const MainStackScreen = () => {
         <MainStack.Navigator screenOptions={screenOptions}>
             <MainStack.Screen name="Home" component={HomeScreen} />
             <MainStack.Screen name="Budget" component={BudgetScreen} />
-            <MainStack.Screen name="Goals" component={GoalsScreen} />
+            <MainStack.Screen name="Goals" component={GoalsCategoriesScreen} />
             <MainStack.Screen name="Educational" component={EducationalScreen} />
             <MainStack.Screen name="Settings" component={SettingsScreen} />
         </MainStack.Navigator>
