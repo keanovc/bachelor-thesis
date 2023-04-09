@@ -43,6 +43,14 @@ const HomeScreen = () => {
             >
                 <Text className="text-white font-bold text-center" style={{ fontFamily: "Montserrat-SemiBold" }}>Go to Message</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+                className="px-4 py-2 rounded-lg mt-4"
+                style={{ backgroundColor: theme.primary }}
+                onPress={() => navigation.navigate('Settings')}
+            >
+                <Text className="text-white font-bold text-center" style={{ fontFamily: "Montserrat-SemiBold" }}>Go to Settings</Text>
+            </TouchableOpacity>
         </View>
     )
 }

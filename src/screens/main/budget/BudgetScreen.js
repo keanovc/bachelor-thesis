@@ -1,21 +1,12 @@
 import { View, Text } from 'react-native'
-import React, { useContext } from 'react'
-import ThemeContext from '../../../context/ThemeContext'
+import React from 'react'
 
-const BudgetScreen = () => {
-    const theme = useContext(ThemeContext)
+const BudgetScreen = ({ route }) => {
+    const category = route.params.item
 
     return (
-        <View
-            className="flex-1 items-center justify-center"
-            style={{ backgroundColor: theme.background }}
-        >
-            <Text 
-                className="text-2xl font-bold"
-                style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}
-            >
-                Budget Screen
-            </Text>
+        <View>
+            <Text>BudgetScreen</Text>
         </View>
     )
 }

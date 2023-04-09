@@ -6,7 +6,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { firebase } from '../../config/firebase'
 import { useNavigation } from '@react-navigation/native'
 
-const CategoryModal = ({ closeModal, category }) => {
+const GoalsCategoryModal = ({ closeModal, category }) => {
     const [user, setUser] = useContext(UserContext)
     const theme = useContext(ThemeContext)
     const navigation = useNavigation()
@@ -239,4 +239,4 @@ const CategoryModal = ({ closeModal, category }) => {
     )
 }
 
-export default CategoryModal
+export default GoalsCategoryModal

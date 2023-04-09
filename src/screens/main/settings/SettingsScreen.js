@@ -62,11 +62,11 @@ const SettingsScreen = () => {
     } 
 
     return (
-        <ScrollView
+        <SafeAreaView
             className="flex-1"
             style={{ backgroundColor: theme.background }}
         >
-            <SafeAreaView>
+            <ScrollView>
                 {/* Modal */}
                 <Modal
                     transparent={true}
@@ -384,8 +384,8 @@ const SettingsScreen = () => {
                         </View>
                     </View>
                 </View>
-            </SafeAreaView>
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

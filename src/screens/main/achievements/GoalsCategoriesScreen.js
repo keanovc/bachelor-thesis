@@ -4,7 +4,7 @@ import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
 import { Ionicons } from '@expo/vector-icons'
 import GoalsCategories from '../../../components/achievements/GoalsCategories'
-import CategoryModal from '../../../components/achievements/CategoryModal'
+import GoalsCategoryModal from '../../../components/achievements/GoalsCategoryModal'
 import { firebase } from '../../../config/firebase'
 
 const GoalsCategoriesScreen = () => {
@@ -45,7 +45,7 @@ const GoalsCategoriesScreen = () => {
             style={{ backgroundColor: theme.background }}
         >
             <Modal animationType="slide" visible={modalVisible}>
-                <CategoryModal closeModal={() => setModalVisible(false)} />
+                <GoalsCategoryModal closeModal={() => setModalVisible(false)} />
             </Modal>
             
             <View className="my-4 px-6 flex flex-row items-center justify-between">
@@ -57,7 +57,7 @@ const GoalsCategoriesScreen = () => {
                     className="bg-white rounded-full p-2"
                     onPress={() => setEditVisible(!editVisible)}
                 >
-                    <Ionicons name="pencil" size={16} color={theme.primary} />
+                    <Ionicons name="create-outline" size={16} color={theme.primary} />
                 </TouchableOpacity>
             </View>
 

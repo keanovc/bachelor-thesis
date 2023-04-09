@@ -4,16 +4,26 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { UserContext } from '../context/UserContext';
 
+// Stack Screens
 import AuthStackScreens from './AuthStackScreens';
 import MainStackScreen from './MainStackScreen';
 
+// Others
 import LoadingScreen from '../screens/others/LoadingScreen';
 import OnBoardingScreen from '../screens/others/OnBoardingScreen';
 
-import WalkthroughScreen from '../screens/auth/WalkthroughScreen';
+// Home
 import MessageScreen from '../screens/main/home/MessageScreen';
+
+// Budget
+import BudgetScreen from '../screens/main/budget/BudgetScreen';
+
+// Goals
 import GoalsScreen from '../screens/main/achievements/GoalsScreen';
 import IndividualGoalScreen from '../screens/main/achievements/IndividualGoalScreen';
+
+// Settings
+import SettingsScreen from '../screens/main/settings/SettingsScreen';
 import ProfileScreen from '../screens/main/settings/ProfileScreen';
 import LanguageSelectorScreen from '../screens/main/settings/LanguageSelectorScreen';
 
@@ -50,8 +60,13 @@ const AppStackScreens = () => {
                 <>
                     {/* Main */}
                     <AppStack.Screen name="Main" component={MainStackScreen} />
+
                     {/* Home */}
                     <AppStack.Screen name="Message" component={MessageScreen} />
+
+                    {/* Budget */}
+                    <AppStack.Screen name="Budget" component={BudgetScreen} />
+
                     {/* Goals */}
                     <AppStack.Screen name="Goals" component={GoalsScreen} />
                     <AppStack.Screen name="IndGoal" component={IndividualGoalScreen} 
@@ -59,7 +74,9 @@ const AppStackScreens = () => {
                             presentation: 'modal',
                         }}
                     />
+
                     {/* Settings */}
+                    <AppStack.Screen name="Settings" component={SettingsScreen} />
                     <AppStack.Screen name="Profile" component={ProfileScreen} />
                     <AppStack.Screen name="LanguageSelector" component={LanguageSelectorScreen} 
                         options={{ 

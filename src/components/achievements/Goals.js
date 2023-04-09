@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Modal } from 'react-native'
+import { View, Text, TouchableOpacity, Modal, FlatList } from 'react-native'
 import React, { useContext, useState, useEffect } from 'react'
 import ThemeContext from '../../context/ThemeContext'
 import { Ionicons } from '@expo/vector-icons'
@@ -20,6 +20,7 @@ const Goals = ({ goal, category, edit }) => {
                 :
                     () => navigation.navigate('IndGoal', { goal, category })
             }
+            onLongPress={() => setEditVisible(!editVisible)}
             style={edit ? { opacity: 0.5, backgroundColor: "lightgray" } : {}}
         >
             <View className="flex flex-row items-center justify-center">

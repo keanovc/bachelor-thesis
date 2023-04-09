@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { UserContext } from '../../context/UserContext'
 import { firebase } from '../../config/firebase'
-import CategoryModal from './CategoryModal'
+import CategoryModal from './GoalsCategoryModal'
 
 const GoalsCategories = ({ category, edit }) => {
     const [user, setUser] = useContext(UserContext)
@@ -61,6 +61,7 @@ const GoalsCategories = ({ category, edit }) => {
                 :
                     () => navigation.navigate('Goals', { category })
             }
+            onLongPress={() => setEditVisible(!editVisible)}
             style={edit ? { opacity: 0.5, backgroundColor: "lightgray" } : {}}
         >
             {

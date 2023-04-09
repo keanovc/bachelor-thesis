@@ -6,10 +6,9 @@ import 'react-native-gesture-handler'
 
 // Main Screens
 import HomeScreen from '../screens/main/home/HomeScreen'
-import BudgetScreen from '../screens/main/budget/BudgetScreen'
+import BudgetCategoriesScreen from '../screens/main/budget/BudgetCategoriesScreen'
 import GoalsCategoriesScreen from '../screens/main/achievements/GoalsCategoriesScreen'
 import EducationalScreen from '../screens/main/educational/EducationalScreen'
-import SettingsScreen from '../screens/main/settings/SettingsScreen'
 
 const MainStackScreen = () => {
     const MainStack = createBottomTabNavigator()
@@ -44,7 +43,7 @@ const MainStackScreen = () => {
                 case 'Home':
                     iconName = focused ? 'grid' : 'grid-outline';
                     break;
-                case 'Budget':
+                case 'BudgetCategories':
                     iconName = focused ? 'wallet' : 'wallet-outline';
                     break;
                 case 'GoalsCategories':
@@ -52,9 +51,6 @@ const MainStackScreen = () => {
                     break;
                 case 'Educational':
                     iconName = focused ? 'school' : 'school-outline';
-                    break;
-                case 'Settings':
-                    iconName = focused ? 'settings' : 'settings-outline';
                     break;
             }
 
@@ -65,10 +61,9 @@ const MainStackScreen = () => {
     return (
         <MainStack.Navigator screenOptions={screenOptions}>
             <MainStack.Screen name="Home" component={HomeScreen} />
-            <MainStack.Screen name="Budget" component={BudgetScreen} />
+            <MainStack.Screen name="BudgetCategories" component={BudgetCategoriesScreen} />
             <MainStack.Screen name="GoalsCategories" component={GoalsCategoriesScreen} />
             <MainStack.Screen name="Educational" component={EducationalScreen} />
-            <MainStack.Screen name="Settings" component={SettingsScreen} />
         </MainStack.Navigator>
     )
 }

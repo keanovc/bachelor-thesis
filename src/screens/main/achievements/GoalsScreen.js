@@ -109,7 +109,7 @@ const GoalsScreen = ({ route }) => {
                     className="bg-white rounded-full p-2"
                     onPress={() => setEditVisible(!editVisible)}
                 >
-                    <Ionicons name="pencil" size={16} color={theme.primary} />
+                    <Ionicons name="create-outline" size={16} color={theme.primary} />
                 </TouchableOpacity>
             </View>
 

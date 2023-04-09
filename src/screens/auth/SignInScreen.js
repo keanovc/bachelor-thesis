@@ -147,7 +147,7 @@ const SignInScreen = ({ navigation }) => {
                                 <TouchableOpacity
                                     onPress={() => navigation.navigate('ForgotPassword')}
                                 >
-                                    <Text className="text-xs text-gray-400" style={{ fontFamily: "Montserrat-Medium" }}>
+                                    <Text className="text-sm text-gray-400" style={{ fontFamily: "Montserrat-Medium" }}>
                                         Forgot password?
                                     </Text>
                                 </TouchableOpacity>
@@ -163,16 +163,16 @@ const SignInScreen = ({ navigation }) => {
                                     {loading ? (
                                         <ActivityIndicator size="small" color="#fff" />
                                     ) : (
-                                        <Text className="text-white text-center text-md" style={{ fontFamily: "Montserrat-SemiBold" }}>Sign In</Text>
+                                        <Text className="text-white text-center text-sm" style={{ fontFamily: "Montserrat-SemiBold" }}>Sign In</Text>
                                     )}
                                 </TouchableOpacity>
                             </View>
 
                             <View className="flex flex-row items-center justify-center mt-6">
                                 <TouchableOpacity onPress={() => navigation.navigate("SignUp")} className="flex-row">
-                                    <Text className="text-gray-400 text-xs" style={{ fontFamily: "Montserrat-Regular" }}>Don't have an account?</Text>
+                                    <Text className="text-gray-400 text-sm" style={{ fontFamily: "Montserrat-Regular" }}>Don't have an account?</Text>
                                     <Text 
-                                        className="text-xs ml-1 font-bold"
+                                        className="text-sm ml-1 font-bold"
                                         style={{ 
                                             color: theme.primary,
                                             fontFamily: "Montserrat-Medium"
