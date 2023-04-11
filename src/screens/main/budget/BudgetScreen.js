@@ -6,16 +6,14 @@ import { useNavigation } from '@react-navigation/native'
 
 import { UserContext } from '../../../context/UserContext'
 import ThemeContext from '../../../context/ThemeContext'
-import BudgetModal from '../../../components/budget/BudgetModal';
 import { firebase } from '../../../config/firebase'
-import BudgetItem from '../../../components/budget/BudgetItem';
+import { BudgetModal, BudgetItem, IconButton } from '../../../components'
 
 const BudgetScreen = ({ route }) => {
-    const category = route.params.category
-    const date = route.params.date
+    const { category, date, } = route.params
+    const theme = useContext(ThemeContext)
     const navigation = useNavigation()
     const [user, setUser] = useContext(UserContext)
-    const theme = useContext(ThemeContext)
 
     const [modalVisible, setModalVisible] = useState(false)
     const [editVisible, setEditVisible] = useState(false)
@@ -73,9 +71,10 @@ const BudgetScreen = ({ route }) => {
                 }}
             >
                 <View className="flex-row justify-between items-center px-4">
-                    <TouchableOpacity className="bg-white rounded-lg p-2" onPress={() => navigation.goBack()}>
-                        <Ionicons name="chevron-back-outline" size={20} color={theme.primary} />
-                    </TouchableOpacity>
+                    <IconButton
+                        onPress={() => navigation.goBack()}
+                        icon="chevron-back-outline"
+                    />
                     
                     <Text className="text-xl" style={{ color: "#fff", fontFamily: "Montserrat-Medium" }}>
                         {category.name}
@@ -83,12 +82,10 @@ const BudgetScreen = ({ route }) => {
 
                     {
                         category.id !== "goals" ? (
-                            <TouchableOpacity 
-                                className="bg-white rounded-lg p-2"
+                            <IconButton
                                 onPress={() => setEditVisible(!editVisible)}
-                            >
-                                <Ionicons name="create-outline" size={20} color={theme.primary} />
-                            </TouchableOpacity>
+                                icon="create-outline"
+                            />
                         ) : (
                             <View />
                         )

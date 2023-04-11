@@ -3,10 +3,11 @@ const Theme = {
         theme: 'light',
         background: '#F5F8FE',
         text: '#121212',
-        accent: '#EDF2F6',
+        accent: '#ffffff',
         primary: '#4D7A80',
         nav: '#ffffff',
         shadow: 'darkgray',
+        input: '#ffffff',
     },
     dark: {
         theme: 'dark',
@@ -14,8 +15,9 @@ const Theme = {
         text: '#F5F8FE',
         accent: '#3C3C3C',
         primary: '#4D7A80',
-        nav: '#121212',
+        nav: '#3C3C3C',
         shadow: 'darkgray',
+        input: '#3C3C3C',
     },
 }
 

@@ -1,3 +1,4 @@
 import icons from "./icons";
+import colors from "./colors";
 
-export { icons }
+export { icons, colors }

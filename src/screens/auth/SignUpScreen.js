@@ -7,8 +7,10 @@ import { useForm, Controller } from "react-hook-form";
 import ThemeContext from '../../context/ThemeContext'
 import { FireBaseContext } from '../../context/FireBaseContext'
 import { UserContext } from '../../context/UserContext'
+import { AuthInputField, LargeButton } from '../../components/index'
 
 const SignUpScreen = ({ navigation }) => {
+    const [fullname, setFullname] = useState('')
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -21,6 +23,8 @@ const SignUpScreen = ({ navigation }) => {
 
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
+            fullname: "",
+            username: "",
             email: "",
             password: "",
         }
@@ -59,6 +63,7 @@ const SignUpScreen = ({ navigation }) => {
 
         try {
             const user = {
+                fullname,
                 username,
                 email,
                 password,
@@ -66,13 +71,18 @@ const SignUpScreen = ({ navigation }) => {
             }
 
             const createdUser = await firebase.createUserWithEmailAndPassword(user)
+            const uid = firebase.getCurrentUser().uid
+            const userInfo = await firebase.getUserInfo(uid)
 
             setUser({
                 ...createdUser,
+                uid: uid,
+                username: userInfo.username,
+                fullname: userInfo.fullname,
+                email: userInfo.email,
+                profilePicture: userInfo.profilePicture,
                 isLoggedIn: true
             })
-
-            // navigation.navigate('Walkthrough')
         } catch (error) {
             alert(error.message)
         } finally {
@@ -84,19 +94,15 @@ const SignUpScreen = ({ navigation }) => {
         <KeyboardAvoidingView 
                 className="flex-1 bg-white"
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={{ 
+                    backgroundColor: theme.background,
+                }}
         >
             <ScrollView
                 bounces={false}
             >
                 <SafeAreaView className="flex-1">
                     <View className="px-10 pt-36">
-                        {/* <View className="items-center justify-center mt-4">
-                            <Image
-                                source={require('../../../assets/images/logo.png')}
-                                style={{ width: 250, resizeMode: 'contain' }}
-                            />
-                        </View> */}
-
                         <Text className="text-2xl font-light text-gray-800" style={{ fontFamily: "Montserrat-Medium" }}>
                             Create an account!
                         </Text>
@@ -106,7 +112,7 @@ const SignUpScreen = ({ navigation }) => {
 
                         <TouchableOpacity 
                             onPress={addProfilePicture}
-                            className="bg-gray-200 w-20 h-20 rounded-full self-center overflow-hidden mt-6"
+                            className="bg-slate-200 w-20 h-20 rounded-full self-center overflow-hidden mt-6"
                         >
                             {profilePicture ? (
                                 <Image source={{ uri: profilePicture }} className="flex-1" />
@@ -122,22 +128,40 @@ const SignUpScreen = ({ navigation }) => {
                                 control={control}
                                 rules={{
                                     required: true,
+                                }}
+                                render={({ field: { onChange, onBlur } }) => (
+                                    <AuthInputField
+                                        onBlur={onBlur}
+                                        onChange={onChange}
+                                        value={fullname}
+                                        setValue={setFullname}
+                                        placeholder="Full Name"
+                                        autoCapitalize='none'
+                                        autoCompleteType='username'
+                                        autoCorrect={false}
+                                    />
+                                )}
+                                name="fullname"
+                            />
+                            {errors.fullname && <Text className="text-red-500 text-xs mt-1" style={{ fontFamily: "Montserrat-Regular" }}>
+                                {errors.fullname.type === "required" && "Full name is required"}
+                            </Text>}
+                        </View>
+
+                        <View className="mt-4">
+                            <Controller
+                                control={control}
+                                rules={{
+                                    required: true,
                                     pattern: /^[^\s]+$/,
                                 }}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <TextInput
-                                        className="bg-gray-100 rounded-lg w-full py-3 px-3 text-gray-700 leading-tight"
-                                        style={{ fontFamily: "Montserrat-Regular" }}
+                                render={({ field: { onChange, onBlur } }) => (
+                                    <AuthInputField
                                         onBlur={onBlur}
-                                        onChangeText={
-                                            (value) => {
-                                                onChange(value)
-                                                setUsername(value)
-                                            }
-                                        }
-                                        value={value}
-                                        placeholder="Enter your username"
-                                        placeholderTextColor="#A9A9A9"
+                                        onChange={onChange}
+                                        value={username}
+                                        setValue={setUsername}
+                                        placeholder="Display Name"
                                         autoCapitalize='none'
                                         autoCompleteType='username'
                                         autoCorrect={false}
@@ -158,20 +182,13 @@ const SignUpScreen = ({ navigation }) => {
                                     required: true,
                                     pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                                 }}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <TextInput
-                                        className="bg-gray-100 rounded-lg w-full py-3 px-3 text-gray-700 leading-tight"
-                                        style={{ fontFamily: "Montserrat-Regular" }}
+                                render={({ field: { onChange, onBlur } }) => (
+                                    <AuthInputField
                                         onBlur={onBlur}
-                                        onChangeText={
-                                            (value) => {
-                                                onChange(value)
-                                                setEmail(value)
-                                            }
-                                        }
-                                        value={value}
-                                        placeholder="Enter your email"
-                                        placeholderTextColor="#A9A9A9"
+                                        onChange={onChange}
+                                        value={email}
+                                        setValue={setEmail}
+                                        placeholder="Email"
                                         autoCapitalize='none'
                                         autoCompleteType='email'
                                         autoCorrect={false}
@@ -193,20 +210,13 @@ const SignUpScreen = ({ navigation }) => {
                                     minLength: 8,
                                     pattern: /^[^\s]+$/,
                                 }}
-                                render={({ field: { onChange, onBlur, value } }) => (
-                                    <TextInput
-                                        className="bg-gray-100 rounded-lg w-full py-3 px-3 text-gray-700 leading-tight"
-                                        style={{ fontFamily: "Montserrat-Regular" }}
+                                render={({ field: { onChange, onBlur } }) => (
+                                    <AuthInputField
                                         onBlur={onBlur}
-                                        onChangeText={
-                                            (value) => {
-                                                onChange(value)
-                                                setPassword(value)
-                                            }
-                                        }
-                                        value={value}
+                                        onChange={onChange}
+                                        value={password}
+                                        setValue={setPassword}
                                         placeholder="Password"
-                                        placeholderTextColor="#A9A9A9"
                                         autoCapitalize='none'
                                         autoCompleteType='password'
                                         autoCorrect={false}
@@ -223,7 +233,14 @@ const SignUpScreen = ({ navigation }) => {
                         </View>
 
                         <View className="mt-8">
-                            <TouchableOpacity 
+                            <LargeButton
+                                handleSubmit={handleSubmit}
+                                onSubmit={onSubmit}
+                                loading={loading}
+                                text="Create"
+                            />
+
+                            {/* <TouchableOpacity 
                                 onPress={handleSubmit(onSubmit)}
                                 disabled={loading} 
                                 className="w-full h-12 rounded-md items-center justify-center mx-auto"
@@ -234,14 +251,14 @@ const SignUpScreen = ({ navigation }) => {
                                 ) : (
                                     <Text className="text-white text-center text-md" style={{ fontFamily: "Montserrat-SemiBold" }}>Create</Text>
                                 )}
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
 
                         <View className="flex flex-row items-center justify-center mt-6">
                             <TouchableOpacity onPress={() => navigation.navigate("SignIn")} className="flex-row">
-                                <Text className="text-gray-400 text-xs">Already have an account?</Text>
+                                <Text className="text-gray-400 text-sm">Already have an account?</Text>
                                 <Text 
-                                    className="text-xs ml-1 font-bold"
+                                    className="text-sm ml-1 font-bold"
                                     style={{ 
                                         color: theme.primary,
                                         fontFamily: 'Montserrat-Medium'
@@ -251,21 +268,6 @@ const SignUpScreen = ({ navigation }) => {
                                 </Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
-
-                    <View className="
-                        -bottom-8
-                        z-0
-                    ">
-                        <Image
-                            source={require('../../../assets/images/hand-create.png')}
-                            className="
-                                absolute
-                                w-32
-                                h-44
-                                rotate-45
-                            "
-                        />
                     </View>
                 </SafeAreaView>
             </ScrollView>

@@ -1,14 +1,12 @@
-import { View, Text, SafeAreaView, ScrollView, ActivityIndicator, RefreshControl, TouchableOpacity, Image } from 'react-native'
-import React, { useContext, useState } from 'react'
+import { View, Text, SafeAreaView, ScrollView, ActivityIndicator, TouchableOpacity } from 'react-native'
+import React, { useContext } from 'react'
 import { useNavigation } from '@react-navigation/native'
-import { getToday } from 'react-native-modern-datepicker'
 import { Ionicons } from '@expo/vector-icons'
 import * as Linking from 'expo-linking';
 
 import ThemeContext from '../../../context/ThemeContext'
-import { icons } from '../../../constants'
 import useFetch from '../../../hooks/useFetch'
-import ArticleDetails from '../../../components/educational/ArticleDetails'
+import { ArticleDetails, IconButton } from '../../../components'
 
 const EducationDetailScreen = ({ route }) => {
     const article = route.params.article
@@ -23,20 +21,19 @@ const EducationDetailScreen = ({ route }) => {
             style={{ backgroundColor: theme.background }}
         >
             <View className="flex-row justify-between items-center px-6 py-2">
-                <TouchableOpacity className="bg-white rounded-lg p-2" onPress={() => navigation.goBack()}>
-                    <Ionicons name="chevron-back-outline" size={20} color={theme.primary} />
-                </TouchableOpacity>
+                <IconButton
+                    onPress={() => navigation.goBack()}
+                    icon="chevron-back-outline"
+                />
                 
-                <Text className="text-lg uppercase" style={{ fontFamily: "Montserrat-Medium" }}>
+                <Text className="text-lg uppercase" style={{ color: theme.text, fontFamily: "Montserrat-Medium" }}>
                     {article.tags[0]}
                 </Text>
 
-                <TouchableOpacity 
-                    className="bg-white rounded-lg p-2"
+                <IconButton
                     onPress={() => Linking.openURL(article.url)}
-                >
-                    <Ionicons name="open-outline" size={20} color={theme.primary} />
-                </TouchableOpacity>
+                    icon="open-outline"
+                />
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false} >

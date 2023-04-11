@@ -5,9 +5,8 @@ import { Ionicons } from '@expo/vector-icons'
 
 import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
-import GoalsCategoriesCard from '../../../components/achievements/GoalsCategoriesCard'
-import GoalsCategoryModal from '../../../components/achievements/GoalsCategoryModal'
 import { firebase } from '../../../config/firebase'
+import { GoalsCategoryModal, GoalsCategoriesCard, IconButton } from '../../../components'
 
 const GoalsCategoriesScreen = () => {
     const theme = useContext(ThemeContext)
@@ -99,21 +98,22 @@ const GoalsCategoriesScreen = () => {
                     <Text className="text-2xl font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Regular" }}> Categories</Text>
                 </Text>
 
-                <TouchableOpacity
-                    className="bg-white rounded-full p-2"
+                <IconButton
                     onPress={() => setEditVisible(!editVisible)}
-                >
-                    <Ionicons name="create-outline" size={16} color={theme.primary} />
-                </TouchableOpacity>
+                    icon="create-outline"
+                />
             </View>
 
-            <View className="flex flex-row items-center justify-between pl-6 pr-12 py-4 mx-6 mb-4 mt-2 bg-white rounded-2xl shadow-sm">
+            <View 
+                className="flex flex-row items-center justify-between pl-6 pr-12 py-4 mx-6 mb-4 mt-2 rounded-2xl shadow-sm"
+                style={{ backgroundColor: theme.accent }}
+            >
                 <View className="flex flex-row items-center justify-center">
                     <Text className="ml-2 text-sm" style={{ color: theme.primary, fontFamily: "Montserrat-Light" }}>Monthly Balance:</Text>
                 </View>
 
                 <View className="flex flex-row items-center justify-center">
-                    <Text className="mr-2 text-2xl font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>${totalBudget}</Text>
+                    <Text className="mr-2 text-2xl" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>${totalBudget}</Text>
                 </View>
             </View>
 

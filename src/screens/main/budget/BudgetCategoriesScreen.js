@@ -8,9 +8,8 @@ import { Ionicons } from '@expo/vector-icons'
 
 import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
-import BudgetCategoryModal from '../../../components/budget/BudgetCategoryModal'
 import { firebase } from '../../../config/firebase'
-import BudgetCategoriesCard from '../../../components/budget/BudgetCategoriesCard'
+import { BudgetCategoryModal, BudgetCategoriesCard, IconButton } from '../../../components'
 
 const BudgetCategoriesScreen = () => {
     const theme = useContext(ThemeContext)
@@ -131,12 +130,10 @@ const BudgetCategoriesScreen = () => {
                     <Text className="text-2xl font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Regular" }}> Overview</Text>
                 </Text>
 
-                <TouchableOpacity
-                    className="bg-white rounded-full p-2"
+                <IconButton
                     onPress={() => setEditVisible(!editVisible)}
-                >
-                    <Ionicons name="create-outline" size={16} color={theme.primary} />
-                </TouchableOpacity>
+                    icon="create-outline"
+                />
             </View>
 
             <View className="flex flex-row items-center justify-center px-12 pt-4 z-20">
@@ -178,7 +175,10 @@ const BudgetCategoriesScreen = () => {
                     display: toggle ? "flex" : "none",
                 }}
             >
-                <View className="bg-white rounded-md px-4 items-center shadow-lg m-6">
+                <View 
+                    className="rounded-md px-4 items-center shadow m-6"
+                    style={{ backgroundColor: theme.accent }}
+                >
                     <DatePicker
                         mode="monthYear"
                         selectorStartingYear={2000}
@@ -188,12 +188,18 @@ const BudgetCategoriesScreen = () => {
                         }}
                         options={{
                             mainColor: theme.primary,
+                            backgroundColor: theme.accent,
+                            textDefaultColor: theme.text,
+                            textHeaderColor: theme.text,
                         }}
                     />
                 </View>
             </View>
 
-            <View className="flex flex-row items-center justify-around px-6 bg-white rounded-lg mx-8 mb-8 mt-4 shadow-sm">
+            <View 
+                className="flex flex-row items-center justify-around px-6 rounded-lg mx-8 mb-8 mt-4 shadow-sm"
+                style={{ backgroundColor: theme.accent }}
+            >
                 <ProgressChart
                     data={{
                         labels: ["Progress"],
@@ -204,12 +210,11 @@ const BudgetCategoriesScreen = () => {
                     strokeWidth={16}
                     radius={32}
                     chartConfig={{
-                        backgroundColor: "#fff",
-                        backgroundGradientFrom: "#fff",
-                        backgroundGradientTo: "#fff",
+                        backgroundColor: theme.accent,
+                        backgroundGradientFrom: theme.accent,
+                        backgroundGradientTo: theme.accent,
                         decimalPlaces: 2,
                         color: (opacity = 1) => `rgba(77, 122, 128, ${opacity})`,
-                        labelColor: (opacity = 1) => `rgba(77, 122, 128, ${opacity})`,
                         style: {
                             borderRadius: 16
                         },
@@ -225,17 +230,27 @@ const BudgetCategoriesScreen = () => {
                 <View className="flex flex-row items-center justify-between">
                     <View className="flex flex-col space-y-3">
                         <View 
-                            className="w-1 h-5 rounded-full" 
-                            style={{ backgroundColor: "#93AEB2" }}
+                            className="w-1 h-5 rounded-full"
+                            style={
+                                theme.theme === "light" ?
+                                    { backgroundColor: "#8CA9AE" }
+                                :
+                                    { backgroundColor: "#466064" }
+                            }
                         />
                         <View 
                             className="w-1 h-5 rounded-full" 
-                            style={{ backgroundColor: "#DBE3E6" }}
+                            style={
+                                theme.theme === "light" ?
+                                    { backgroundColor: "#CCD9DE" }
+                                :
+                                    { backgroundColor: "#3F484A" }
+                            }
                         />
                     </View>
                     <View className="flex flex-col space-y-3">
-                        <Text className="text-sm font-bold mr-4 ml-2" style={{ color: theme.primary, fontFamily: "Montserrat-Light" }}>Incomes</Text>
-                        <Text className="text-sm font-bold mr-4 ml-2" style={{ color: theme.primary, fontFamily: "Montserrat-Light" }}>Expenses</Text>
+                        <Text className="text-sm font-bold mr-4 ml-2" style={{ color: theme.text, fontFamily: "Montserrat-Light" }}>Incomes</Text>
+                        <Text className="text-sm font-bold mr-4 ml-2" style={{ color: theme.text, fontFamily: "Montserrat-Light" }}>Expenses</Text>
                     </View>
 
                     <View className="flex flex-col space-y-3">

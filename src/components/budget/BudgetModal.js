@@ -1,10 +1,11 @@
-import { View, Text, KeyboardAvoidingView, TouchableOpacity, SafeAreaView, TextInput, FlatList, Modal, Alert } from 'react-native'
+import { View, Text, KeyboardAvoidingView, TouchableOpacity, SafeAreaView, TextInput, Modal, Alert } from 'react-native'
 import React, { useContext, useState } from 'react'
+import { Ionicons } from '@expo/vector-icons'
+import NumericInput from 'react-native-numeric-input'
+
 import ThemeContext from '../../context/ThemeContext'
 import { UserContext } from '../../context/UserContext'
-import { Ionicons } from '@expo/vector-icons'
 import { firebase } from '../../config/firebase'
-import NumericInput from 'react-native-numeric-input'
 
 const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
     const [user, setUser] = useContext(UserContext)
@@ -92,29 +93,51 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
                 </TouchableOpacity>
 
                 <View className="flex flex-col">
-                    <Text className="ml-4 text-lg" style={{ fontFamily: "Montserrat-Medium" }}>Budget Name</Text>
+                    <Text 
+                        className="ml-4 text-lg" 
+                        style={{ 
+                            fontFamily: "Montserrat-Medium",
+                            color: theme.text,
+                        }}
+                    >
+                        {budget ? "Edit Budget" : "Create Budget"}
+                    </Text>
 
                     <View
                         className="w-80 bg-gray-300 mt-2"
                         style={{ height: 2, backgroundColor: theme.primary }}
                     />
 
-                    <View className="flex flex-row mt-4 items-center justify-center">
+                    <View className="flex flex-row items-center justify-center">
                         <TextInput 
-                            className="w-80 h-12 rounded-md border-2 border-gray-300 pb-2 text-lg text-center" 
+                            className="mt-4 w-80 h-12 rounded-lg px-4" 
+                            style={{
+                                color: theme.text,
+                                backgroundColor: theme.input,
+                                fontFamily: "Montserrat-Regular",
+                                fontSize: 14,
+                            }} 
                             placeholder={
                                 category.type === "incomes" ? "Salary" : "Groceries"
                             }
-                            style={{ color: theme.text, fontFamily: "Montserrat-Regular" }} 
+                            placeholderTextColor={theme.text}
                             value={budgetName}
                             onChangeText={text => setBudgetName(text)}
                         />
                     </View>
 
-                    <Text className="mt-8 ml-4 text-lg" style={{ fontFamily: "Montserrat-Medium" }}>Budget Money</Text>
+                    <Text 
+                        className="mt-8 ml-4 text-lg" 
+                        style={{ 
+                            fontFamily: "Montserrat-Medium",
+                            color: theme.text,
+                        }}
+                    >
+                        Budget Money
+                    </Text>
 
-                    <View
-                        className="w-80 bg-gray-300 mt-2"
+                    <View 
+                        className="w-80 bg-gray-300 mt-2" 
                         style={{ height: 2, backgroundColor: theme.primary }}
                     />
 
@@ -125,7 +148,7 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
                             totalWidth={160}
                             totalHeight={50}
                             iconSize={25}
-                            step={200}
+                            step={100}
                             minValue={0}
                             valueType='real'
                             rounded
@@ -134,14 +157,26 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
                             rightButtonBackgroundColor={theme.primary}
                             leftButtonBackgroundColor={theme.primary}
                             borderColor={theme.background}
+                            containerStyle={{
+                                backgroundColor: theme.input,
+                            }}
                             inputStyle={{ 
                                 fontFamily: "Montserrat-Regular",
                                 fontSize: 14,
+                                color: theme.text,
                             }}
                         />
                     </View>
 
-                    <Text className="mt-8 ml-4 text-lg" style={{ fontFamily: "Montserrat-Medium" }}>Budget Period</Text>
+                    <Text 
+                        className="mt-8 ml-4 text-lg" 
+                        style={{ 
+                            fontFamily: "Montserrat-Medium",
+                            color: theme.text,
+                        }}
+                    >
+                        Budget Type
+                    </Text>
 
                     <View
                         className="w-80 bg-gray-300 mt-2"
@@ -152,7 +187,7 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
                         <TouchableOpacity
                             onPress={() => setMonthly(false)}
                             className="w-36 h-12 rounded-md flex items-center justify-center shadow-sm"
-                            style={{ backgroundColor: monthly ? "#fff" : theme.primary }}
+                            style={{ backgroundColor: monthly ? theme.input : theme.primary }}
                         >
                             <Text className="text-md" style={{ fontFamily: "Montserrat-Medium", color: monthly ? theme.text : "#fff" }}>Once</Text>
                         </TouchableOpacity>
@@ -160,7 +195,7 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
                         <TouchableOpacity
                             onPress={() => setMonthly(true)}
                             className="w-36 h-12 rounded-md flex items-center justify-center shadow-sm"
-                            style={{ backgroundColor: monthly ? theme.primary : "#fff" }}
+                            style={{ backgroundColor: monthly ? theme.primary : theme.input }}
                         >
                             <Text className="text-md" style={{ fontFamily: "Montserrat-Medium", color: monthly ? "#fff" : theme.text }}>Monthly</Text>
                         </TouchableOpacity>

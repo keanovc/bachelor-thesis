@@ -1,17 +1,15 @@
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, ActivityIndicator } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react'
-import { useNavigation } from '@react-navigation/native'
 
 import ThemeContext from '../../context/ThemeContext'
-import LatestArticleCard from './LatestArticleCard'
 import useFetch from '../../hooks/useFetch'
 import env from "../../config/env";
+import { LatestArticleCard } from '../../components'
 
 const rapidApiKey = env.RAPID_API_KEY
 
 const LatestArticles = () => {
     const theme = useContext(ThemeContext)
-    const navigation = useNavigation()
     
     const [dataIds, setDataIds] = useState([])
     const [data, setData] = useState([])
@@ -52,10 +50,10 @@ const LatestArticles = () => {
     return (
         <View className="mt-2">
             <View className="flex flex-row items-center justify-between">
-                <Text className="text-lg font-bold" style={{ fontFamily: "Montserrat-Bold" }}>Latest Articles</Text>
+                <Text className="text-lg font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>Latest Articles</Text>
             </View>
 
-            <View className="flex flex-col items-center justify-center mt-2 mb-6">
+            <View className="flex flex-col items-center justify-center mt-2 mb-6 px-2">
                 {
                     isLoading ? (
                         <ActivityIndicator size="large" color={theme.primary} />

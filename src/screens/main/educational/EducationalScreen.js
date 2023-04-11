@@ -3,8 +3,7 @@ import React, { useContext } from 'react'
 import { getToday } from 'react-native-modern-datepicker'
 
 import ThemeContext from '../../../context/ThemeContext'
-import { PopularArticles, LatestArticles } from '../../../components'
-import Filter from '../../../components/educational/Filter'
+import { PopularArticles, LatestArticles, Filter } from '../../../components'
 
 const EducationalScreen = () => {
     const theme = useContext(ThemeContext)
@@ -20,7 +19,7 @@ const EducationalScreen = () => {
                         <Text className="text-2xl font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Regular" }}> Education</Text>
                     </Text>
 
-                    <Text className="text-xs font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Light" }}>{getToday()}</Text>
+                    <Text className="text-xs font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Light" }}>{getToday()}</Text>
                 </View>
             </View>
 

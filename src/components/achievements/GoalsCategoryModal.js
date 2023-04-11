@@ -126,7 +126,7 @@ const GoalsCategoryModal = ({ closeModal, category }) => {
                 key={icon}
                 onPress={() => setCategoryIcon(icon)}
                 className="w-12 h-12 rounded-md m-2 flex items-center justify-center shadow-sm"
-                style={{ backgroundColor: "#fff", opacity: categoryIcon === icon ? 0.5 : 1 }}
+                style={{ backgroundColor: theme.accent, opacity: categoryIcon === icon ? 0.5 : 1 }}
             >
                 <Emoji name={icon} style={{ fontSize: 24 }} />
 
@@ -145,7 +145,15 @@ const GoalsCategoryModal = ({ closeModal, category }) => {
                 </TouchableOpacity>
 
                 <View className="flex flex-col">
-                    <Text className="ml-4 text-lg" style={{ fontFamily: "Montserrat-Medium" }}>Category Name</Text>
+                    <Text 
+                        className="ml-4 text-lg" 
+                        style={{ 
+                            fontFamily: "Montserrat-Medium",
+                            color: theme.text,
+                        }}
+                    >
+                        {category ? "Edit Category" : "Create Category"}
+                    </Text>
 
                     <View
                         className="w-80 bg-gray-300 mt-2"
@@ -154,15 +162,29 @@ const GoalsCategoryModal = ({ closeModal, category }) => {
 
                     <View className="flex flex-row items-center justify-center">
                         <TextInput 
-                            className="mt-4 w-80 h-12 rounded-md border-2 border-gray-300 pb-2 text-lg text-center" 
+                            className="mt-4 w-80 h-12 rounded-lg px-4" 
+                            style={{
+                                color: theme.text,
+                                backgroundColor: theme.input,
+                                fontFamily: "Montserrat-Regular",
+                                fontSize: 14,
+                            }} 
                             placeholder="Ex: Household"
-                            style={{ color: theme.text, fontFamily: "Montserrat-Regular" }} 
+                            placeholderTextColor={theme.text}
                             value={categoryName} 
                             onChangeText={text => setCategoryName(text)}
                         />
                     </View>
 
-                    <Text className="mt-8 ml-4 text-lg" style={{ fontFamily: "Montserrat-Medium" }}>Select Color</Text>
+                    <Text 
+                        className="mt-8 ml-4 text-lg" 
+                        style={{ 
+                            fontFamily: "Montserrat-Medium",
+                            color: theme.text,
+                        }}
+                    >
+                        Select Color
+                    </Text>
 
                     <View 
                         className="w-80 bg-gray-300 mt-2" 
@@ -173,7 +195,15 @@ const GoalsCategoryModal = ({ closeModal, category }) => {
                         {renderColors()}
                     </View>
 
-                    <Text className="mt-8 ml-4 text-lg" style={{ fontFamily: "Montserrat-Medium" }}>Select Icon</Text>
+                    <Text 
+                        className="mt-8 ml-4 text-lg" 
+                        style={{ 
+                            fontFamily: "Montserrat-Medium",
+                            color: theme.text,
+                        }}
+                    >
+                        Select Icon
+                    </Text>
 
                     <View
                         className="w-80 bg-gray-300 mt-2"

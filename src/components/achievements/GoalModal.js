@@ -1,12 +1,13 @@
 import { View, Text, KeyboardAvoidingView, TouchableOpacity, SafeAreaView, TextInput, FlatList, Modal, Alert } from 'react-native'
 import React, { useContext, useState } from 'react'
-import ThemeContext from '../../context/ThemeContext'
-import { UserContext } from '../../context/UserContext'
 import { Ionicons } from '@expo/vector-icons'
-import { firebase } from '../../config/firebase'
 import DatePicker, { getToday } from 'react-native-modern-datepicker'
 import NumericInput from 'react-native-numeric-input'
 import Emoji from 'react-native-emoji';
+
+import ThemeContext from '../../context/ThemeContext'
+import { UserContext } from '../../context/UserContext'
+import { firebase } from '../../config/firebase'
 
 const GoalModal = ({ category, closeModal, goal }) => {
     const [user, setUser] = useContext(UserContext)
@@ -102,7 +103,7 @@ const GoalModal = ({ category, closeModal, goal }) => {
                 key={icon}
                 onPress={() => setGoalIcon(icon)}
                 className="w-12 h-12 rounded-md m-2 flex items-center justify-center shadow-sm"
-                style={{ backgroundColor: "#fff", opacity: goalIcon === icon ? 0.5 : 1 }}
+                style={{ backgroundColor: theme.accent, opacity: goalIcon === icon ? 0.5 : 1 }}
             >
                 <Emoji name={icon} style={{ fontSize: 24 }} />
 
@@ -121,24 +122,46 @@ const GoalModal = ({ category, closeModal, goal }) => {
                 </TouchableOpacity>
 
                 <View className="flex flex-col">
-                    <Text className="ml-4 text-lg" style={{ fontFamily: "Montserrat-Medium" }}>Goal Name</Text>
+                    <Text 
+                        className="ml-4 text-lg" 
+                        style={{ 
+                            fontFamily: "Montserrat-Medium",
+                            color: theme.text,
+                        }}
+                    >
+                        {goal ? "Edit Goal" : "Create Goal"}
+                    </Text>
 
                     <View
                         className="w-80 bg-gray-300 mt-2"
                         style={{ height: 2, backgroundColor: theme.primary }}
                     />
 
-                    <View className="flex flex-row mt-4 items-center justify-center">
+                    <View className="flex flex-row items-center justify-center">
                         <TextInput 
-                            className="w-80 h-12 rounded-md border-2 border-gray-300 pb-2 text-lg text-center" 
-                            placeholder="Ex: Household"
-                            style={{ color: theme.text, fontFamily: "Montserrat-Regular" }} 
+                            className="mt-4 w-80 h-12 rounded-lg px-4" 
+                            style={{
+                                color: theme.text,
+                                backgroundColor: theme.input,
+                                fontFamily: "Montserrat-Regular",
+                                fontSize: 14,
+                            }} 
+                            placeholder="Ex: New Phone"
+                            placeholderTextColor={theme.text}
                             value={goalName}
                             onChangeText={text => setGoalName(text)}
                         />
                     </View>
 
-                    <Text className="mt-8 ml-4 text-lg" style={{ fontFamily: "Montserrat-Medium" }}>Select Icon</Text>
+                    <Text 
+                        className="mt-8 ml-4 text-lg" 
+                        style={{ 
+                            fontFamily: "Montserrat-Medium",
+                            color: theme.text,
+                        }}
+                    >
+                        Select Icon
+                    </Text>
 
                     <View
                         className="w-80 bg-gray-300 mt-2"
@@ -155,7 +178,15 @@ const GoalModal = ({ category, closeModal, goal }) => {
                         />
                     </View>
 
-                    <Text className="mt-8 ml-4 text-lg" style={{ fontFamily: "Montserrat-Medium" }}>Goal Date & Money</Text>
+                    <Text 
+                        className="mt-8 ml-4 text-lg" 
+                        style={{ 
+                            fontFamily: "Montserrat-Medium",
+                            color: theme.text,
+                        }}
+                    >
+                        Select Date & Amount
+                    </Text>
 
                     <View
                         className="w-80 bg-gray-300 mt-2"
@@ -165,7 +196,7 @@ const GoalModal = ({ category, closeModal, goal }) => {
                     <View className="flex flex-row mt-4 items-center justify-center">
                         <TouchableOpacity
                             className="w-36 h-12 mr-4 rounded-md text-lg text-center flex flex-row items-center justify-center"
-                            style={{ backgroundColor: theme.primary, opacity: goalDate === "" ? 0.5 : 1 }}
+                            style={{ backgroundColor: theme.accent, opacity: goalDate === "" ? 0.5 : 1 }}
                             onPress={() => setOpenDateModal(true)}
                         >
                             <Text style={{ color: "#fff", fontFamily: "Montserrat-Regular" }}>{goalDate === "" ? "Select Date" : goalDate}</Text>
@@ -186,9 +217,13 @@ const GoalModal = ({ category, closeModal, goal }) => {
                             rightButtonBackgroundColor={theme.primary}
                             leftButtonBackgroundColor={theme.primary}
                             borderColor={theme.background}
+                            containerStyle={{
+                                backgroundColor: theme.input,
+                            }}
                             inputStyle={{ 
                                 fontFamily: "Montserrat-Regular",
                                 fontSize: 14,
+                                color: theme.text,
                             }}
                         />
                     </View>
@@ -199,7 +234,10 @@ const GoalModal = ({ category, closeModal, goal }) => {
                         visible={openDateModal}
                     >
                         <View className="flex flex-col items-center justify-center w-full h-full">
-                            <View className="m-20 bg-white rounded-md w-11/12 p-4 items-center shadow-lg">
+                            <View 
+                                className="m-20 rounded-md w-11/12 p-4 items-center shadow-lg"
+                                style={{ backgroundColor: theme.accent }}
+                            >
                                 <DatePicker
                                     mode="calendar"
                                     selected={goalDate}
@@ -209,6 +247,9 @@ const GoalModal = ({ category, closeModal, goal }) => {
                                     }}
                                     options={{
                                         mainColor: theme.primary,
+                                        backgroundColor: theme.accent,
+                                        textDefaultColor: theme.text,
+                                        textHeaderColor: theme.text,
                                     }}
                                 />
                             </View>

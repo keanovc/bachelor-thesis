@@ -1,8 +1,9 @@
 import { View, Text, TouchableOpacity, Modal } from 'react-native'
 import React, { useState, useContext } from 'react'
-import BudgetModal from './BudgetModal'
 import { Ionicons } from '@expo/vector-icons'
+
 import ThemeContext from '../../context/ThemeContext'
+import { BudgetModal } from '../../components'
 
 const BudgetItem = ({ item, category, loading, edit, date }) => {
     const [editVisible, setEditVisible] = useState(false)
@@ -16,7 +17,10 @@ const BudgetItem = ({ item, category, loading, edit, date }) => {
 
     return (
         <TouchableOpacity 
-            className="py-4 border-b border-gray-200"
+            className="py-4 border-b"
+            style={{
+                borderColor: theme.accent,
+            }}
             onPress={
                 edit ? () => setEditVisible(!editVisible) : null
             }
@@ -41,10 +45,10 @@ const BudgetItem = ({ item, category, loading, edit, date }) => {
                     }
 
                     <View className="flex-col">
-                        <Text className="text-base" style={{ fontFamily: "Montserrat-Medium" }}>
+                        <Text className="text-base" style={{ color:theme.text, fontFamily: "Montserrat-SemiBold" }}>
                             {item.name}
                         </Text>
-                        <Text className="text-xs" style={{ fontFamily: "Montserrat-Light" }}>
+                        <Text className="text-xs" style={{ color:theme.text, fontFamily: "Montserrat-Light" }}>
                             {toDateTime(item.createdAt.seconds).toDateString()}
                         </Text>
                     </View>
@@ -54,14 +58,14 @@ const BudgetItem = ({ item, category, loading, edit, date }) => {
                     <Text 
                         className="text-base"
                         style={{ 
-                            fontFamily: "Montserrat-Medium",
+                            fontFamily: "Montserrat-SemiBold",
                             color: category.type == "incomes" ? "#48BB78" : "#F66565",
                         }}
                     >
                         $ {item.money}
                     </Text>
 
-                    <Text className="text-xs" style={{ fontFamily: "Montserrat-Light" }}>
+                    <Text className="text-xs" style={{ color:theme.text, fontFamily: "Montserrat-Light" }}>
                         {
                             category.id !== "goals" ? (
                                 item.monthly ? "/monthly" : "/once"

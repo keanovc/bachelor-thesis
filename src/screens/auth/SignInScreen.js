@@ -5,6 +5,7 @@ import ThemeContext from '../../context/ThemeContext'
 
 import { UserContext } from '../../context/UserContext'
 import { FireBaseContext } from '../../context/FireBaseContext'
+import { AuthInputField, LargeButton } from '../../components/index'
 
 const SignInScreen = ({ navigation }) => {
     const [email, setEmail] = useState('')
@@ -32,9 +33,10 @@ const SignInScreen = ({ navigation }) => {
 
             setUser({
                 isLoggedIn: true,
-                email: userInfo.email,
                 uid: uid,
                 username: userInfo.username,
+                fullname: userInfo.fullname,
+                email: userInfo.email,
                 profilePicture: userInfo.profilePicture,
             })
         } catch (error) {
@@ -48,19 +50,15 @@ const SignInScreen = ({ navigation }) => {
         <KeyboardAvoidingView 
                 className="flex-1 bg-white"
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
+                style={{ 
+                    backgroundColor: theme.background,
+                }}
         >
             <ScrollView 
                 bounces={false}
             >
                 <SafeAreaView className="flex-1">
                     <View className="px-10 pt-36">
-                        {/* <View className="items-center justify-center mt-4">
-                            <Image
-                                source={require('../../../assets/images/logo.png')}
-                                style={{ width: 250, resizeMode: 'contain' }}
-                            />
-                        </View> */}
-
                         <View className="mt-6">
                             <Text className="text-2xl text-gray-800" style={{ fontFamily: "Montserrat-Medium" }} >
                                 Welcome back.
@@ -78,24 +76,16 @@ const SignInScreen = ({ navigation }) => {
                                         required: true,
                                         pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                                     }}
-                                    render={({ field: { onChange, onBlur, value } }) => (
-                                        <TextInput
-                                            className="bg-gray-100 rounded-lg w-full py-3 px-3 text-gray-700 leading-tight"
-                                            style={{ fontFamily: "Montserrat-Regular" }}
+                                    render={({ field: { onChange, onBlur } }) => (
+                                        <AuthInputField
                                             onBlur={onBlur}
-                                            onChangeText={
-                                                (value) => {
-                                                    onChange(value)
-                                                    setEmail(value)
-                                                }
-                                            }
-                                            value={value}
+                                            onChange={onChange}
+                                            value={email}
+                                            setValue={setEmail}
                                             placeholder="Email"
-                                            placeholderTextColor="#A9A9A9"
                                             autoCapitalize='none'
                                             autoCompleteType='email'
                                             autoCorrect={false}
-                                            autoFocus={true}
                                         />
                                     )}
                                     name="email"
@@ -114,20 +104,13 @@ const SignInScreen = ({ navigation }) => {
                                         minLength: 8,
                                         pattern: /^[^\s]+$/,
                                     }}
-                                    render={({ field: { onChange, onBlur, value } }) => (
-                                        <TextInput  
-                                            className="bg-gray-100 rounded-lg w-full py-3 px-3 text-gray-700 leading-tight"
-                                            style={{ fontFamily: "Montserrat-Regular" }}
+                                    render={({ field: { onChange, onBlur } }) => (
+                                        <AuthInputField
                                             onBlur={onBlur}
-                                            onChangeText={
-                                                (value) => {
-                                                    onChange(value)
-                                                    setPassword(value)
-                                                }
-                                            }
-                                            value={value}
+                                            onChange={onChange}
+                                            value={password}
+                                            setValue={setPassword}
                                             placeholder="Password"
-                                            placeholderTextColor="#A9A9A9"
                                             autoCapitalize='none'
                                             autoCompleteType='password'
                                             autoCorrect={false}
@@ -154,18 +137,12 @@ const SignInScreen = ({ navigation }) => {
                             </View>
 
                             <View className="mt-6">
-                                <TouchableOpacity 
-                                    onPress={handleSubmit(onSubmit)} 
-                                    disabled={loading} 
-                                    className="rounded-lg py-3 px-3 w-full"
-                                    style={{ backgroundColor: theme.primary }}
-                                >
-                                    {loading ? (
-                                        <ActivityIndicator size="small" color="#fff" />
-                                    ) : (
-                                        <Text className="text-white text-center text-sm" style={{ fontFamily: "Montserrat-SemiBold" }}>Sign In</Text>
-                                    )}
-                                </TouchableOpacity>
+                                <LargeButton
+                                    handleSubmit={handleSubmit}
+                                    onSubmit={onSubmit}
+                                    loading={loading}
+                                    text="Sign In"
+                                />
                             </View>
 
                             <View className="flex flex-row items-center justify-center mt-6">

@@ -22,12 +22,14 @@ const FireBase = {
                     const uid = FireBase.getCurrentUser().uid;
 
                     await firebase.firestore().collection('users').doc(uid).set({
+                        fullname: user.fullname,
                         username: user.username,
                         email: user.email,
                         profilePicture: profilePictureUrl,
                     });
 
                     return {
+                        fullname: user.fullname,
                         username: user.username,
                         email: user.email,
                         uid,
@@ -95,6 +97,7 @@ const FireBase = {
 
             await FireBase.getCurrentUser().updateEmail(user.email).then(async () => {
                 await firebase.firestore().collection('users').doc(uid).update({
+                    fullname: user.fullname,
                     username: user.username,
                     email: user.email,
                     profilePicture: profilePictureUrl,
@@ -104,6 +107,7 @@ const FireBase = {
             });
 
             return {
+                fullname: user.fullname,
                 username: user.username,
                 email: user.email,
                 uid,

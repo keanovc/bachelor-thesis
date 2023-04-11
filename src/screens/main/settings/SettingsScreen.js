@@ -8,7 +8,7 @@ import { useForm, Controller } from "react-hook-form";
 
 import { UserContext } from '../../../context/UserContext'
 import { FireBaseContext } from '../../../context/FireBaseContext'
-import SettingsItem from '../../../components/settings/SettingsItem'
+import { SettingsItem, ProfileSignIn, IconButton } from '../../../components';
 
 const SettingsScreen = () => {
     const [user, setUser] = useContext(UserContext)
@@ -42,6 +42,7 @@ const SettingsScreen = () => {
                 email: userInfo.email,
                 uid: uid,
                 username: userInfo.username,
+                fullname: userInfo.fullname,
                 profilePicture: userInfo.profilePicture,
             })
         } catch (error) {
@@ -67,130 +68,36 @@ const SettingsScreen = () => {
             style={{ backgroundColor: theme.background }}
         >
             <ScrollView>
-                {/* Modal */}
-                <Modal
-                    transparent={true}
-                    visible={modalVisible}
-                >
-                    <View className="flex-1 justify-center items-center"
-                        style={{
-                            backgroundColor: "#00000080",
-                        }}
-                    >
-                        <View className="w-3/4 rounded-md p-6 shadow-lg"
-                            style={{
-                                backgroundColor: theme.background,
-                            }}
-                        >
-                            <View className="flex-row items-center justify-between">
-                                <View>
-                                    <Text className="text-2xl font-bold" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>Sign In</Text>
-                                    <Text className="text-xs font-regular mt-1 text-gray-400" style={{ fontFamily: "Montserrat-Regular" }}>
-                                        Before you can edit your profile
-                                    </Text>
-                                </View>
-                                <TouchableOpacity
-                                    onPress={() => setModalVisible(false)}
-                                >
-                                    <Ionicons name="close" size={24} color={theme.text} />
-                                </TouchableOpacity>
-                            </View>
-
-                            <View className="mt-6">
-                                <Text className="text-xs text-gray-400 mb-2 uppercase" style={{ fontFamily: "Montserrat-Regular" }}>Email</Text>
-                                <Controller
-                                    control={control}
-                                    rules={{
-                                        required: true,
-                                        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                    }}
-                                    render={({ field: { onChange, onBlur, value } }) => (
-                                        <TextInput
-                                            className="border-b border-gray-300 w-full py-2"
-                                            onBlur={onBlur}
-                                            onChangeText={
-                                                value => {
-                                                    onChange(value)
-                                                    setEmail(value)
-                                                }
-                                            }
-                                            value={value}
-                                            placeholder="Email"
-                                            placeholderTextColor="#A9A9A9"
-                                            autoCapitalize='none'
-                                            autoCompleteType='email'
-                                            autoCorrect={false}
-                                            autoFocus={true}
-                                            style={{ color: theme.text, fontFamily: "Montserrat-Regular" }}
-                                        />
-                                    )}
-                                    name="email"
-                                />
-                                {errors.email && <Text className="text-red-500" style={{ fontFamily: "Montserrat-Regular" }}>
-                                    {errors.email.type === "required" && "This is required."}
-                                    {errors.email.type === "pattern" && "Please enter a valid email."}
-                                </Text>}
-                            </View>
-
-                            <View className="mt-6">
-                                <Text className="text-xs text-gray-400 mb-2 uppercase">Password</Text>
-                                <Controller
-                                    control={control}
-                                    rules={{
-                                        required: true,
-                                        minLength: 8,
-                                        pattern: /^[^\s]+$/,
-                                    }}
-                                    render={({ field: { onChange, onBlur, value } }) => (
-                                        <TextInput
-                                            className="border-b border-gray-300 w-full py-2"
-                                            onBlur={onBlur}
-                                            onChangeText={
-                                                (value) => {
-                                                    onChange(value)
-                                                    setPassword(value)
-                                                }
-                                            }
-                                            value={value}
-                                            placeholder="Password"
-                                            placeholderTextColor="#A9A9A9"
-                                            autoCapitalize='none'
-                                            autoCompleteType='password'
-                                            autoCorrect={false}
-                                            secureTextEntry={true}
-                                            style={{ color: theme.text, fontFamily: "Montserrat-Regular" }}
-                                        />
-                                    )}
-                                    name="password"
-                                />
-                                {errors.password && <Text className="text-red-500" style={{ fontFamily: "Montserrat-Regular" }}>
-                                    {errors.password.type === "required" && "This is required."}
-                                    {errors.password.type === "minLength" && "Password must be at least 8 characters."}
-                                    {errors.password.type === "pattern" && "Password cannot contain spaces."}
-                                </Text>}
-                            </View>
-
-                        <View className="mt-10">
-                                <TouchableOpacity
-                                    className="bg-indigo-500 rounded-md py-2"
-                                    onPress={handleSubmit(onSubmit)}
-                                    style={{ backgroundColor: theme.primary }}
-                                >
-                                    <Text className="text-center text-white font-semibold" style={{ fontFamily: "Montserrat-SemiBold" }}>Sign In</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </View>
-                </Modal>
+                <ProfileSignIn
+                    modalVisible={modalVisible}
+                    setModalVisible={setModalVisible}
+                    control={control}
+                    errors={errors}
+                    handleSubmit={handleSubmit}
+                    setEmail={setEmail}
+                    setPassword={setPassword}
+                    onSubmit={onSubmit}
+                    loading={loading}
+                />
                 
-                <View className="px-6">
-                    <View className="mt-4">
-                        <Text className="text-3xl" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>Settings</Text>
+                <View 
+                    className="px-6"
+                    style={
+                        modalVisible ? { opacity: 0.2 } : { opacity: 1 }
+                    }
+                >
+                    <View className="flex-row items-center justify-start mt-4">
+                        <IconButton
+                            onPress={() => navigation.goBack()}
+                            icon="chevron-back"
+                        />
+
+                        <Text className="text-3xl ml-4" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>Settings</Text>
                     </View>
 
                     {/* Account Edit */}
                     <View className="mt-4">
-                        <Text className="text-xl" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>Account</Text>
+                        <Text className="text-xl" style={{ color: theme.text, fontFamily: "Montserrat-Medium" }}>Account</Text>
                     </View>
 
                     <TouchableOpacity
@@ -208,7 +115,7 @@ const SettingsScreen = () => {
                             />
 
                             <View className="ml-4">
-                                <Text className="text-lg font-bold" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>{user.username}</Text>
+                                <Text className="text-lg font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Medium" }}>{user.fullname}</Text>
                                 <Text className="text-sm font-regular text-gray-400" style={{ fontFamily: "Montserrat-Regular" }}>Personal Info</Text>
                             </View>
                         </View>
@@ -225,7 +132,7 @@ const SettingsScreen = () => {
 
                     {/* Preferences */}
                     <View className="mt-10">
-                        <Text className="text-xl" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>Preferences</Text>
+                        <Text className="text-xl" style={{ color: theme.text, fontFamily: "Montserrat-Medium" }}>Preferences</Text>
                     </View>
 
                     {/* Dark Mode */}
@@ -313,7 +220,7 @@ const SettingsScreen = () => {
 
                     {/* Help */}
                     <View className="mt-10 mb-6">
-                        <Text className="text-xl" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>Help</Text>
+                        <Text className="text-xl" style={{ color: theme.text, fontFamily: "Montserrat-Medium" }}>Help</Text>
 
                         <View className="space-y-4 mt-6">
                             {/* About */}
@@ -357,28 +264,6 @@ const SettingsScreen = () => {
                                     iconBackgroundColor="#CAD8D9"
                                     iconColor="white"
                                     icon="warning"
-                                />
-                            </View>
-
-                            {/* Cookie Policy */}
-                            <View>
-                                <SettingsItem
-                                    title="Cookie Policy"
-                                    onPress={() => navigation.navigate('CookiePolicy')}
-                                    iconBackgroundColor="#CAD8D9"
-                                    iconColor="white"
-                                    icon="server"
-                                />
-                            </View>
-
-                            {/* Community Standards */}
-                            <View>
-                                <SettingsItem
-                                    title="Community Standards"
-                                    onPress={() => navigation.navigate('CommunityStandards')}
-                                    iconBackgroundColor="#CAD8D9"
-                                    iconColor="white"
-                                    icon="people"
                                 />
                             </View>
                         </View>

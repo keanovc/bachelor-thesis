@@ -13,30 +13,44 @@ const ArticleDetails = ({ article, content }) => {
             <View className="flex flex-row items-center justify-between mt-4">
                 <Text className="text-xs" style={{ color: theme.primary, fontFamily: "Montserrat-Medium" }}>
                     {article.published_at}
-                    {/* {
-                        article.topics !== {} ? (
-                            <Text className="text-xs" style={{ color: "lightgray", fontFamily: "Montserrat-Medium" }}>
-                                {
-                                    article.topics.map((topic, index) => {
-                                        return (
-                                            <Text key={index}>
-                                                {index === 0 ? " • " : null}
-                                                {topic} {index === article.topics.length - 1 ? null : " • "} 
-                                            </Text>
-                                        )
-                                    })
-                                }
-                            </Text>
-                        ) : null
-                    }  */}
                 </Text>
             </View>
 
             <Markdown
                 markdownStyles={{
                     h1: {
-                        fontFamily: "Montserrat-Medium",
+                        fontFamily: "Montserrat-SemiBold",
                         fontSize: 20,
+                        color: theme.text,
+                        marginVertical: 10
+                    },
+                    h2: {
+                        fontFamily: "Montserrat-SemiBold",
+                        fontSize: 18,
+                        color: theme.text,
+                        marginVertical: 10
+                    },
+                    h3: {
+                        fontFamily: "Montserrat-SemiBold",
+                        fontSize: 16,
+                        color: theme.text,
+                        marginVertical: 10
+                    },
+                    h4: {
+                        fontFamily: "Montserrat-SemiBold",
+                        fontSize: 14,
+                        color: theme.text,
+                        marginVertical: 10
+                    },
+                    h5: {
+                        fontFamily: "Montserrat-SemiBold",
+                        fontSize: 12,
+                        color: theme.text,
+                        marginVertical: 10
+                    },
+                    h6: {
+                        fontFamily: "Montserrat-SemiBold",
+                        fontSize: 10,
                         color: theme.text,
                         marginVertical: 10
                     },
@@ -51,6 +65,51 @@ const ArticleDetails = ({ article, content }) => {
                         objectFit: "cover",
                         borderRadius: 10,
                         marginVertical: 10
+                    },
+                    list: {
+                        fontFamily: "Montserrat-Regular",
+                        fontSize: 14,
+                        color: theme.text
+                    },
+                    listItem: {
+                        fontFamily: "Montserrat-Regular",
+                        fontSize: 14,
+                        color: theme.text,
+                        marginVertical: 5
+                    },
+                    listItemContent: {
+                        fontFamily: "Montserrat-Regular",
+                        fontSize: 14,
+                        color: theme.text,
+                        marginVertical: 5
+                    },
+                    listItemNumber: {
+                        fontFamily: "Montserrat-Bold",
+                        fontSize: 14,
+                        color: theme.text,
+                        marginVertical: 5
+                    },
+                    listItemBullet: {
+                        fontFamily: "Montserrat-Bold",
+                        fontSize: 14,
+                        color: theme.text,
+                        marginVertical: 5
+                    },
+                    u: {
+                        fontFamily: "Montserrat-Regular",
+                        fontSize: 14,
+                        color: theme.text,
+                        textDecorationLine: "underline"
+                    },
+                    strong: {
+                        fontFamily: "Montserrat-Bold",
+                        fontSize: 14,
+                        color: theme.text
+                    },
+                    em: {
+                        fontFamily: "Montserrat-Italic",
+                        fontSize: 14,
+                        color: theme.text
                     },
                 }}
                 style={{ 

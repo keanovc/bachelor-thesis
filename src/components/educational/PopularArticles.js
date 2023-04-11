@@ -3,9 +3,9 @@ import React, { useState, useContext, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 
 import ThemeContext from '../../context/ThemeContext'
-import PopularArticleCard from './PopularArticleCard'
 import useFetch from '../../hooks/useFetch'
 import env from "../../config/env";
+import { PopularArticleCard } from '../../components'
 
 const rapidApiKey = env.RAPID_API_KEY
 
@@ -52,7 +52,7 @@ const PopularArticles = () => {
     return (
         <View className="mt-2">
             <View className="flex flex-row items-center justify-between">
-                <Text className="text-lg font-bold" style={{ fontFamily: "Montserrat-Bold" }}>Popular Articles</Text>
+                <Text className="text-lg" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>Popular Articles</Text>
             </View>
 
             <View className="flex flex-row items-center justify-center mt-2 mb-6">

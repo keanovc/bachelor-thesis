@@ -1,12 +1,12 @@
-import { View, Text, SafeAreaView, TouchableOpacity, FlatList, Modal, Keyboard, Pressable } from 'react-native'
+import { View, Text, SafeAreaView, TouchableOpacity, FlatList, Modal, Keyboard } from 'react-native'
 import React, { useContext, useState, useEffect } from 'react'
+import { Ionicons } from '@expo/vector-icons'
+import { useNavigation } from '@react-navigation/native'
+
 import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
-import { Ionicons } from '@expo/vector-icons'
 import { firebase } from '../../../config/firebase'
-import { useNavigation } from '@react-navigation/native'
-import GoalItem from '../../../components/achievements/GoalItem'
-import GoalModal from '../../../components/achievements/GoalModal'
+import { GoalModal, GoalItem, IconButton } from '../../../components'
 
 const GoalsScreen = ({ route }) => {
     const [user, setUser] = useContext(UserContext)
@@ -90,44 +90,43 @@ const GoalsScreen = ({ route }) => {
 
             <View className="flex flex-row items-center justify-between mx-5 pt-5">
                 <View className="flex flex-row items-center">
-                    <TouchableOpacity className="bg-white rounded-md p-2" onPress={() => navigation.goBack()}>
-                        <Ionicons name="chevron-back-outline" size={30} color={theme.primary} />
-                    </TouchableOpacity>
+                    <IconButton
+                        onPress={() => navigation.goBack()}
+                        icon="chevron-back-outline"
+                    />
 
                     <View className="flex flex-col">
-                        <Text className="text-2xl ml-4" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>
+                        <Text className="text-lg ml-4" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>
                             {category.name}
                         </Text>
 
-                        <Text className="text-md ml-4" style={{ color: theme.text, fontFamily: "Montserrat-Light" }}>
+                        <Text className="text-xs ml-4" style={{ color: theme.text, fontFamily: "Montserrat-Light" }}>
                             {completedGoals} of {totalGoals} goals completed
                         </Text>
                     </View>
                 </View>
 
-                <TouchableOpacity
-                    className="bg-white rounded-full p-2"
+                <IconButton
                     onPress={() => setEditVisible(!editVisible)}
-                >
-                    <Ionicons name="create-outline" size={16} color={theme.primary} />
-                </TouchableOpacity>
+                    icon="create-outline"
+                />
             </View>
 
-            <View className="flex flex-row items-center justify-between mx-5">
+            <View className="flex flex-row items-center justify-between mx-5 pt-2">
                 <View className="flex flex-row items-center justify-center">
                     <FlatList
                         data={filter}
                         renderItem={({ item }) => 
                             <TouchableOpacity 
-                                className="flex flex-row items-center justify-center bg-white rounded-full py-2 px-4 shadow-sm m-1"
+                                className="flex flex-row items-center justify-center rounded-full py-2 px-4 shadow-sm m-1"
                                 onPress={() => {
                                     setFilterGoals(item)
                                     Keyboard.dismiss()
                                 }}
-                                style={{ backgroundColor: filterGoals.id === item.id ? theme.primary : "white" }}
+                                style={{ backgroundColor: filterGoals.id === item.id ? theme.primary : theme.accent }}
                             >
-                                <Ionicons name={item.icon} size={18} color={filterGoals.id === item.id ? theme.background : theme.primary} />
-                                <Text className="ml-1 text-sm" style={{ color: filterGoals.id === item.id ? theme.background : theme.primary, fontFamily: "Montserrat-Light" }}>{item.name}</Text>
+                                <Ionicons name={item.icon} size={18} color={filterGoals.id === item.id ? "white" : theme.primary} />
+                                <Text className="ml-1 text-sm" style={{ color: filterGoals.id === item.id ? "white" : theme.text,  fontFamily: filterGoals.id === item.id ? "Montserrat-Bold" : "Montserrat-Light" }}>{item.name}</Text>
                             </TouchableOpacity>
                         }
                         keyExtractor={(item) => item.id}

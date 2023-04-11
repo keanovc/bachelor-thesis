@@ -4,10 +4,12 @@ import LotteView from 'lottie-react-native'
 
 import { UserContext } from '../../context/UserContext'
 import { FireBaseContext } from '../../context/FireBaseContext'
+import ThemeContext from '../../context/ThemeContext'
 
 const LoadingScreen = () => {
     const [_, setUser] = useContext(UserContext)
     const firebase = useContext(FireBaseContext)
+    const theme = useContext(ThemeContext)
 
     const fadeInAnimation = new Animated.Value(0)
     const fadeOutAnimation = new Animated.Value(1)
@@ -45,7 +47,12 @@ const LoadingScreen = () => {
     }, [])
 
     return (
-        <View className="flex-1 items-center justify-center bg-white">
+        <View 
+            className="flex-1 items-center justify-center"
+            style={{
+                backgroundColor: theme.background,
+            }}
+        >
             <Animated.View
                 // fade in and when done fade out
                 style={{

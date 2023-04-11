@@ -25,15 +25,7 @@ const MainStackScreen = () => {
             height: 80,
             borderTopWidth: 0,
             paddingTop: 10,
-            paddingHorizontal: 10,
-            shadowColor: theme.shadow,
-            shadowOffset: {
-                width: 0,
-                height: 10,
-            },
-            shadowOpacity: 0.53,
-            shadowRadius: 13.97,
-            elevation: 21,
+            paddingHorizontal: 10
         },
 
         tabBarIcon: ({ focused, color, size }) => {

@@ -1,12 +1,12 @@
 import { View, Text, TouchableOpacity, Modal } from 'react-native'
 import React, { useContext, useState, useEffect } from 'react'
-import ThemeContext from '../../context/ThemeContext'
-import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import Emoji from 'react-native-emoji';
+
+import ThemeContext from '../../context/ThemeContext'
 import { UserContext } from '../../context/UserContext'
 import { firebase } from '../../config/firebase'
-import CategoryModal from './GoalsCategoryModal'
-import Emoji from 'react-native-emoji';
+import { GoalsCategoryModal } from '../../components'
 
 const GoalsCategoriesCard = ({ category, edit, totalBudget }) => {
     const [user, setUser] = useContext(UserContext)
@@ -55,7 +55,7 @@ const GoalsCategoriesCard = ({ category, edit, totalBudget }) => {
 
     return (
         <TouchableOpacity 
-            className="flex flex-col items-center justify-center rounded-2xl shadow-sm w-[162px] h-48 m-2 bg-white"
+            className="flex flex-col items-center justify-center rounded-2xl shadow-sm w-[162px] h-48 m-2"
             onPress={
                 edit ?
                     () => setEditVisible(!editVisible)
@@ -63,7 +63,12 @@ const GoalsCategoriesCard = ({ category, edit, totalBudget }) => {
                     () => navigation.navigate('Goals', { category, totalBudget })
             }
             onLongPress={() => setEditVisible(!editVisible)}
-            style={edit ? { opacity: 0.5, backgroundColor: "lightgray" } : {}}
+            style={
+                edit ? 
+                    { opacity: 0.5, backgroundColor: "lightgray" } 
+                : 
+                    { backgroundColor: theme.accent }
+            }
         >
             {
                 edit &&
@@ -78,11 +83,11 @@ const GoalsCategoriesCard = ({ category, edit, totalBudget }) => {
             }
 
             <Modal animationType="slide" visible={editVisible}>
-                <CategoryModal closeModal={() => setEditVisible(false)} category={category}  />
+                <GoalsCategoryModal closeModal={() => setEditVisible(false)} category={category}  />
             </Modal>
 
             <View className="absolute top-0 left-0 m-4">
-                <Text className="text-xs" style={{ fontFamily: "Montserrat-Bold" }}>
+                <Text className="text-xs" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>
                     {completedGoals}/{totalGoals}
                 </Text>
             </View>
@@ -91,11 +96,11 @@ const GoalsCategoriesCard = ({ category, edit, totalBudget }) => {
                 <Emoji name={category.icon} style={{ fontSize: 24 }} />
             </View>
 
-            <Text className="mt-2 text-lg " style={{ color: theme.primary, fontFamily: "Montserrat-Medium" }}>
+            <Text className="mt-2 text-lg" style={{ color: theme.primary, fontFamily: "Montserrat-SemiBold" }}>
                 {category.name}
             </Text>
 
-            <Text className="mt-4 text-sm" style={{ fontFamily: "Montserrat-Bold" }}>
+            <Text className="mt-4 text-sm" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>
                 $ {totalBalance}
             </Text>
         </TouchableOpacity>
