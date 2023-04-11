@@ -1,5 +1,5 @@
 import { TextInput } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 
 const AuthInputField = ({
     onBlur,
@@ -16,8 +16,8 @@ const AuthInputField = ({
         <TextInput  
             className="rounded-lg w-full py-3 px-3 leading-tight"
             style={{ 
-                color: theme.text,
-                backgroundColor: theme.input,
+                color: "black",
+                backgroundColor: "white",
                 fontFamily: "Montserrat-Regular",
                 fontSize: 14,
             }}
@@ -30,7 +30,7 @@ const AuthInputField = ({
             }
             value={value}
             placeholder={placeholder}
-            placeholderTextColor="#A9A9A9"
+            placeholderTextColor="#9E9E9E"
             autoCapitalize={autoCapitalize}
             autoCompleteType={autoCompleteType}
             autoCorrect={autoCorrect}

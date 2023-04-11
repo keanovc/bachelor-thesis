@@ -4,7 +4,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import ThemeContext from '../../context/ThemeContext'
 import useFetch from '../../hooks/useFetch'
 import env from "../../config/env";
-import { LatestArticleCard } from '../../components'
+import LatestArticleCard from './LatestArticleCard'
 
 const rapidApiKey = env.RAPID_API_KEY
 

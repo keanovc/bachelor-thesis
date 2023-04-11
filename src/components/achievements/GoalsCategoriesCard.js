@@ -6,7 +6,7 @@ import Emoji from 'react-native-emoji';
 import ThemeContext from '../../context/ThemeContext'
 import { UserContext } from '../../context/UserContext'
 import { firebase } from '../../config/firebase'
-import { GoalsCategoryModal } from '../../components'
+import GoalsCategoryModal from './GoalsCategoryModal'
 
 const GoalsCategoriesCard = ({ category, edit, totalBudget }) => {
     const [user, setUser] = useContext(UserContext)

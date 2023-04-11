@@ -4,7 +4,7 @@ import Emoji from 'react-native-emoji';
 import { useNavigation } from '@react-navigation/native'
 
 import ThemeContext from '../../context/ThemeContext'
-import { GoalModal } from '../../components'
+import GoalModal from './GoalModal'
 
 const GoalItem = ({ goal, category, edit, totalBudget }) => {
     const theme = useContext(ThemeContext)

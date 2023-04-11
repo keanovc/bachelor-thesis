@@ -4,7 +4,8 @@ import { Ionicons } from '@expo/vector-icons'
 import { Controller } from 'react-hook-form'
 
 import ThemeContext from '../../context/ThemeContext'
-import { AuthInputField, LargeButton } from '../index'
+import AuthInputField from '../common/form/AuthInputField'
+import LargeButton from '../common/form/LargeButton'
 
 const ProfileSignIn = ({
     modalVisible,

@@ -112,7 +112,7 @@ const SignUpScreen = ({ navigation }) => {
 
                         <TouchableOpacity 
                             onPress={addProfilePicture}
-                            className="bg-slate-200 w-20 h-20 rounded-full self-center overflow-hidden mt-6"
+                            className="bg-white w-20 h-20 rounded-full self-center overflow-hidden mt-6"
                         >
                             {profilePicture ? (
                                 <Image source={{ uri: profilePicture }} className="flex-1" />

@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 
 import ThemeContext from '../../context/ThemeContext'
-import { BudgetModal } from '../../components'
+import BudgetModal from './BudgetModal'
 
 const BudgetItem = ({ item, category, loading, edit, date }) => {
     const [editVisible, setEditVisible] = useState(false)

@@ -9,7 +9,7 @@ import ThemeContext from '../../context/ThemeContext'
 const LoadingScreen = () => {
     const [_, setUser] = useContext(UserContext)
     const firebase = useContext(FireBaseContext)
-    const theme = useContext(ThemeContext)
+    const { theme } = useContext(ThemeContext)
 
     const fadeInAnimation = new Animated.Value(0)
     const fadeOutAnimation = new Animated.Value(1)

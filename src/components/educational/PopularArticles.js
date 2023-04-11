@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import ThemeContext from '../../context/ThemeContext'
 import useFetch from '../../hooks/useFetch'
 import env from "../../config/env";
-import { PopularArticleCard } from '../../components'
+import PopularArticleCard from './PopularArticleCard'
 
 const rapidApiKey = env.RAPID_API_KEY
 
