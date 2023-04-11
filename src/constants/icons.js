@@ -1,0 +1,17 @@
+export default {
+    basketball: "basketball",
+    beer: "beer",
+    book: "book",
+    bus: "bus",
+    car: "car",
+    moneybag: "moneybag",
+    football: "football",
+    video_game: "video_game",
+    gift: "gift",
+    golf: "golf",
+    musical_note: "musical_note",
+    heart: "heart",
+    house: "house",
+    ice_cream: "ice_cream",
+    iphone: "iphone",
+}

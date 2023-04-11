@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons'
 import NumericInput from 'react-native-numeric-input'
 import { firebase } from '../../../config/firebase'
 import DatePicker from 'react-native-modern-datepicker'
+import Emoji from 'react-native-emoji';
 
 const IndividualGoalScreen = ({ route }) => {
     const [user, setUser] = useContext(UserContext)
@@ -72,7 +73,7 @@ const IndividualGoalScreen = ({ route }) => {
 
             <View className="flex flex-row items-center mx-12 -mt-14">
                 <View className="flex flex-row items-center justify-center bg-white rounded-full p-6 shadow-sm">
-                    <Ionicons name={goal.icon} size={30} color={theme.primary} />
+                    <Emoji name={goal.icon} style={{ fontSize: 30 }} />
                 </View>
 
                 <Text className="ml-4 text-xl" style={{ color: "#fff", fontFamily: "Montserrat-Bold" }}>

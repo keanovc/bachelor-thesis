@@ -1,90 +1,40 @@
-import { View, Text, SafeAreaView, ActivityIndicator, ScrollView } from 'react-native'
-import React, { useContext, useState, useEffect } from 'react'
-import axios from 'axios'
+import { View, Text, SafeAreaView, ScrollView } from 'react-native'
+import React, { useState } from 'react'
+import { useNavigation } from '@react-navigation/native'
+import { getToday } from 'react-native-modern-datepicker'
 
 import ThemeContext from '../../../context/ThemeContext'
-import env from '../../../config/env'
-import ArticleItem from '../../../components/educational/ArticleItem'
+import { icons } from '../../../constants'
+import { PopularArticles, LatestArticles } from '../../../components'
+import Filter from '../../../components/educational/Filter'
 
 const EducationalScreen = () => {
-    const theme = useContext(ThemeContext)
-    const [article, setArticle] = useState([])
-    const [loading, setLoading] = useState(false)
-
-    const API_KEY = "env.RAPID_API_KEY"
-
-    const getLatestArticles = async () => {
-        setLoading(true)
-
-        const options = {
-            method: 'GET',
-            url: 'https://medium2.p.rapidapi.com/latestposts/blockchain',
-            headers: {
-              'X-RapidAPI-Key': API_KEY,
-              'X-RapidAPI-Host': 'medium2.p.rapidapi.com'
-            }
-        };
-
-        axios.request(options).then(function (response) {
-            const articleIds = response.data.latestposts.slice(0, 5)
-            getArticleDetails(articleIds)
-        }).catch(function (error) {
-            console.error(error);
-        });
-    }
-
-    useEffect(() => {
-        getLatestArticles()
-    }, [])
-
-    const getArticleDetails = async (articleIds) => {
-        const articlePromises = articleIds.map(async (articleId) => {
-            const options = {
-                method: 'GET',
-                url: 'https://medium2.p.rapidapi.com/article/' + articleId,
-                headers: {
-                  'X-RapidAPI-Key': API_KEY,
-                  'X-RapidAPI-Host': 'medium2.p.rapidapi.com'
-                }
-            };
-
-            const article = await axios.request(options)
-            return article.data
-        })
-
-        const articles = await Promise.all(articlePromises)
-        setArticle(articles)
-        console.log(articles)
-        setLoading(false)
-    }
+    const navigation = useNavigation()
+    const theme = React.useContext(ThemeContext)
 
     return (
-        <SafeAreaView className="flex-1"
+        <SafeAreaView 
+            className="flex-1"
             style={{ backgroundColor: theme.background }}
         >
-            <ScrollView className="flex-1 px-6">
-                <View className="my-4">
-                    <Text className="text-3xl font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>Learn Finance</Text>
-                </View>
+            <View className="my-4 px-6 flex flex-row items-center justify-between">
+                <View>
+                    <Text className="text-2xl font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>Financial 
+                        <Text className="text-2xl font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Regular" }}> Education</Text>
+                    </Text>
 
-                <Text>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                </Text>
-                
-                {
-                    loading ? (
-                        <View className="flex-1 items-center justify-center">
-                            <ActivityIndicator size="large" color="#4D7A80" />
-                        </View>
-                    ) : (
-                        article.map((article, index) => (
-                            <ArticleItem 
-                                key={index}
-                                title={article.title}
-                            />
-                        ))
-                    )
-                }
+                    <Text className="text-xs font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Light" }}>{getToday()}</Text>
+                </View>
+            </View>
+
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View className="flex px-6">
+                    <Filter />
+
+                    <PopularArticles />
+
+                    <LatestArticles />
+                </View>
             </ScrollView>
         </SafeAreaView>
     )

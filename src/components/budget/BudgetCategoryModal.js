@@ -5,13 +5,15 @@ import { UserContext } from '../../context/UserContext'
 import { Ionicons } from '@expo/vector-icons'
 import { firebase } from '../../config/firebase'
 import { useNavigation } from '@react-navigation/native'
+import Emoji from 'react-native-emoji';
 
-const BudgetCategoryModal = ({ closeModal, category, income }) => {
+const BudgetCategoryModal = ({ closeModal, category, type }) => {
     const [user, setUser] = useContext(UserContext)
     const theme = useContext(ThemeContext)
     const navigation = useNavigation()
 
     const budgetCategoriesRef = firebase.firestore().collection("users").doc(user.uid).collection("budgetCategories")
+    const budgetsRef = firebase.firestore().collection("users").doc(user.uid).collection("budgets")
 
     const [categoryName, setCategoryName] = useState(category ? category.name : "")
 
@@ -33,16 +35,16 @@ const BudgetCategoryModal = ({ closeModal, category, income }) => {
         "book",
         "bus",
         "car",
-        "cash",
+        "moneybag",
         "football",
-        "game-controller",
+        "video_game",
         "gift",
         "golf",
-        "headset",
+        "musical_note",
         "heart",
-        "home",
-        "ice-cream",
-        "images",
+        "house",
+        "ice_cream",
+        "iphone",
     ]
 
     const [categoryIcon, setCategoryIcon] = useState(category ? category.icon : iconNames[0])
@@ -53,8 +55,7 @@ const BudgetCategoryModal = ({ closeModal, category, income }) => {
             name: categoryName,
             color: categoryColor,
             icon: categoryIcon,
-            income: income,
-            total: 0,
+            type: type,
             userId: user.uid,
             createdAt: timestamp,
         }
@@ -78,7 +79,7 @@ const BudgetCategoryModal = ({ closeModal, category, income }) => {
             userId: user.uid,
             createdAt: timestamp,
         }
-        goalsCategoriesRef
+        budgetCategoriesRef
             .doc(category.id)
             .update(data)
             .then(_doc => {
@@ -91,7 +92,7 @@ const BudgetCategoryModal = ({ closeModal, category, income }) => {
     }
     
     const deleteCategory = () => {
-        goalsCategoriesRef
+        budgetCategoriesRef
             .doc(category.id)
             .delete()
             .then(_doc => {
@@ -101,6 +102,20 @@ const BudgetCategoryModal = ({ closeModal, category, income }) => {
             .catch((error) => {
                 alert(error)
             })
+
+        budgetsRef
+            .where("categoryId", "==", category.id)
+            .get()
+            .then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    doc.ref.delete()
+                })
+                closeModal()
+            })
+            .catch((error) => {
+                alert(error)
+            }
+        )
     }
 
     const renderColors = () => {
@@ -125,10 +140,10 @@ const BudgetCategoryModal = ({ closeModal, category, income }) => {
             <TouchableOpacity
                 key={icon}
                 onPress={() => setCategoryIcon(icon)}
-                className="w-12 h-12 rounded-md m-2 flex items-center justify-center"
-                style={{ backgroundColor: theme.primary, opacity: categoryIcon === icon ? 0.5 : 1 }}
+                className="w-12 h-12 rounded-md m-2 flex items-center justify-center shadow-sm"
+                style={{ backgroundColor: "#fff", opacity: categoryIcon === icon ? 0.5 : 1 }}
             >
-                <Ionicons name={icon} size={24} color="#fff" />
+                <Emoji name={icon} style={{ fontSize: 24 }} />
 
                 {categoryIcon === icon && (
                     <Ionicons name="checkmark" size={24} color="black" style={{ position: "absolute", top: 10, right: 10 }} />
@@ -156,7 +171,7 @@ const BudgetCategoryModal = ({ closeModal, category, income }) => {
                         <TextInput 
                             className="mt-4 w-80 h-12 rounded-md border-2 border-gray-300 pb-2 text-lg text-center" 
                             placeholder={
-                                income ? "Ex. Salary" : "Ex. Subscription"
+                                type == "incomes" ? "Ex. Salary" : "Ex. Subscription"
                             }
                             style={{ color: theme.text, fontFamily: "Montserrat-Regular" }} 
                             value={categoryName} 
@@ -208,7 +223,7 @@ const BudgetCategoryModal = ({ closeModal, category, income }) => {
                                     onPress={
                                         () => Alert.alert(
                                             "Delete Category",
-                                            "Are you sure you want to delete this category?",
+                                            "Are you sure you want to delete this category, all budgets under this category will be deleted as well?",
                                             [
                                                 {
                                                     text: "Cancel",

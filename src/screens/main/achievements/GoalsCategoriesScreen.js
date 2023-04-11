@@ -3,7 +3,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
 import { Ionicons } from '@expo/vector-icons'
-import GoalsCategories from '../../../components/achievements/GoalsCategories'
+import GoalsCategoriesCard from '../../../components/achievements/GoalsCategoriesCard'
 import GoalsCategoryModal from '../../../components/achievements/GoalsCategoryModal'
 import { firebase } from '../../../config/firebase'
 
@@ -49,8 +49,8 @@ const GoalsCategoriesScreen = () => {
             </Modal>
             
             <View className="my-4 px-6 flex flex-row items-center justify-between">
-                <Text className="text-3xl font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>Goals 
-                    <Text className="text-3xl font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Regular" }}> Categories</Text>
+                <Text className="text-2xl font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>Goals 
+                    <Text className="text-2xl font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Regular" }}> Categories</Text>
                 </Text>
 
                 <TouchableOpacity
@@ -74,7 +74,7 @@ const GoalsCategoriesScreen = () => {
             <ScrollView className="flex mx-auto w-11/12">
                 <View className="flex flex-row items-center justify-start flex-wrap">
                     {goalsCategories.map((category, index) => (
-                        <GoalsCategories key={index} category={category} edit={editVisible} />
+                        <GoalsCategoriesCard key={index} category={category} edit={editVisible} />
                     ))}
                 </View>
             </ScrollView>

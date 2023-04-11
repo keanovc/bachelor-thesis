@@ -6,8 +6,9 @@ import { useNavigation } from '@react-navigation/native'
 import { UserContext } from '../../context/UserContext'
 import { firebase } from '../../config/firebase'
 import CategoryModal from './GoalsCategoryModal'
+import Emoji from 'react-native-emoji';
 
-const GoalsCategories = ({ category, edit }) => {
+const GoalsCategoriesCard = ({ category, edit }) => {
     const [user, setUser] = useContext(UserContext)
     const theme = useContext(ThemeContext)
     const navigation = useNavigation()
@@ -87,7 +88,7 @@ const GoalsCategories = ({ category, edit }) => {
             </View>
 
             <View className="flex flex-row items-center justify-center w-16 h-16 rounded-full" style={{ backgroundColor: category.color }}>
-                <Ionicons name={category.icon} size={24} color="white" />
+                <Emoji name={category.icon} style={{ fontSize: 24 }} />
             </View>
 
             <Text className="mt-2 text-lg " style={{ color: theme.primary, fontFamily: "Montserrat-Medium" }}>
@@ -101,4 +102,4 @@ const GoalsCategories = ({ category, edit }) => {
     )
 }
 
-export default GoalsCategories
+export default GoalsCategoriesCard

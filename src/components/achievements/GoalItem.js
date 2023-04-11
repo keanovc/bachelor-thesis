@@ -1,12 +1,11 @@
 import { View, Text, TouchableOpacity, Modal, FlatList } from 'react-native'
 import React, { useContext, useState, useEffect } from 'react'
 import ThemeContext from '../../context/ThemeContext'
-import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import GoalModal from './GoalModal'
+import Emoji from 'react-native-emoji';
 
-
-const Goals = ({ goal, category, edit }) => {
+const GoalItem = ({ goal, category, edit }) => {
     const theme = useContext(ThemeContext)
     const navigation = useNavigation()
     const [editVisible, setEditVisible] = useState(false)
@@ -40,7 +39,7 @@ const Goals = ({ goal, category, edit }) => {
                     <GoalModal closeModal={() => setEditVisible(false)} category={category} goal={goal} />
                 </Modal>
 
-                <Ionicons name={goal.icon} size={24} color={theme.primary} />
+                <Emoji name={goal.icon} style={{ fontSize: 30 }} />
 
                 <View className="flex flex-col ml-6">
                     <Text className="text-sm font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Regular" }}>{goal.name}</Text>
@@ -77,4 +76,4 @@ const Goals = ({ goal, category, edit }) => {
     )
 }
 
-export default Goals
+export default GoalItem

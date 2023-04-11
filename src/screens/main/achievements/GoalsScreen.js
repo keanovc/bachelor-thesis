@@ -5,7 +5,7 @@ import { UserContext } from '../../../context/UserContext'
 import { Ionicons } from '@expo/vector-icons'
 import { firebase } from '../../../config/firebase'
 import { useNavigation } from '@react-navigation/native'
-import Goals from '../../../components/achievements/Goals'
+import GoalItem from '../../../components/achievements/GoalItem'
 import GoalModal from '../../../components/achievements/GoalModal'
 
 const GoalsScreen = ({ route }) => {
@@ -147,7 +147,7 @@ const GoalsScreen = ({ route }) => {
                     goals
                 }
                 numColumns={1}
-                renderItem={({ item }) => <Goals goal={item} category={category} edit={editVisible} />}
+                renderItem={({ item }) => <GoalItem goal={item} category={category} edit={editVisible} />}
                 keyExtractor={(item) => item.id}
                 className="mt-4"
             />

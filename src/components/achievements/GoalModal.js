@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { firebase } from '../../config/firebase'
 import DatePicker, { getToday } from 'react-native-modern-datepicker'
 import NumericInput from 'react-native-numeric-input'
+import Emoji from 'react-native-emoji';
 
 const GoalModal = ({ category, closeModal, goal }) => {
     const [user, setUser] = useContext(UserContext)
@@ -26,16 +27,16 @@ const GoalModal = ({ category, closeModal, goal }) => {
         "book",
         "bus",
         "car",
-        "cash",
+        "moneybag",
         "football",
-        "game-controller",
+        "video_game",
         "gift",
         "golf",
-        "headset",
+        "musical_note",
         "heart",
-        "home",
-        "ice-cream",
-        "images",
+        "house",
+        "ice_cream",
+        "iphone",
     ]
 
     const [goalIcon, setGoalIcon] = useState(goal ? goal.icon : iconNames[0])
@@ -100,10 +101,10 @@ const GoalModal = ({ category, closeModal, goal }) => {
             <TouchableOpacity
                 key={icon}
                 onPress={() => setGoalIcon(icon)}
-                className="w-12 h-12 rounded-md m-2 flex items-center justify-center"
-                style={{ backgroundColor: theme.primary, opacity: goalIcon === icon ? 0.5 : 1 }}
+                className="w-12 h-12 rounded-md m-2 flex items-center justify-center shadow-sm"
+                style={{ backgroundColor: "#fff", opacity: goalIcon === icon ? 0.5 : 1 }}
             >
-                <Ionicons name={icon} size={24} color="#fff" />
+                <Emoji name={icon} style={{ fontSize: 24 }} />
 
                 {goalIcon === icon && (
                     <Ionicons name="checkmark" size={24} color="black" style={{ position: "absolute", top: 10, right: 10 }} />

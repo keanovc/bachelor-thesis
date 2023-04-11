@@ -5,7 +5,7 @@ import { EventRegister } from 'react-native-event-listeners';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 
-import Theme from './src/styles/Theme';
+import Theme from './src/constants/theme';
 import ThemeContext from './src/context/ThemeContext';
 
 import { UserProvider } from './src/context/UserContext';

@@ -6,17 +6,42 @@ import { Ionicons } from '@expo/vector-icons'
 import BudgetCategoryModal from '../../../components/budget/BudgetCategoryModal'
 import { firebase } from '../../../config/firebase'
 import { useNavigation } from '@react-navigation/native'
-import { LineChart, BarChart, PieChart, ProgressChart, ContributionGraph } from 'react-native-chart-kit'
+import Emoji from 'react-native-emoji';
+import DatePicker, { getToday } from 'react-native-modern-datepicker'
+import { ProgressChart } from 'react-native-chart-kit'
+import BudgetCategoriesCard from '../../../components/budget/BudgetCategoriesCard'
 
 const BudgetCategoriesScreen = () => {
     const theme = useContext(ThemeContext)
     const [user, setUser] = useContext(UserContext)
-    const [modalVisible, setModalVisible] = useState(false)
-    const [income, setIncome] = useState(false)
     const navigation = useNavigation()
+
+    const [modalVisible, setModalVisible] = useState(false)
+    const [editVisible, setEditVisible] = useState(false)
+
+    const [type, setType] = useState('')
+    const [date, setDate] = useState(getToday().toString().substring(0, 4) + " " + getToday().toString().substring(5, 7))
+    const [toggle, setToggle] = useState(false);
+    const [totalPercentage, setTotalPercentage] = useState(0.5)
 
     const [budgetCategories, setBudgetCategories] = useState([])
     const budgetCategoriesRef = firebase.firestore().collection("users").doc(user.uid).collection("budgetCategories")
+    const budgetsRef = firebase.firestore().collection("users").doc(user.uid).collection("budgets")
+
+    const months = [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December",
+    ]
 
     useEffect(() => {
         budgetCategoriesRef
@@ -37,34 +62,141 @@ const BudgetCategoriesScreen = () => {
             )
     }, [])
 
+    async function getIsDateOrMonthlyIsTrue() {
+        const isDate = budgetsRef.where("date", "==", date ? date : getToday().toString().substring(0, 4) + " " + getToday().toString().substring(5, 7)).get();
+        const isMonthly = budgetsRef.where("monthly", "==", true).get();
+
+        const [dateQuerySnapshot, monthlyQuerySnapshot] = await Promise.all([
+            isDate, 
+            isMonthly
+        ]);
+
+        const dateBudgetsArray = dateQuerySnapshot.docs;
+        const monthlyBudgetArray = monthlyQuerySnapshot.docs;
+
+        const budgetsArray = dateBudgetsArray.concat(monthlyBudgetArray);
+
+        return budgetsArray;
+    }
+
+    const getBudgets = () => {
+        let totalIncomes = 0
+        let totalExpenses = 0
+        setTotalPercentage(0.5)
+
+        getIsDateOrMonthlyIsTrue()
+            .then(results => {
+                results.forEach((doc) => {
+                    const budget = doc.data()
+                    if (budget.type === 'incomes') {
+                        totalIncomes += budget.money
+                    } else {
+                        totalExpenses += budget.money
+                    }
+                })
+
+                if (totalIncomes && totalExpenses  !== NaN) {
+                    setTotalPercentage(totalIncomes / (totalIncomes + totalExpenses))
+                }
+            },
+            error => {
+                console.log(error)
+            }
+        )
+    }
+
+    useEffect(() => {
+        getBudgets()
+    }, [date])
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            getBudgets()
+        });
+
+        return unsubscribe;
+    }, [navigation]);
+
     return (
         <SafeAreaView className="flex-1"
             style={{ backgroundColor: theme.background }}
         >
             <Modal animationType="slide" visible={modalVisible}>
-                <BudgetCategoryModal income={income} closeModal={() => setModalVisible(false)} />
+                <BudgetCategoryModal type={type} closeModal={() => setModalVisible(false)} />
             </Modal>
 
             <View className="my-4 px-6 flex flex-row items-center justify-between">
-                <Text className="text-3xl font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>Budget 
-                    <Text className="text-3xl font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Regular" }}> Overview</Text>
+                <Text className="text-2xl font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>Budget 
+                    <Text className="text-2xl font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Regular" }}> Overview</Text>
                 </Text>
+
+                <TouchableOpacity
+                    className="bg-white rounded-full p-2"
+                    onPress={() => setEditVisible(!editVisible)}
+                >
+                    <Ionicons name="create-outline" size={16} color={theme.primary} />
+                </TouchableOpacity>
             </View>
 
-            <View className="flex flex-row items-center justify-between px-12 pt-4">
-                <Ionicons name="arrow-back" size={24} color={theme.text} />
-                <View className="flex flex-row items-center justify-between">
-                    <Text className="text-2xl font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>March</Text>
-                    <Text className="text-2xl font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Medium" }}> 2021</Text>
+            <View className="flex flex-row items-center justify-center px-12 pt-4 z-20">
+                <TouchableOpacity
+                    onPress={() => setToggle(!toggle)}
+                    className="flex flex-row items-center justify-center"
+                >
+                    <Text className="text-2xl font-bold mr-2" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>
+                        {
+                            date ? 
+                                months[date.toString().substring(5, 8) - 1]
+                            : 
+                                months[getToday().toString().substring(5, 7) - 1]
+                        }
+                    </Text>
+
+                    <Text className="text-2xl font-bold mr-2" style={{ color: theme.primary, fontFamily: "Montserrat-Regular" }}>
+                        {
+                            date ? 
+                                date.toString().substring(0, 4)
+                            : 
+                                getToday().toString().substring(0, 4)
+                        }
+                    </Text>
+
+                    {
+                        toggle ? (
+                            <Ionicons name="chevron-up" size={24} color={theme.text} />
+                        ) : (
+                            <Ionicons name="chevron-down" size={24} color={theme.text} />
+                        )
+                    }
+                </TouchableOpacity>
+            </View>
+
+            <View 
+                className="absolute top-40 left-0 right-0 z-10"
+                style={{ 
+                    display: toggle ? "flex" : "none",
+                }}
+            >
+                <View className="bg-white rounded-md px-4 items-center shadow-lg m-6">
+                    <DatePicker
+                        mode="monthYear"
+                        selectorStartingYear={2000}
+                        onMonthYearChange={selectedDate => {
+                            setDate(selectedDate)
+                            setToggle(false)
+                        }}
+                        options={{
+                            mainColor: theme.primary,
+                        }}
+                    />
                 </View>
-                <Ionicons name="arrow-forward" size={24} color={theme.text} />
             </View>
 
-            <View className="flex flex-row items-center justify-around px-6 bg-white rounded-lg m-8 shadow-sm">
+            <View className="flex flex-row items-center justify-around px-6 bg-white rounded-lg mx-8 mb-8 mt-4 shadow-sm">
                 <ProgressChart
                     data={{
                         labels: ["Progress"],
-                        data: [0.78]
+                        data: [totalPercentage]
                     }}
                     width={100}
                     height={120}
@@ -106,8 +238,16 @@ const BudgetCategoriesScreen = () => {
                     </View>
 
                     <View className="flex flex-col space-y-3">
-                        <Text className="text-sm font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>78%</Text>
-                        <Text className="text-sm font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>22%</Text>
+                        <Text className="text-sm font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>
+                            {
+                                (totalPercentage * 100).toFixed(0) + "%"
+                            }
+                        </Text>
+                        <Text className="text-sm font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>
+                            {
+                                ((1 - totalPercentage) * 100).toFixed(0) + "%"
+                            }
+                        </Text>
                     </View>
                 </View>
             </View>
@@ -119,7 +259,7 @@ const BudgetCategoriesScreen = () => {
                         className="flex flex-row items-center justify-between"
                         onPress={() => {
                             setModalVisible(true)
-                            setIncome(true)
+                            setType("incomes")
                         }}
                     >
                         <Ionicons name="add-circle" size={32} color={theme.primary} />
@@ -128,17 +268,17 @@ const BudgetCategoriesScreen = () => {
 
                 <View className="flex flex-row items-center justify-start px-6 pt-2">
                     {
-                        budgetCategories.filter(budgetCategory => budgetCategory.income === true).length === 0 ? (
+                        budgetCategories.filter(budgetCategory => budgetCategory.type === "incomes").length === 0 ? (
                             <TouchableOpacity
                                 className="rounded-lg m-2 shadow-sm flex flex-row items-center justify-center p-3"
                                 style={{
                                     backgroundColor: "rgb(77, 122, 128)",
                                     width: 120,
-                                    height: 140
+                                    height: 120
                                 }}
                                 onPress={() => {
                                     setModalVisible(true)
-                                    setIncome(true)
+                                    setType("incomes")
                                 }}
                             >
                                 <View className="flex flex-col items-center">
@@ -150,25 +290,15 @@ const BudgetCategoriesScreen = () => {
                     }
 
                     <FlatList
-                        data={budgetCategories.filter(budgetCategory => budgetCategory.income === true)}
+                        data={budgetCategories.filter(budgetCategory => budgetCategory.type === "incomes")}
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}
                         renderItem={({ item }) => (
-                            <TouchableOpacity 
-                                className="rounded-lg m-2 shadow-sm flex flex-row items-center justify-start p-3"
-                                style={{
-                                    backgroundColor: item.color,
-                                    width: 120,
-                                    height: 140
-                                }}
-                                onPress={() => navigation.navigate('Budget', { item })}
-                            >
-                                <View className="flex flex-col">
-                                    <Ionicons name={item.icon} size={24} color="#fff" />
-                                    <Text className="text-base text-white pt-1 pb-5" style={{ fontFamily: "Montserrat-Regular" }}>{item.name}</Text>
-                                    <Text className="text-base text-white" style={{ fontFamily: "Montserrat-Bold" }}>$ {item.total}</Text>
-                                </View>
-                            </TouchableOpacity>
+                            <BudgetCategoriesCard 
+                                category={item} 
+                                date={date} 
+                                edit={editVisible}
+                            />
                         )}
                         keyExtractor={item => item.name}
                     />
@@ -190,26 +320,26 @@ const BudgetCategoriesScreen = () => {
                         className="flex flex-row items-center justify-between"
                         onPress={() => {
                             setModalVisible(true)
-                            setIncome(false)
+                            setType("expenses")
                         }}
                     >
                         <Ionicons name="add-circle" size={32} color={theme.primary} />
                     </TouchableOpacity>
                 </View>
 
-                <View className="flex flex-row items-center justify-between px-6 pt-2 pb-6">
+                <View className="flex flex-row items-center justify-between px-6 pt-2">
                 {
-                        budgetCategories.filter(budgetCategory => budgetCategory.income === false).length === 0 ? (
+                        budgetCategories.filter(budgetCategory => budgetCategory.type === "expenses").length === 0 ? (
                             <TouchableOpacity
                                 className="rounded-lg m-2 shadow-sm flex flex-row items-center justify-center p-3"
                                 style={{
                                     backgroundColor: "rgb(77, 122, 128)",
                                     width: 120,
-                                    height: 140
+                                    height: 120
                                 }}
                                 onPress={() => {
                                     setModalVisible(true)
-                                    setIncome(false)
+                                    setType("expenses")
                                 }}
                             >
                                 <View className="flex flex-col items-center">
@@ -221,24 +351,15 @@ const BudgetCategoriesScreen = () => {
                     }
 
                     <FlatList
-                        data={budgetCategories.filter(budgetCategory => budgetCategory.income === false)}
+                        data={budgetCategories.filter(budgetCategory => budgetCategory.type === "expenses")}
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}
                         renderItem={({ item }) => (
-                            <TouchableOpacity
-                                className="rounded-lg m-2 shadow-sm flex flex-row items-center justify-start p-3"
-                                style={{
-                                    backgroundColor: item.color,
-                                    width: 120,
-                                    height: 140
-                                }}
-                            >
-                                <View className="flex flex-col">
-                                    <Ionicons name={item.icon} size={24} color="#fff" />
-                                    <Text className="text-base text-white pt-1 pb-5" style={{ fontFamily: "Montserrat-Regular" }}>{item.name}</Text>
-                                    <Text className="text-base text-white" style={{ fontFamily: "Montserrat-Bold" }}>$ {item.total}</Text>
-                                </View>
-                            </TouchableOpacity>
+                            <BudgetCategoriesCard
+                                category={item}
+                                date={date}
+                                edit={editVisible}
+                            />
                         )}
                         keyExtractor={item => item.name}
                     />

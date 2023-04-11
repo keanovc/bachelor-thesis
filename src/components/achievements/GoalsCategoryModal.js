@@ -5,6 +5,7 @@ import { UserContext } from '../../context/UserContext'
 import { Ionicons } from '@expo/vector-icons'
 import { firebase } from '../../config/firebase'
 import { useNavigation } from '@react-navigation/native'
+import Emoji from 'react-native-emoji';
 
 const GoalsCategoryModal = ({ closeModal, category }) => {
     const [user, setUser] = useContext(UserContext)
@@ -33,16 +34,16 @@ const GoalsCategoryModal = ({ closeModal, category }) => {
         "book",
         "bus",
         "car",
-        "cash",
+        "moneybag",
         "football",
-        "game-controller",
+        "video_game",
         "gift",
         "golf",
-        "headset",
+        "musical_note",
         "heart",
-        "home",
-        "ice-cream",
-        "images",
+        "house",
+        "ice_cream",
+        "iphone",
     ]
 
     const [categoryIcon, setCategoryIcon] = useState(category ? category.icon : iconNames[0])
@@ -123,10 +124,10 @@ const GoalsCategoryModal = ({ closeModal, category }) => {
             <TouchableOpacity
                 key={icon}
                 onPress={() => setCategoryIcon(icon)}
-                className="w-12 h-12 rounded-md m-2 flex items-center justify-center"
-                style={{ backgroundColor: theme.primary, opacity: categoryIcon === icon ? 0.5 : 1 }}
+                className="w-12 h-12 rounded-md m-2 flex items-center justify-center shadow-sm"
+                style={{ backgroundColor: "#fff", opacity: categoryIcon === icon ? 0.5 : 1 }}
             >
-                <Ionicons name={icon} size={24} color="#fff" />
+                <Emoji name={icon} style={{ fontSize: 24 }} />
 
                 {categoryIcon === icon && (
                     <Ionicons name="checkmark" size={24} color="black" style={{ position: "absolute", top: 10, right: 10 }} />
