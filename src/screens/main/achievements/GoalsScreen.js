@@ -13,7 +13,7 @@ const GoalsScreen = ({ route }) => {
     const theme = useContext(ThemeContext)
     const navigation = useNavigation()
 
-    const { category } = route.params
+    const { category, totalBudget } = route.params
 
     const [goals, setGoals] = useState([])
     const goalsRef = firebase.firestore().collection('users').doc(user.uid).collection('goalsCategories').doc(category.id).collection('goals')
@@ -147,7 +147,7 @@ const GoalsScreen = ({ route }) => {
                     goals
                 }
                 numColumns={1}
-                renderItem={({ item }) => <GoalItem goal={item} category={category} edit={editVisible} />}
+                renderItem={({ item }) => <GoalItem goal={item} category={category} edit={editVisible} totalBudget={totalBudget} />}
                 keyExtractor={(item) => item.id}
                 className="mt-4"
             />

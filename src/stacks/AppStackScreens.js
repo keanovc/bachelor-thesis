@@ -22,6 +22,9 @@ import BudgetScreen from '../screens/main/budget/BudgetScreen';
 import GoalsScreen from '../screens/main/achievements/GoalsScreen';
 import IndividualGoalScreen from '../screens/main/achievements/IndividualGoalScreen';
 
+// Educational
+import EducationDetailScreen from '../screens/main/educational/EducationDetailScreen';
+
 // Settings
 import SettingsScreen from '../screens/main/settings/SettingsScreen';
 import ProfileScreen from '../screens/main/settings/ProfileScreen';
@@ -74,6 +77,9 @@ const AppStackScreens = () => {
                             presentation: 'modal',
                         }}
                     />
+
+                    {/* Educational */}
+                    <AppStack.Screen name="EducationDetail" component={EducationDetailScreen} />
 
                     {/* Settings */}
                     <AppStack.Screen name="Settings" component={SettingsScreen} />

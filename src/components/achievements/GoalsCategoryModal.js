@@ -1,11 +1,12 @@
 import { View, Text, KeyboardAvoidingView, TouchableOpacity, SafeAreaView, TextInput, FlatList, Alert } from 'react-native'
 import React, { useContext, useState } from 'react'
-import ThemeContext from '../../context/ThemeContext'
-import { UserContext } from '../../context/UserContext'
 import { Ionicons } from '@expo/vector-icons'
-import { firebase } from '../../config/firebase'
 import { useNavigation } from '@react-navigation/native'
 import Emoji from 'react-native-emoji';
+
+import ThemeContext from '../../context/ThemeContext'
+import { UserContext } from '../../context/UserContext'
+import { firebase } from '../../config/firebase'
 
 const GoalsCategoryModal = ({ closeModal, category }) => {
     const [user, setUser] = useContext(UserContext)

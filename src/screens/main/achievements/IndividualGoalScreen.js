@@ -1,17 +1,18 @@
 import { View, Text, TouchableOpacity, Modal } from 'react-native'
 import React, { useContext, useState, useEffect } from 'react'
-import ThemeContext from '../../../context/ThemeContext'
-import { UserContext } from '../../../context/UserContext'
 import { useNavigation } from '@react-navigation/native'
 import { Ionicons } from '@expo/vector-icons'
 import NumericInput from 'react-native-numeric-input'
-import { firebase } from '../../../config/firebase'
-import DatePicker from 'react-native-modern-datepicker'
+import DatePicker, { getToday } from 'react-native-modern-datepicker'
 import Emoji from 'react-native-emoji';
+
+import ThemeContext from '../../../context/ThemeContext'
+import { UserContext } from '../../../context/UserContext'
+import { firebase } from '../../../config/firebase'
 
 const IndividualGoalScreen = ({ route }) => {
     const [user, setUser] = useContext(UserContext)
-    const { goal, category } = route.params
+    const { goal, category, totalBudget } = route.params
     const theme = useContext(ThemeContext)
     const navigation = useNavigation()
 
@@ -20,6 +21,9 @@ const IndividualGoalScreen = ({ route }) => {
     const [openDateModal, setOpenDateModal] = useState(false)
 
     const goalsRef = firebase.firestore().collection("users").doc(user.uid).collection('goalsCategories').doc(category.id).collection('goals')
+    const budgetsRef = firebase.firestore().collection("users").doc(user.uid).collection('budgets')
+    const budgetCategoriesRef = firebase.firestore().collection("users").doc(user.uid).collection('budgetCategories')
+    const currentMonth = getToday().toString().substring(0, 4) + " " + getToday().toString().substring(5, 7)
 
     useEffect(() => {
         if (amount > goal.money - goal.moneySaved) {
@@ -35,15 +39,58 @@ const IndividualGoalScreen = ({ route }) => {
 
     const addMoney = () => {
         if (amount > 0) {
-            goalsRef.doc(goal.id).update({
-                moneySaved: goal.moneySaved + amount
-            })
-            .then(() => {
-                navigation.goBack()
-            })
-            .catch((error) => {
-                alert(error)
-            })
+            if (amount <= totalBudget) {
+                goalsRef.doc(goal.id).update({
+                    moneySaved: goal.moneySaved + amount
+                })
+                .then(() => {
+                    navigation.goBack()
+                })
+                .catch((error) => {
+                    alert(error)
+                })
+
+                const timestamp = firebase.firestore.FieldValue.serverTimestamp()
+                budgetCategoriesRef.doc("goals").get()
+                    .then((doc) => {
+                        if (!doc.exists) {
+                            budgetCategoriesRef.doc("goals").set({
+                                name: "Goals",
+                                color: "#4D7A80",
+                                icon: "golf",
+                                type: "expenses",
+                                userId: user.uid,
+                                createdAt: timestamp,
+                            })
+                        }
+                    })
+                    .catch((error) => {
+                        alert(error)
+                    })
+
+                const data = {
+                    name: goal.name + " (" + category.name + ")",
+                    money: amount,
+                    date: currentMonth,
+                    monthly: false,
+                    type: "expenses",
+                    categoryId: "goals",
+                    createdAt: timestamp,
+                }
+                budgetsRef
+                    .add(data)
+                    .then((docRef) => {
+                        data.id = docRef.id
+                        budgetsRef.doc(docRef.id).set(data)
+                    })
+                    .catch((error) => {
+                        alert(error)
+                    })
+            } else {
+                alert("You don't have enough money in your budget")
+            }
+        } else {
+            alert("Please enter a valid amount")
         }
     }
 

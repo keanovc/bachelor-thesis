@@ -1,8 +1,10 @@
 import { View, Text, SafeAreaView, ScrollView, Modal, TouchableOpacity } from 'react-native'
 import React, { useContext, useState, useEffect } from 'react'
+import DatePicker, { getToday } from 'react-native-modern-datepicker'
+import { Ionicons } from '@expo/vector-icons'
+
 import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
-import { Ionicons } from '@expo/vector-icons'
 import GoalsCategoriesCard from '../../../components/achievements/GoalsCategoriesCard'
 import GoalsCategoryModal from '../../../components/achievements/GoalsCategoryModal'
 import { firebase } from '../../../config/firebase'
@@ -40,6 +42,50 @@ const GoalsCategoriesScreen = () => {
             )
     }, [])
 
+    const budgetsRef = firebase.firestore().collection("users").doc(user.uid).collection('budgets')
+    const [budgets, setBudgets] = useState([])
+
+    useEffect(() => {
+        budgetsRef
+            .onSnapshot(
+                querySnapshot => {
+                    const newBudgets = []
+                    querySnapshot.forEach(doc => {
+                        const {money, monthly, date, type} = doc.data()
+                        newBudgets.push({
+                            id: doc.id,
+                            money,
+                            monthly,
+                            date,
+                            type
+                        })
+                    })
+                    setBudgets(newBudgets)
+                },
+                error => {
+                    alert(error)
+                }
+            )
+    }, [])
+
+    const currentMonth = getToday().toString().substring(0, 4) + " " + getToday().toString().substring(5, 7)
+    const monthlyBudgets = budgets.filter(budget => budget.monthly === true || budget.date === currentMonth)
+
+    const [totalBudget, setTotalBudget] = useState(0)
+
+    useEffect(() => {
+        let totalIncome = 0
+        let totalExpense = 0
+        monthlyBudgets.forEach(budget => {
+            if (budget.type === "incomes") {
+                totalIncome += budget.money
+            } else {
+                totalExpense += budget.money
+            }
+        })
+        setTotalBudget(totalIncome - totalExpense)
+    }, [monthlyBudgets])
+
     return (
         <SafeAreaView className="flex-1"
             style={{ backgroundColor: theme.background }}
@@ -63,18 +109,18 @@ const GoalsCategoriesScreen = () => {
 
             <View className="flex flex-row items-center justify-between pl-6 pr-12 py-4 mx-6 mb-4 mt-2 bg-white rounded-2xl shadow-sm">
                 <View className="flex flex-row items-center justify-center">
-                    <Text className="ml-2 text-sm" style={{ color: theme.primary, fontFamily: "Montserrat-Light" }}>Total Balance:</Text>
+                    <Text className="ml-2 text-sm" style={{ color: theme.primary, fontFamily: "Montserrat-Light" }}>Monthly Balance:</Text>
                 </View>
 
                 <View className="flex flex-row items-center justify-center">
-                    <Text className="mr-2 text-2xl font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>$1000</Text>
+                    <Text className="mr-2 text-2xl font-bold" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>${totalBudget}</Text>
                 </View>
             </View>
 
             <ScrollView className="flex mx-auto w-11/12">
                 <View className="flex flex-row items-center justify-start flex-wrap">
                     {goalsCategories.map((category, index) => (
-                        <GoalsCategoriesCard key={index} category={category} edit={editVisible} />
+                        <GoalsCategoriesCard key={index} category={category} edit={editVisible} totalBudget={totalBudget} />
                     ))}
                 </View>
             </ScrollView>

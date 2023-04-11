@@ -1,11 +1,12 @@
 import { View, Text, TouchableOpacity, Modal, FlatList } from 'react-native'
 import React, { useContext, useState, useEffect } from 'react'
-import ThemeContext from '../../context/ThemeContext'
-import { useNavigation } from '@react-navigation/native'
-import GoalModal from './GoalModal'
 import Emoji from 'react-native-emoji';
+import { useNavigation } from '@react-navigation/native'
 
-const GoalItem = ({ goal, category, edit }) => {
+import ThemeContext from '../../context/ThemeContext'
+import GoalModal from './GoalModal'
+
+const GoalItem = ({ goal, category, edit, totalBudget }) => {
     const theme = useContext(ThemeContext)
     const navigation = useNavigation()
     const [editVisible, setEditVisible] = useState(false)
@@ -17,7 +18,7 @@ const GoalItem = ({ goal, category, edit }) => {
                 edit ?
                     () => setEditVisible(!editVisible)
                 :
-                    () => navigation.navigate('IndGoal', { goal, category })
+                    () => navigation.navigate('IndGoal', { goal, category, totalBudget })
             }
             onLongPress={() => setEditVisible(!editVisible)}
             style={edit ? { opacity: 0.5, backgroundColor: "lightgray" } : {}}

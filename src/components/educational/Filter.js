@@ -23,32 +23,6 @@ const Filter = () => {
     return (
         <View className="flex flex-col">
             <View className="flex flex-row items-center justify-center">
-                <TextInput
-                    value=""
-                    onChange={() => {}}
-                    placeholder="What are you looking for?"
-                    placeholderTextColor="lightgray"
-                    style={{
-                        backgroundColor: theme.accent,
-                        color: theme.text,
-                        fontFamily: "Montserrat-Medium",
-                        fontSize: 12,
-                    }}
-                    className="w-10/12 h-10 px-4 rounded-lg"
-                />
-
-                <TouchableOpacity
-                    onPress={() => {}}
-                    className="ml-4 w-10 h-10 rounded-lg flex items-center justify-center"
-                    style={{
-                        backgroundColor: theme.primary,
-                    }}
-                >
-                    <Ionicons name="ios-search" size={18} color="#fff" />
-                </TouchableOpacity>
-            </View>
-
-            <View className="flex flex-row items-center justify-center">
                 <FlatList 
                     data={categories}
                     renderItem={({ item }) => (

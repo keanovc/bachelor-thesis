@@ -20,7 +20,9 @@ const BudgetItem = ({ item, category, loading, edit, date }) => {
             onPress={
                 edit ? () => setEditVisible(!editVisible) : null
             }
-            onLongPress={() => setEditVisible(!editVisible)}
+            onLongPress={
+                category.id !== "goals" ? () => setEditVisible(!editVisible) : null
+            }
         >
             <Modal animationType="slide" visible={editVisible}>
                 <BudgetModal closeModal={() => setEditVisible(false)} loading={loading} category={category} budget={item} date={date} />
@@ -60,7 +62,11 @@ const BudgetItem = ({ item, category, loading, edit, date }) => {
                     </Text>
 
                     <Text className="text-xs" style={{ fontFamily: "Montserrat-Light" }}>
-                        {item.monthly ? "/monthly" : "/once"}
+                        {
+                            category.id !== "goals" ? (
+                                item.monthly ? "/monthly" : "/once"
+                            ) : null
+                        }
                     </Text>
                 </View>
             </View>

@@ -1,12 +1,15 @@
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 import React, { useContext } from 'react'
 import { checkImageUrl } from '../../utils/checkImageUrl'
+import { useNavigation } from '@react-navigation/native'
 
-const LatestArticleCard = ({ article, handleNavigation }) => {
+const LatestArticleCard = ({ article }) => {
+    const navigation = useNavigation()
+
     return (
         <TouchableOpacity
             className="flex flex-col items-center justify-center rounded-2xl shadow-sm w-full h-24 m-2 bg-white"
-            onPress={handleNavigation}
+            onPress={() => navigation.navigate("EducationDetail", { article: article })}
         >
             <View className="flex flex-row items-center justify-start w-full h-full">
                 <View className="flex flex-row items-center justify-start">

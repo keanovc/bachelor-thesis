@@ -21,11 +21,15 @@ const LatestArticles = () => {
         "x-rapidapi-host": "medium2.p.rapidapi.com"
     };
 
-    const { data: dataAll, isLoading, error } = useFetch("latestposts/blockchain", {});
+    const { data: dataAll, isLoading, error } = useFetch("topfeeds/data-science/new", 
+    {
+        count: 1,
+        after: 0,
+    });
 
     useEffect(() => {
         if (dataAll) {
-            setDataIds(dataAll.latestposts.slice(0, 2))
+            setDataIds(dataAll.topfeeds)
         }
     }, [dataAll])
 
@@ -53,19 +57,15 @@ const LatestArticles = () => {
 
             <View className="flex flex-col items-center justify-center mt-2 mb-6">
                 {
-                    // isLoading ? (
-                    //     <ActivityIndicator size="large" color={theme.primary} />
-                    // ) : error ? (
-                    //     <Text>Something went wrong</Text>
-                    // ) : (
+                    isLoading ? (
+                        <ActivityIndicator size="large" color={theme.primary} />
+                    ) : error ? (
+                        <Text>Something went wrong</Text>
+                    ) : (
                         data?.map((article) => (
-                            <LatestArticleCard 
-                                key={article?.id}
-                                article={article} 
-                                handleNavigation={() => navigation.navigate("Article", { articleId: article?.id })}
-                            />
+                            <LatestArticleCard key={article.id} article={article} />
                         ))
-                    // )
+                    )
                 }
             </View>
         </View>

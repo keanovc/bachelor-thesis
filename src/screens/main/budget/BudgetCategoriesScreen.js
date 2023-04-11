@@ -1,14 +1,15 @@
 import { View, Text, SafeAreaView, Dimensions, FlatList, TouchableOpacity, ScrollView, Modal } from 'react-native'
 import React, { useContext, useState, useEffect } from 'react'
-import ThemeContext from '../../../context/ThemeContext'
-import { UserContext } from '../../../context/UserContext'
-import { Ionicons } from '@expo/vector-icons'
-import BudgetCategoryModal from '../../../components/budget/BudgetCategoryModal'
-import { firebase } from '../../../config/firebase'
 import { useNavigation } from '@react-navigation/native'
 import Emoji from 'react-native-emoji';
 import DatePicker, { getToday } from 'react-native-modern-datepicker'
 import { ProgressChart } from 'react-native-chart-kit'
+import { Ionicons } from '@expo/vector-icons'
+
+import ThemeContext from '../../../context/ThemeContext'
+import { UserContext } from '../../../context/UserContext'
+import BudgetCategoryModal from '../../../components/budget/BudgetCategoryModal'
+import { firebase } from '../../../config/firebase'
 import BudgetCategoriesCard from '../../../components/budget/BudgetCategoriesCard'
 
 const BudgetCategoriesScreen = () => {

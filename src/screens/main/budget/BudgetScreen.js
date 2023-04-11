@@ -3,6 +3,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import Emoji from 'react-native-emoji';
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+
 import { UserContext } from '../../../context/UserContext'
 import ThemeContext from '../../../context/ThemeContext'
 import BudgetModal from '../../../components/budget/BudgetModal';
@@ -80,12 +81,18 @@ const BudgetScreen = ({ route }) => {
                         {category.name}
                     </Text>
 
-                    <TouchableOpacity 
-                        className="bg-white rounded-lg p-2"
-                        onPress={() => setEditVisible(!editVisible)}
-                    >
-                        <Ionicons name="create-outline" size={20} color={theme.primary} />
-                    </TouchableOpacity>
+                    {
+                        category.id !== "goals" ? (
+                            <TouchableOpacity 
+                                className="bg-white rounded-lg p-2"
+                                onPress={() => setEditVisible(!editVisible)}
+                            >
+                                <Ionicons name="create-outline" size={20} color={theme.primary} />
+                            </TouchableOpacity>
+                        ) : (
+                            <View />
+                        )
+                    }
                 </View>
 
                 <View className="flex-row justify-between items-center px-4 pt-8">
@@ -121,11 +128,17 @@ const BudgetScreen = ({ route }) => {
                     )}
                 />
 
-                <View className="absolute bottom-10 right-5 m-4">
-                    <TouchableOpacity onPress={() => setModalVisible(true)}>
-                        <Ionicons name="add-circle" size={60} color={theme.primary} />
-                    </TouchableOpacity>
-                </View>
+                {
+                    category.id !== "goals" ? (
+                        <View className="absolute bottom-10 right-5 m-4">
+                        <TouchableOpacity onPress={() => setModalVisible(true)}>
+                            <Ionicons name="add-circle" size={60} color={theme.primary} />
+                        </TouchableOpacity>
+                    </View>
+                    ) : (
+                        <View />
+                    )
+                }
             </View>
         </View>
     )

@@ -8,7 +8,7 @@ import { firebase } from '../../config/firebase'
 import CategoryModal from './GoalsCategoryModal'
 import Emoji from 'react-native-emoji';
 
-const GoalsCategoriesCard = ({ category, edit }) => {
+const GoalsCategoriesCard = ({ category, edit, totalBudget }) => {
     const [user, setUser] = useContext(UserContext)
     const theme = useContext(ThemeContext)
     const navigation = useNavigation()
@@ -60,7 +60,7 @@ const GoalsCategoriesCard = ({ category, edit }) => {
                 edit ?
                     () => setEditVisible(!editVisible)
                 :
-                    () => navigation.navigate('Goals', { category })
+                    () => navigation.navigate('Goals', { category, totalBudget })
             }
             onLongPress={() => setEditVisible(!editVisible)}
             style={edit ? { opacity: 0.5, backgroundColor: "lightgray" } : {}}

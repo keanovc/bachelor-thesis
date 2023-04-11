@@ -23,7 +23,7 @@ const PopularArticles = () => {
 
     const { data: dataAll, isLoading, error } = useFetch("topfeeds/data-science/hot", 
     {
-        count: 2,
+        count: 1,
         after: 0,
     });
 
@@ -49,13 +49,6 @@ const PopularArticles = () => {
         getArticlesInfo();
     }, [dataIds])
 
-    const [selectedArticle, setSelectedArticle] = useState({})
-
-    const handleCardPress = (item) => {
-        setSelectedArticle(item)
-        navigation.navigate('Article', { article: item })
-    }
-
     return (
         <View className="mt-2">
             <View className="flex flex-row items-center justify-between">
@@ -72,11 +65,7 @@ const PopularArticles = () => {
                         <FlatList 
                             data={data}
                             renderItem={({ item }) => (
-                                <PopularArticleCard 
-                                    item={item}
-                                    selectedArticle={selectedArticle}
-                                    handleCardPress={handleCardPress}
-                                />
+                                <PopularArticleCard item={item} />
                             )}
                             keyExtractor={item => item.id}
                             horizontal
