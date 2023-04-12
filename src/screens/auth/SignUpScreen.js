@@ -80,6 +80,9 @@ const SignUpScreen = ({ navigation }) => {
                 username: userInfo.username,
                 fullname: userInfo.fullname,
                 email: userInfo.email,
+                symbol: userInfo.symbol,
+                symbolBefore: userInfo.symbolBefore,
+                valuta: userInfo.valuta,
                 profilePicture: userInfo.profilePicture,
                 isLoggedIn: true
             })

@@ -59,7 +59,7 @@ const HomeScreen = () => {
     return (
         <View  className="flex-1" style={{ backgroundColor: theme.background }}>
             <View 
-                className="h-1/5 w-full flex justify-end items-start py-4 px-6"
+                className="h-1/4 h- w-full flex justify-end items-start py-4 px-6"
                 style={{ backgroundColor: theme.primary }}
             >
                 <View className="flex flex-row items-center justify-between w-full">
