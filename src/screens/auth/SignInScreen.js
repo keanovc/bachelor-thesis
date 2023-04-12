@@ -48,17 +48,16 @@ const SignInScreen = ({ navigation }) => {
 
     return (
         <KeyboardAvoidingView 
-                className="flex-1 bg-white"
+                className="flex-1 bg-[#F5F8FE]"
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={{ 
-                    backgroundColor: theme.background,
-                }}
         >
             <ScrollView 
                 bounces={false}
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={{ flexGrow: 1 }}
             >
-                <SafeAreaView className="flex-1">
-                    <View className="px-10 pt-36">
+                <SafeAreaView className="flex-1 items-center justify-center">
+                    <View className="px-10 w-full">
                         <View className="mt-6">
                             <Text className="text-2xl text-gray-800" style={{ fontFamily: "Montserrat-Medium" }} >
                                 Welcome back.
@@ -86,6 +85,7 @@ const SignInScreen = ({ navigation }) => {
                                             autoCapitalize='none'
                                             autoCompleteType='email'
                                             autoCorrect={false}
+                                            login={true}
                                         />
                                     )}
                                     name="email"
@@ -115,6 +115,7 @@ const SignInScreen = ({ navigation }) => {
                                             autoCompleteType='password'
                                             autoCorrect={false}
                                             secureTextEntry={true}
+                                            login={true}
                                         />
                                     )}
                                     name="password"
@@ -149,10 +150,10 @@ const SignInScreen = ({ navigation }) => {
                                 <TouchableOpacity onPress={() => navigation.navigate("SignUp")} className="flex-row">
                                     <Text className="text-gray-400 text-sm" style={{ fontFamily: "Montserrat-Regular" }}>Don't have an account?</Text>
                                     <Text 
-                                        className="text-sm ml-1 font-bold"
+                                        className="text-sm ml-1"
                                         style={{ 
                                             color: theme.primary,
-                                            fontFamily: "Montserrat-Medium"
+                                            fontFamily: "Montserrat-SemiBold"
                                         }}
                                     >
                                         Sign Up
@@ -160,25 +161,21 @@ const SignInScreen = ({ navigation }) => {
                                 </TouchableOpacity>
                             </View>
                         </View>
-
-                        <View className="
-                            -right-48
-                            -bottom-28
-                            z-0
-                        ">
-                            <Image
-                                source={require('../../../assets/images/hand-welcome.png')}
-                                className="
-                                    absolute
-                                    w-40
-                                    h-56
-                                    -rotate-12
-                                "
-                            />
-                        </View>
                     </View>
                 </SafeAreaView>
             </ScrollView>
+
+            <Image
+                source={require('../../../assets/images/hand-welcome.png')}
+                className="
+                    absolute
+                    w-40
+                    h-56
+                    -rotate-45
+                    -bottom-10
+                    -right-10
+                "
+            />
         </KeyboardAvoidingView>
     )
 }

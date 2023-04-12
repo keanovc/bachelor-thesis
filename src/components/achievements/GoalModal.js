@@ -14,7 +14,7 @@ const GoalModal = ({ category, closeModal, goal }) => {
     const theme = useContext(ThemeContext)
     const startDate = getToday()
 
-    const goalsRef = firebase.firestore().collection("users").doc(user.uid).collection('goalsCategories').doc(category.id).collection('goals')
+    const goalsRef = firebase.firestore().collection("users").doc(user.uid).collection('goals')
 
     const [goalName, setGoalName] = useState(goal ? goal.name : "")
     const [goalMoney, setGoalMoney] = useState(goal ? goal.money : 0)
@@ -50,6 +50,7 @@ const GoalModal = ({ category, closeModal, goal }) => {
             money: goalMoney,
             moneySaved: 0,
             date: goalDate,
+            categoryId: category.id,
             completed: false,
             createdAt: timestamp,
         }
@@ -147,7 +148,7 @@ const GoalModal = ({ category, closeModal, goal }) => {
                                 fontSize: 14,
                             }} 
                             placeholder="Ex: New Phone"
-                            placeholderTextColor={theme.text}
+                            placeholderTextColor="#9E9E9E"
                             value={goalName}
                             onChangeText={text => setGoalName(text)}
                         />
@@ -199,7 +200,7 @@ const GoalModal = ({ category, closeModal, goal }) => {
                             style={{ backgroundColor: theme.accent, opacity: goalDate === "" ? 0.5 : 1 }}
                             onPress={() => setOpenDateModal(true)}
                         >
-                            <Text style={{ color: "#fff", fontFamily: "Montserrat-Regular" }}>{goalDate === "" ? "Select Date" : goalDate}</Text>
+                            <Text style={{ color: theme.text, fontFamily: "Montserrat-Regular" }}>{goalDate === "" ? "Select Date" : goalDate}</Text>
                         </TouchableOpacity>
 
                         <NumericInput
@@ -291,9 +292,11 @@ const GoalModal = ({ category, closeModal, goal }) => {
                         ) : (
                             <View className="flex flex-row mt-8 items-center justify-center">
                                 <TouchableOpacity 
-                                    disabled={goalName === ""}
+                                    disabled={
+                                        goalName === "" || goalDate === "" || goalMoney === 0
+                                    }
                                     className="p-4 w-80 bg-gray-300 rounded-md"
-                                    style={{ backgroundColor: theme.primary, opacity: goalName === "" ? 0.5 : 1 }}
+                                    style={{ backgroundColor: theme.primary, opacity: goalName === "" || goalDate === "" || goalMoney === 0 ? 0.5 : 1 }}
                                     onPress={createGoal}
                                 >
                                     <Text className="text-center text-white" style={{ fontFamily: "Montserrat-Bold" }}>Create</Text>

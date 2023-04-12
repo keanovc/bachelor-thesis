@@ -170,7 +170,7 @@ const GoalsCategoryModal = ({ closeModal, category }) => {
                                 fontSize: 14,
                             }} 
                             placeholder="Ex: Household"
-                            placeholderTextColor={theme.text}
+                            placeholderTextColor="#9E9E9E"
                             value={categoryName} 
                             onChangeText={text => setCategoryName(text)}
                         />

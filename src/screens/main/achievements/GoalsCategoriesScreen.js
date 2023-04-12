@@ -7,10 +7,11 @@ import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
 import { firebase } from '../../../config/firebase'
 import { GoalsCategoryModal, GoalsCategoriesCard, IconButton } from '../../../components'
+import { setRightCurrency } from '../../../utils/setRightCurrency'
 
 const GoalsCategoriesScreen = () => {
     const theme = useContext(ThemeContext)
-    const [user, setUser] = useContext(UserContext)
+    const [user] = useContext(UserContext)
     const [modalVisible, setModalVisible] = useState(false)
     const [editVisible, setEditVisible] = useState(false)
 
@@ -113,7 +114,9 @@ const GoalsCategoriesScreen = () => {
                 </View>
 
                 <View className="flex flex-row items-center justify-center">
-                    <Text className="mr-2 text-2xl" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>${totalBudget}</Text>
+                    <Text className="mr-2 text-2xl" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>
+                        {setRightCurrency(user, totalBudget)}
+                    </Text>
                 </View>
             </View>
 

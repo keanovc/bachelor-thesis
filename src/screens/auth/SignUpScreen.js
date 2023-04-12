@@ -92,17 +92,16 @@ const SignUpScreen = ({ navigation }) => {
 
     return (
         <KeyboardAvoidingView 
-                className="flex-1 bg-white"
+                className="flex-1 bg-[#F5F8FE]"
                 behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={{ 
-                    backgroundColor: theme.background,
-                }}
         >
             <ScrollView
                 bounces={false}
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={{ flexGrow: 1 }}
             >
-                <SafeAreaView className="flex-1">
-                    <View className="px-10 pt-36">
+                <SafeAreaView className="flex-1 items-center justify-center">
+                    <View className="px-10 w-full">
                         <Text className="text-2xl font-light text-gray-800" style={{ fontFamily: "Montserrat-Medium" }}>
                             Create an account!
                         </Text>
@@ -112,13 +111,13 @@ const SignUpScreen = ({ navigation }) => {
 
                         <TouchableOpacity 
                             onPress={addProfilePicture}
-                            className="bg-white w-20 h-20 rounded-full self-center overflow-hidden mt-6"
+                            className="bg-white w-32 h-32 rounded-full self-center overflow-hidden mt-6"
                         >
                             {profilePicture ? (
                                 <Image source={{ uri: profilePicture }} className="flex-1" />
                             ) : (
                                 <View className="items-center justify-center flex-1">
-                                    <Ionicons name="image" size={28} color={ theme.primary } />
+                                    <Ionicons name="image" size={32} color={ theme.primary } />
                                 </View>
                             )}
                         </TouchableOpacity>
@@ -139,6 +138,7 @@ const SignUpScreen = ({ navigation }) => {
                                         autoCapitalize='none'
                                         autoCompleteType='username'
                                         autoCorrect={false}
+                                        login={true}
                                     />
                                 )}
                                 name="fullname"
@@ -165,6 +165,7 @@ const SignUpScreen = ({ navigation }) => {
                                         autoCapitalize='none'
                                         autoCompleteType='username'
                                         autoCorrect={false}
+                                        login={true}
                                     />
                                 )}
                                 name="username"
@@ -192,6 +193,7 @@ const SignUpScreen = ({ navigation }) => {
                                         autoCapitalize='none'
                                         autoCompleteType='email'
                                         autoCorrect={false}
+                                        login={true}
                                     />
                                 )}
                                 name="email"
@@ -221,6 +223,7 @@ const SignUpScreen = ({ navigation }) => {
                                         autoCompleteType='password'
                                         autoCorrect={false}
                                         secureTextEntry={true}
+                                        login={true}
                                     />
                                 )}
                                 name="password"
@@ -239,29 +242,16 @@ const SignUpScreen = ({ navigation }) => {
                                 loading={loading}
                                 text="Create"
                             />
-
-                            {/* <TouchableOpacity 
-                                onPress={handleSubmit(onSubmit)}
-                                disabled={loading} 
-                                className="w-full h-12 rounded-md items-center justify-center mx-auto"
-                                style={{ backgroundColor: theme.primary }}
-                            >
-                                {loading ? (
-                                    <ActivityIndicator size="small" color="#fff" />
-                                ) : (
-                                    <Text className="text-white text-center text-md" style={{ fontFamily: "Montserrat-SemiBold" }}>Create</Text>
-                                )}
-                            </TouchableOpacity> */}
                         </View>
 
                         <View className="flex flex-row items-center justify-center mt-6">
                             <TouchableOpacity onPress={() => navigation.navigate("SignIn")} className="flex-row">
-                                <Text className="text-gray-400 text-sm">Already have an account?</Text>
+                                <Text className="text-gray-400 text-sm" style={{ fontFamily: 'Montserrat-Regular' }}>Already have an account?</Text>
                                 <Text 
-                                    className="text-sm ml-1 font-bold"
+                                    className="text-sm ml-1"
                                     style={{ 
                                         color: theme.primary,
-                                        fontFamily: 'Montserrat-Medium'
+                                        fontFamily: 'Montserrat-SemiBold'
                                     }}
                                 >
                                     Sign In

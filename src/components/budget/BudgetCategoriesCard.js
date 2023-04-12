@@ -56,7 +56,6 @@ const BudgetCategoriesCard = ({ category, date, edit }) => {
             <View className="flex flex-col items-center">
                 <Emoji name={category.icon} style={{ fontSize: 30 }} />
                 <Text className="text-base text-white pt-1" style={{ fontFamily: "Montserrat-Regular" }}>{category.name}</Text>
-                {/* <Text className="text-base text-white" style={{ fontFamily: "Montserrat-Bold" }}>$ 0</Text> */}
             </View>
         </TouchableOpacity>
     )

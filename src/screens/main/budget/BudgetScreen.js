@@ -13,7 +13,7 @@ const BudgetScreen = ({ route }) => {
     const { category, date, } = route.params
     const theme = useContext(ThemeContext)
     const navigation = useNavigation()
-    const [user, setUser] = useContext(UserContext)
+    const [user] = useContext(UserContext)
 
     const [modalVisible, setModalVisible] = useState(false)
     const [editVisible, setEditVisible] = useState(false)
@@ -96,7 +96,7 @@ const BudgetScreen = ({ route }) => {
                     <View className="flex-col">
                         <Text className="text-xs" style={{ color: "#fff", fontFamily: "Montserrat-Light" }}>
                             {
-                                category.type == "incomes" ? "TOTAL INCOMES ($)" : "TOTAL EXPENSES ($)"
+                                category.type == "incomes" ? `TOTAL INCOMES (${user.symbol})` : `TOTAL EXPENSES (${user.symbol})`
                             }
                         </Text>
                         <Text className="text-3xl pt-2" style={{ color: "#fff", fontFamily: "Montserrat-Medium" }}>
@@ -121,6 +121,7 @@ const BudgetScreen = ({ route }) => {
                             loading={() => setLoading(!loading)}
                             edit={editVisible}
                             date={date}
+                            user={user}
                         />
                     )}
                 />

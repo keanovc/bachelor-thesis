@@ -28,8 +28,8 @@ const ProfileSignIn = ({
         >
             <View className="flex-1 justify-center items-center">
                 <View 
-                    className="w-10/12 rounded-md p-10 shadow-lg"
-                    style={{ backgroundColor: theme.accent }}
+                    className="w-11/12 rounded-xl p-10 shadow-lg"
+                    style={{ backgroundColor: theme.background }}
                 >
                     <TouchableOpacity
                         className="absolute top-4 right-4"
@@ -82,11 +82,10 @@ const ProfileSignIn = ({
                                 minLength: 8,
                                 pattern: /^[^\s]+$/,
                             }}
-                            render={({ field: { onChange, onBlur, value } }) => (
+                            render={({ field: { onChange, onBlur } }) => (
                                 <AuthInputField
                                     onBlur={onBlur}
                                     onChange={onChange}
-                                    value={value}
                                     setValue={setPassword}
                                     placeholder="Password"
                                     autoCapitalize='none'

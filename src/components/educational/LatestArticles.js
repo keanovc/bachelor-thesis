@@ -8,7 +8,9 @@ import LatestArticleCard from './LatestArticleCard'
 
 const rapidApiKey = env.RAPID_API_KEY
 
-const LatestArticles = () => {
+const LatestArticles = ({
+    selectedCategory
+}) => {
     const theme = useContext(ThemeContext)
     
     const [dataIds, setDataIds] = useState([])
@@ -19,7 +21,7 @@ const LatestArticles = () => {
         "x-rapidapi-host": "medium2.p.rapidapi.com"
     };
 
-    const { data: dataAll, isLoading, error } = useFetch("topfeeds/data-science/new", 
+    const { data: dataAll, isLoading, error, refetch } = useFetch(`topfeeds/${selectedCategory}/new`, 
     {
         count: 1,
         after: 0,
@@ -46,6 +48,10 @@ const LatestArticles = () => {
     useEffect(() => {
         getArticlesInfo();
     }, [dataIds])
+
+    useEffect(() => {
+        refetch()
+    }, [selectedCategory])
 
     return (
         <View className="mt-2">

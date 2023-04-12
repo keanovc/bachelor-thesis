@@ -1,6 +1,5 @@
 import { View, Text, FlatList, ActivityIndicator } from 'react-native'
 import React, { useState, useContext, useEffect } from 'react'
-import { useNavigation } from '@react-navigation/native'
 
 import ThemeContext from '../../context/ThemeContext'
 import useFetch from '../../hooks/useFetch'
@@ -9,9 +8,10 @@ import PopularArticleCard from './PopularArticleCard'
 
 const rapidApiKey = env.RAPID_API_KEY
 
-const PopularArticles = () => {
+const PopularArticles = ({
+    selectedCategory
+}) => {
     const theme = useContext(ThemeContext)
-    const navigation = useNavigation()
     
     const [dataIds, setDataIds] = useState([])
     const [data, setData] = useState([])
@@ -21,7 +21,7 @@ const PopularArticles = () => {
         "x-rapidapi-host": "medium2.p.rapidapi.com"
     };
 
-    const { data: dataAll, isLoading, error } = useFetch("topfeeds/data-science/hot", 
+    const { data: dataAll, isLoading, error, refetch } = useFetch(`topfeeds/${selectedCategory}/hot`, 
     {
         count: 1,
         after: 0,
@@ -48,6 +48,10 @@ const PopularArticles = () => {
     useEffect(() => {
         getArticlesInfo();
     }, [dataIds])
+
+    useEffect(() => {
+        refetch()
+    }, [selectedCategory])
 
     return (
         <View className="mt-2">

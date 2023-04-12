@@ -10,9 +10,10 @@ import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
 import { firebase } from '../../../config/firebase'
 import { IconButton } from '../../../components'
+import { setRightCurrency } from '../../../utils/setRightCurrency'
 
 const IndividualGoalScreen = ({ route }) => {
-    const [user, setUser] = useContext(UserContext)
+    const [user] = useContext(UserContext)
     const { goal, category, totalBudget } = route.params
     const theme = useContext(ThemeContext)
     const navigation = useNavigation()
@@ -21,7 +22,7 @@ const IndividualGoalScreen = ({ route }) => {
     const [goalDate, setGoalDate] = useState(goal.date)
     const [openDateModal, setOpenDateModal] = useState(false)
 
-    const goalsRef = firebase.firestore().collection("users").doc(user.uid).collection('goalsCategories').doc(category.id).collection('goals')
+    const goalsRef = firebase.firestore().collection("users").doc(user.uid).collection('goals')
     const budgetsRef = firebase.firestore().collection("users").doc(user.uid).collection('budgets')
     const budgetCategoriesRef = firebase.firestore().collection("users").doc(user.uid).collection('budgetCategories')
     const currentMonth = getToday().toString().substring(0, 4) + " " + getToday().toString().substring(5, 7)
@@ -137,8 +138,8 @@ const IndividualGoalScreen = ({ route }) => {
 
             <View className="mx-12 mt-6">
                 <View className="flex flex-row items-center justify-between">
-                    <Text className="text-xl mt-2" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>$ {goal.moneySaved}</Text>
-                    <Text className="text-xs mt-2" style={{ color: theme.text, fontFamily: "Montserrat-Light" }}>$ {goal.money}</Text>
+                    <Text className="text-xl mt-2" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>{setRightCurrency(user, goal.moneySaved)}</Text>
+                    <Text className="text-xs mt-2" style={{ color: theme.text, fontFamily: "Montserrat-Light" }}>{setRightCurrency(user, goal.money)}</Text>
                 </View>
 
                 <View className="flex flex-row items-center justify-center h-3 mt-2">

@@ -278,7 +278,7 @@ const BudgetCategoriesScreen = () => {
                             setType("incomes")
                         }}
                     >
-                        <Ionicons name="add-circle" size={32} color={theme.primary} />
+                        <Ionicons name="add-circle" size={40} color={theme.primary} />
                     </TouchableOpacity>
                 </View>
 
@@ -339,7 +339,7 @@ const BudgetCategoriesScreen = () => {
                             setType("expenses")
                         }}
                     >
-                        <Ionicons name="add-circle" size={32} color={theme.primary} />
+                        <Ionicons name="add-circle" size={40} color={theme.primary} />
                     </TouchableOpacity>
                 </View>
 

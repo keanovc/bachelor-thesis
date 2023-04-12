@@ -29,6 +29,9 @@ import EducationDetailScreen from '../screens/main/educational/EducationDetailSc
 import SettingsScreen from '../screens/main/settings/SettingsScreen';
 import ProfileScreen from '../screens/main/settings/ProfileScreen';
 import LanguageSelectorScreen from '../screens/main/settings/LanguageSelectorScreen';
+import ValutaSelectorScreen from '../screens/main/settings/ValutaSelectorScreen';
+import AboutScreen from '../screens/main/settings/AboutScreen';
+import FAQScreen from '../screens/main/settings/FAQScreen';
 
 const AppStackScreens = () => {
     const AppStack = createStackNavigator();
@@ -84,11 +87,10 @@ const AppStackScreens = () => {
                     {/* Settings */}
                     <AppStack.Screen name="Settings" component={SettingsScreen} />
                     <AppStack.Screen name="Profile" component={ProfileScreen} />
-                    <AppStack.Screen name="LanguageSelector" component={LanguageSelectorScreen} 
-                        options={{ 
-                            presentation: 'modal',
-                        }}
-                    />
+                    <AppStack.Screen name="LanguageSelector" component={LanguageSelectorScreen} />
+                    <AppStack.Screen name="ValutaSelector" component={ValutaSelectorScreen} />
+                    <AppStack.Screen name="About" component={AboutScreen} />
+                    <AppStack.Screen name="FAQ" component={FAQScreen} />
                 </>
             ) : (
                 <AppStack.Screen name="Auth" component={AuthStackScreens} />

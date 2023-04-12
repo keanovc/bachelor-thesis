@@ -8,7 +8,7 @@ import { useForm, Controller } from "react-hook-form";
 import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
 import { FireBaseContext } from '../../../context/FireBaseContext'
-import { AuthInputField, LargeButton } from '../../../components/index'
+import { AuthInputField, LargeButton, IconButton } from '../../../components/index'
 
 const ProfileScreen = () => {
     const [user, setUser] = useContext(UserContext)
@@ -84,10 +84,12 @@ const ProfileScreen = () => {
             }}
         >
             <View className="px-6">
-                <View className="flex-row items-center mt-8 space-x-2">
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                        <Ionicons name="chevron-back" size={24} color={theme.text} />
-                    </TouchableOpacity>
+                <View className="flex-row items-center mt-8 space-x-4">
+                    <IconButton
+                        onPress={() => navigation.goBack()}
+                        icon="chevron-back"
+                    />
+
                     <Text className="text-2xl font-semibold" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>Account</Text>
                 </View>
 

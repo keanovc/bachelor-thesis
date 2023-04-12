@@ -7,6 +7,7 @@ import ThemeContext from '../../context/ThemeContext'
 import { UserContext } from '../../context/UserContext'
 import { firebase } from '../../config/firebase'
 import GoalsCategoryModal from './GoalsCategoryModal'
+import { setRightCurrency } from '../../utils/setRightCurrency';
 
 const GoalsCategoriesCard = ({ category, edit, totalBudget }) => {
     const [user, setUser] = useContext(UserContext)
@@ -15,7 +16,7 @@ const GoalsCategoriesCard = ({ category, edit, totalBudget }) => {
     
     const [editVisible, setEditVisible] = useState(false)
 
-    const goalsRef = firebase.firestore().collection('users').doc(user.uid).collection('goalsCategories').doc(category.id).collection('goals')
+    const goalsRef = firebase.firestore().collection('users').doc(user.uid).collection('goals')
     const [goals, setGoals] = useState([])
 
     const [completedGoals, setCompletedGoals] = useState(0)
@@ -30,6 +31,7 @@ const GoalsCategoriesCard = ({ category, edit, totalBudget }) => {
 
     useEffect(() => {
         goalsRef
+            .where('categoryId', '==', category.id)
             .onSnapshot(
                 querySnapshot => {
                     const newGoals = []
@@ -101,7 +103,7 @@ const GoalsCategoriesCard = ({ category, edit, totalBudget }) => {
             </Text>
 
             <Text className="mt-4 text-sm" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>
-                $ {totalBalance}
+                {setRightCurrency(user, totalBalance)}
             </Text>
         </TouchableOpacity>
     )

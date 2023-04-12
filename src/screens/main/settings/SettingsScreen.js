@@ -1,10 +1,11 @@
-import { View, Text, Image, TouchableOpacity, Switch, SafeAreaView, Modal, TextInput, ScrollView } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Switch, SafeAreaView, ActivityIndicator, ScrollView } from 'react-native'
 import React, { useContext, useState } from 'react'
 import { EventRegister } from 'react-native-event-listeners'
 import ThemeContext from '../../../context/ThemeContext'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { UserContext } from '../../../context/UserContext'
 import { FireBaseContext } from '../../../context/FireBaseContext'
@@ -32,6 +33,11 @@ const SettingsScreen = () => {
     const onSubmit = async () => {
         setLoading(true)
 
+        if (email !== user.email) {
+            setLoading(false)
+            return alert("Wrong email address")
+        }
+
         try {
             await firebase.signInWithEmailAndPassword(email, password)
             const uid = firebase.getCurrentUser().uid
@@ -45,12 +51,13 @@ const SettingsScreen = () => {
                 fullname: userInfo.fullname,
                 profilePicture: userInfo.profilePicture,
             })
+
+            navigation.navigate("Profile")
+            setModalVisible(false)
         } catch (error) {
             alert(error.message)
         } finally {
             setLoading(false)
-            navigation.navigate("Profile")
-            setModalVisible(false)
         }
     }
 
@@ -61,6 +68,14 @@ const SettingsScreen = () => {
             setUser(state => ({ ...state, isLoggedIn: false }))
         }
     } 
+
+    const clearOnBoarding = async () => {
+        try {
+            await AsyncStorage.removeItem('@viewedOnBoarding')
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     return (
         <SafeAreaView
@@ -105,17 +120,23 @@ const SettingsScreen = () => {
                         className="flex-row items-center justify-between mt-6 px-4"
                     >
                         <View className="flex-row items-center">
-                            <Image
-                                className="w-16 h-16 rounded-full"
-                                source={{ uri: 
-                                    user.profilePicture === "default" 
-                                        ? "https://firebasestorage.googleapis.com/v0/b/bachelorthesis-e377a.appspot.com/o/placeholderPictures%2Fplaceholder-person.jpeg?alt=media&token=90a1ac16-40af-45e8-ba17-211cda672ef2"
-                                        : user.profilePicture
-                                }}
-                            />
+                            {
+                                user.profilePicture ? (
+                                    <Image
+                                        className="w-16 h-16 rounded-full"
+                                        source={{ uri: 
+                                            user.profilePicture === "default" 
+                                                ? "https://firebasestorage.googleapis.com/v0/b/bachelorthesis-e377a.appspot.com/o/placeholderPictures%2Fplaceholder-person.jpeg?alt=media&token=90a1ac16-40af-45e8-ba17-211cda672ef2"
+                                                : user.profilePicture
+                                        }}
+                                    />
+                                ) : (
+                                    <ActivityIndicator size="large" color={theme.primary} />
+                                )
+                            }
 
                             <View className="ml-4">
-                                <Text className="text-lg font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Medium" }}>{user.fullname}</Text>
+                                <Text className="text-lg font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Medium" }}>{user.username}</Text>
                                 <Text className="text-sm font-regular text-gray-400" style={{ fontFamily: "Montserrat-Regular" }}>Personal Info</Text>
                             </View>
                         </View>
@@ -167,7 +188,7 @@ const SettingsScreen = () => {
                                 }}
                                 ios_backgroundColor="#3e3e3e"
                                 style={{
-                                    transform: [{ scaleX: 0.6 }, { scaleY: 0.6 }]
+                                    transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }]
                                 }}
                                 className="-mr-2"
                             />
@@ -196,15 +217,15 @@ const SettingsScreen = () => {
                         </View>
 
                         {/* Notifications */}
-                        {/* <View>
+                        <View>
                             <SettingsItem
                                 title="Notifications"
-                                onPress={() => navigation.navigate('Notifications')}
+                                onPress={clearOnBoarding}
                                 iconBackgroundColor="#FFEDE0"
                                 iconColor="orange"
                                 icon="notifications"
                             />
-                        </View> */}
+                        </View>
                         
                         {/* Log Out */}
                         <View>

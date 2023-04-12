@@ -1,12 +1,12 @@
-import { View, Text, SafeAreaView, FlatList, TextInput, TouchableOpacity, Image, KeyboardAvoidingView } from 'react-native'
+import { View, Text, FlatList, TextInput, TouchableOpacity, Image, KeyboardAvoidingView } from 'react-native'
 import React, { useState, useContext } from 'react'
 import axios from 'axios'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 
 import env from '../../../config/env'
-
 import ThemeContext from '../../../context/ThemeContext'
+import { IconButton } from '../../../components'
 
 const MessageScreen = () => {
     const API_KEY = env.API_KEY_CHATGPT
@@ -49,33 +49,21 @@ const MessageScreen = () => {
                 <View 
                     className="flex-row items-center justify-between px-5 pt-16 pb-3"
                     style={{
-                        backgroundColor: "white",
-                        shadowColor: '#D3D3D3',
-                        shadowOffset: { width: 0, height: 6 },
-                        shadowOpacity: 0.25,
-                        shadowRadius: 3.84,
-                        elevation: 5,
+                        backgroundColor: theme.primary,
                     }}
                 >
                     <View className="flex-row items-center">
-                        <TouchableOpacity
-                            className="
-                                w-10 h-10
-                                rounded-lg
-                                items-center
-                                justify-center
-                            "
-                            style={{ backgroundColor: theme.background }}
+                        <IconButton
                             onPress={() => navigation.goBack()}
-                        >
-                            <Ionicons name="chevron-back" size={24} color={theme.primary} />
-                        </TouchableOpacity>
+                            icon="chevron-back"
+                        />
+
                         <View className="ml-4">
-                            <Text className="text-lg font-bold" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>Visional Bot</Text>
+                            <Text className="text-lg" style={{ color: "white", fontFamily: "Montserrat-SemiBold" }}>Visional Bot</Text>
 
                             <View className="flex-row items-center">
                                 <View className="w-2 h-2 rounded-full bg-green-500 ml-1" />
-                                <Text className="text-sm ml-2 text-gray-400" style={{ fontFamily: "Montserrat-Light" }}>Powered by ChatGPT</Text>
+                                <Text className="text-sm ml-2" style={{ color: "white", fontFamily: "Montserrat-Light" }}>Powered by ChatGPT</Text>
                             </View>
                         </View>
                     </View>
@@ -113,13 +101,17 @@ const MessageScreen = () => {
                     )}
                 />
 
-                <View className="flex-row items-center justify-between p-5 mx-8 my-5 bg-white shadow rounded-3xl">
+                <View 
+                    className="flex-row items-center justify-between p-5 mx-8 my-5 shadow rounded-3xl"
+                    style={{ backgroundColor: theme.input }}
+                >
                     <TextInput
                         className="flex-1 px-4 text-md"
                         value={message}
                         onChangeText={text => setMessage(text)}
                         placeholder="Type your question here..."
-                        style={{ fontFamily: "Montserrat-Regular" }}
+                        placeholderTextColor={theme.text}
+                        style={{ fontFamily: "Montserrat-Regular", color: theme.text }}
                     />
                     <TouchableOpacity
                         className="ml-2 items-center justify-center"

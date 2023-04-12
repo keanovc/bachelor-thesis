@@ -16,6 +16,8 @@ import AppStackScreens from './src/stacks/AppStackScreens';
 export default function App() {
   const [darkMode, setDarkMode] = useState(false)
   const [fontsLoaded] = useFonts({
+    'Montserrat-Italic': require('./assets/fonts/Montserrat-Italic.ttf'),
+    'Montserrat-MediumItalic': require('./assets/fonts/Montserrat-MediumItalic.ttf'),
     'Montserrat-Regular': require('./assets/fonts/Montserrat-Regular.ttf'),
     'Montserrat-Bold': require('./assets/fonts/Montserrat-Bold.ttf'),
     'Montserrat-SemiBold': require('./assets/fonts/Montserrat-SemiBold.ttf'),

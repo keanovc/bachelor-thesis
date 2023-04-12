@@ -9,14 +9,14 @@ import { firebase } from '../../../config/firebase'
 import { GoalModal, GoalItem, IconButton } from '../../../components'
 
 const GoalsScreen = ({ route }) => {
-    const [user, setUser] = useContext(UserContext)
+    const [user] = useContext(UserContext)
     const theme = useContext(ThemeContext)
     const navigation = useNavigation()
 
     const { category, totalBudget } = route.params
 
     const [goals, setGoals] = useState([])
-    const goalsRef = firebase.firestore().collection('users').doc(user.uid).collection('goalsCategories').doc(category.id).collection('goals')
+    const goalsRef = firebase.firestore().collection('users').doc(user.uid).collection('goals')
     const [modalVisible, setModalVisible] = useState(false)
     const [editVisible, setEditVisible] = useState(false)
 
@@ -59,6 +59,7 @@ const GoalsScreen = ({ route }) => {
     useEffect(() => {
         goalsRef
             .orderBy("createdAt", "desc")
+            .where("categoryId", "==", category.id)
             .onSnapshot(
                 querySnapshot => {
                     const newGoals = []
@@ -77,7 +78,7 @@ const GoalsScreen = ({ route }) => {
                     setGoals(newGoals)
                 },
                 error => {
-                    alert(error)
+                    console.log(error)
                 }
             )
     }, [])

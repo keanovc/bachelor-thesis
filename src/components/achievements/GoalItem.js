@@ -4,9 +4,12 @@ import Emoji from 'react-native-emoji';
 import { useNavigation } from '@react-navigation/native'
 
 import ThemeContext from '../../context/ThemeContext'
+import { UserContext } from '../../context/UserContext'
 import GoalModal from './GoalModal'
+import { setRightCurrency } from '../../utils/setRightCurrency';
 
 const GoalItem = ({ goal, category, edit, totalBudget }) => {
+    const [user] = useContext(UserContext)
     const theme = useContext(ThemeContext)
     const navigation = useNavigation()
     const [editVisible, setEditVisible] = useState(false)
@@ -50,7 +53,7 @@ const GoalItem = ({ goal, category, edit, totalBudget }) => {
                 <View className="flex flex-col ml-6">
                     <Text className="text-sm font-bold" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>{goal.name}</Text>
 
-                    <Text className="text-xs mt-2" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>$ {goal.moneySaved}</Text>
+                    <Text className="text-xs mt-2" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>{setRightCurrency(user, goal.moneySaved)}</Text>
 
                     <View className="flex flex-row items-center justify-center h-1">
                         <View 
@@ -74,7 +77,7 @@ const GoalItem = ({ goal, category, edit, totalBudget }) => {
                         <Text className="text-xs" style={{ color: theme.text, fontFamily: "Montserrat-Light" }}>
                             {goal.date}    
                         </Text>
-                        <Text className="text-xs" style={{ color: "lightgray", fontFamily: "Montserrat-Light" }}>$ {goal.money}</Text>
+                        <Text className="text-xs" style={{ color: "lightgray", fontFamily: "Montserrat-Light" }}>{setRightCurrency(user, goal.money)}</Text>
                     </View>
                 </View>
             </View>

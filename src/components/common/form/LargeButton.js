@@ -15,7 +15,7 @@ const LargeButton = ({
         <TouchableOpacity 
             onPress={handleSubmit(onSubmit)} 
             disabled={loading} 
-            className="rounded-lg py-3 px-3 w-full"
+            className="rounded-lg py-4 px-3 w-full"
             style={{ backgroundColor: theme.primary }}
         >
             {loading ? (

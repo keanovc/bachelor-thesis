@@ -4,8 +4,9 @@ import { Ionicons } from '@expo/vector-icons'
 
 import ThemeContext from '../../context/ThemeContext'
 import BudgetModal from './BudgetModal'
+import { setRightCurrency } from '../../utils/setRightCurrency'
 
-const BudgetItem = ({ item, category, loading, edit, date }) => {
+const BudgetItem = ({ item, category, loading, edit, date, user }) => {
     const [editVisible, setEditVisible] = useState(false)
     const theme = useContext(ThemeContext)
 
@@ -62,7 +63,7 @@ const BudgetItem = ({ item, category, loading, edit, date }) => {
                             color: category.type == "incomes" ? "#48BB78" : "#F66565",
                         }}
                     >
-                        $ {item.money}
+                        {setRightCurrency(user, item.money)}
                     </Text>
 
                     <Text className="text-xs" style={{ color:theme.text, fontFamily: "Montserrat-Light" }}>

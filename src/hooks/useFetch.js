@@ -13,7 +13,6 @@ const useFetch = (endpoint, query) => {
     const options = {
         method: 'GET',
         url: `https://medium2.p.rapidapi.com/${endpoint}`,
-        // url: `https://medium2.p.rapidapi.com/test`,
         headers: {
             'X-RapidAPI-Key': rapidApiKey,
             'X-RapidAPI-Host': 'medium2.p.rapidapi.com'

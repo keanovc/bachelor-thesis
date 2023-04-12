@@ -23,6 +23,10 @@ const LoadingScreen = () => {
 
                 setUser({
                     isLoggedIn: true,
+                    symbol: userInfo.symbol,
+                    symbolBefore: userInfo.symbolBefore,
+                    valuta: userInfo.valuta,
+                    fullname: userInfo.fullname,
                     email: userInfo.email,
                     username: userInfo.username,
                     uid: user.uid,
@@ -48,10 +52,7 @@ const LoadingScreen = () => {
 
     return (
         <View 
-            className="flex-1 items-center justify-center"
-            style={{
-                backgroundColor: theme.background,
-            }}
+            className="flex-1 items-center justify-center bg-[#F5F8FE]"
         >
             <Animated.View
                 // fade in and when done fade out
@@ -74,16 +75,6 @@ const LoadingScreen = () => {
                         height: 67,
                     }}
                 />
-
-                {/* <LotteView
-                    source={require('../../../assets/animations/loading.json')}
-                    autoPlay
-                    loop
-                    style={{
-                        width: 100,
-                        height: 100,
-                    }}
-                /> */}
             </Animated.View>
         </View>
     )

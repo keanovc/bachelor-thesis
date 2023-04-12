@@ -1,5 +1,5 @@
-import { View, Text, SafeAreaView, ScrollView } from 'react-native'
-import React, { useContext } from 'react'
+import { View, Text, SafeAreaView, ScrollView, FlatList } from 'react-native'
+import React, { useContext, useState } from 'react'
 import { getToday } from 'react-native-modern-datepicker'
 
 import ThemeContext from '../../../context/ThemeContext'
@@ -7,6 +7,51 @@ import { PopularArticles, LatestArticles, Filter } from '../../../components'
 
 const EducationalScreen = () => {
     const theme = useContext(ThemeContext)
+
+    const filterCategories = [
+        {
+            name: "Marketing",
+            icon: "rocket",
+            search: "marketing"
+        },
+        {
+            name: "Work",
+            icon: "briefcase",
+            search: "work"
+        },
+        {
+            name: "Entrepreneurship",
+            icon: "new",
+            search: "entrepreneurship"
+        },
+        {
+            name: "Mental Health",
+            icon: "brain",
+            search: "mental health"
+        },
+        {
+            name: "Life",
+            icon: "heart",
+            search: "life"
+        },
+        {
+            name: "Money",
+            icon: "moneybag",
+            search: "money"
+        },
+        {
+            name: "Self Improvement",
+            icon: "star",
+            search: "self-improvement"
+        },
+        {
+            name: "Education",
+            icon: "school",
+            search: "education"
+        },
+    ]
+    
+    const [selectedCategory, setSelectedCategory] = useState(filterCategories[1].search)
 
     return (
         <SafeAreaView 
@@ -25,11 +70,30 @@ const EducationalScreen = () => {
 
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View className="flex px-6">
-                    <Filter />
+                    <View className="flex flex-col">
+                        <View className="flex flex-row items-center justify-center">
+                            <FlatList
+                                data={filterCategories}
+                                renderItem={({ item }) => (
+                                    <Filter
+                                        name={item.name}
+                                        icon={item.icon}
+                                        search={item.search}
+                                        selectedCategory={selectedCategory}
+                                        setSelectedCategory={setSelectedCategory}
+                                    />
+                                )}
+                                keyExtractor={item => item.name}
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                className="py-4"
+                            />
+                        </View>
+                    </View>
 
-                    {/* <PopularArticles />
+                    {/* <PopularArticles selectedCategory={selectedCategory} />
 
-                    <LatestArticles /> */}
+                    <LatestArticles selectedCategory={selectedCategory} /> */}
                 </View>
             </ScrollView>
         </SafeAreaView>

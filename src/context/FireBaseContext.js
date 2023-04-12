@@ -97,6 +97,9 @@ const FireBase = {
 
             await FireBase.getCurrentUser().updateEmail(user.email).then(async () => {
                 await firebase.firestore().collection('users').doc(uid).update({
+                    symbol: user.symbol,
+                    symbolBefore: user.symbolBefore,
+                    valuta: user.valuta,
                     fullname: user.fullname,
                     username: user.username,
                     email: user.email,
@@ -107,6 +110,9 @@ const FireBase = {
             });
 
             return {
+                symbol: user.symbol,
+                symbolBefore: user.symbolBefore,
+                valuta: user.valuta,
                 fullname: user.fullname,
                 username: user.username,
                 email: user.email,

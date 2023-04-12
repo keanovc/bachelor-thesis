@@ -8,6 +8,8 @@ import Markdown from 'react-native-easy-markdown';
 const ArticleDetails = ({ article, content }) => {
     const theme = useContext(ThemeContext)
 
+    console.log(content)
+
     return (
         <View className="flex px-8">
             <View className="flex flex-row items-center justify-between mt-4">
@@ -25,31 +27,31 @@ const ArticleDetails = ({ article, content }) => {
                         marginVertical: 10
                     },
                     h2: {
-                        fontFamily: "Montserrat-SemiBold",
+                        fontFamily: "Montserrat-Medium",
                         fontSize: 18,
                         color: theme.text,
                         marginVertical: 10
                     },
                     h3: {
-                        fontFamily: "Montserrat-SemiBold",
-                        fontSize: 16,
+                        fontFamily: "Montserrat-Medium",
+                        fontSize: 14,
                         color: theme.text,
                         marginVertical: 10
                     },
                     h4: {
-                        fontFamily: "Montserrat-SemiBold",
+                        fontFamily: "Montserrat-Medium",
                         fontSize: 14,
                         color: theme.text,
                         marginVertical: 10
                     },
                     h5: {
-                        fontFamily: "Montserrat-SemiBold",
+                        fontFamily: "Montserrat-Medium",
                         fontSize: 12,
                         color: theme.text,
                         marginVertical: 10
                     },
                     h6: {
-                        fontFamily: "Montserrat-SemiBold",
+                        fontFamily: "Montserrat-Medium",
                         fontSize: 10,
                         color: theme.text,
                         marginVertical: 10
@@ -105,12 +107,7 @@ const ArticleDetails = ({ article, content }) => {
                         fontFamily: "Montserrat-Bold",
                         fontSize: 14,
                         color: theme.text
-                    },
-                    em: {
-                        fontFamily: "Montserrat-Italic",
-                        fontSize: 14,
-                        color: theme.text
-                    },
+                    }
                 }}
                 style={{ 
                     marginBottom: 20,

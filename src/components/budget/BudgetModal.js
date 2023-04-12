@@ -120,7 +120,7 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
                             placeholder={
                                 category.type === "incomes" ? "Salary" : "Groceries"
                             }
-                            placeholderTextColor={theme.text}
+                            placeholderTextColor="#9E9E9E"
                             value={budgetName}
                             onChangeText={text => setBudgetName(text)}
                         />
