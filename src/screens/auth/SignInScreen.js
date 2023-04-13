@@ -88,6 +88,7 @@ const SignInScreen = ({ navigation }) => {
                                             autoCapitalize='none'
                                             autoCompleteType='email'
                                             autoCorrect={false}
+                                            keyboardType='email-address'
                                             login={true}
                                         />
                                     )}

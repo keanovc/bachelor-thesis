@@ -1,13 +1,18 @@
-import { View, Text, TouchableOpacity, Image, Animated, ScrollView } from 'react-native'
-import React, { useContext, useEffect, useState } from 'react'
+import { View, Text, TouchableOpacity, Image, Animated, ScrollView, RefreshControl } from 'react-native'
+import React, { useContext, useEffect, useState, useCallback } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import Emoji from 'react-native-emoji'
 import { Ionicons } from '@expo/vector-icons'
 import axios from 'axios'
+import { BarChart } from 'react-native-chart-kit'
 
 import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
+import { firebase } from '../../../config/firebase'
 import env from '../../../config/env'
+import { calculateMonthAndYear } from '../../../utils/calculateMonthAndYear'
+import { calculateBudgets } from '../../../utils/calculateBudgets'
+import { setRightCurrency } from '../../../utils/setRightCurrency'
 
 const HomeScreen = () => {
     const API_KEY = env.QUOTES_API_KEY
@@ -15,10 +20,19 @@ const HomeScreen = () => {
     const theme = useContext(ThemeContext)
     const navigation = useNavigation()
     const [user] = useContext(UserContext)
+
     const [showMessage, setShowMessage] = useState(false)
     const [quote, setQuote] = useState("")
-
+    const [refreshing, setRefreshing] = useState(false)
     const show = new Animated.Value(0)
+
+    const budgetsRef = firebase.firestore().collection("users").doc(user.uid).collection("budgets")
+    const [budgets, setBudgets] = useState([])
+    
+    const [type, setType] = useState("incomes")
+
+    const [totalIncomes, setTotalIncomes] = useState(0)
+    const [totalExpenses, setTotalExpenses] = useState(0)
 
     useEffect(() => {
         if (user) {
@@ -48,13 +62,80 @@ const HomeScreen = () => {
         }
     };
 
-    useEffect(() => {
-        axios.request(options).then(function (response) {
+    const axiosGetQuote = async () => {
+        await axios.request(options).then(function (response) {
             setQuote(response.data[0])
         }).catch(function (error) {
             console.error(error);
         });
+    }
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true)
+        axiosGetQuote()
+        setRefreshing(false)
     }, [])
+
+    useEffect(() => {
+        axiosGetQuote()
+
+        getIsDateOrMonthlyIsTrue().then((budgetsArray) => {
+            const budgets = budgetsArray.map((doc) => {
+                const data = doc.data();
+                const id = doc.id;
+                return { id, ...data };
+            });
+            setBudgets(budgets);
+        });
+    }, [])
+
+    async function getIsDateOrMonthlyIsTrue() {
+        const isDateFirstMonth = budgetsRef.where("date", "==", calculateMonthAndYear(0).dateMonthAndYear).get();
+        const isDateSecondMonth = budgetsRef.where("date", "==", calculateMonthAndYear(1).dateMonthAndYear).get();
+        const isDateThirdMonth = budgetsRef.where("date", "==", calculateMonthAndYear(2).dateMonthAndYear).get();
+        const isDateFourthMonth = budgetsRef.where("date", "==", calculateMonthAndYear(3).dateMonthAndYear).get();
+        const isMonthly = budgetsRef.where("monthly", "==", true).get();
+
+        const [dateFirstMonthQuerySnapshot, dateSecondMonthQuerySnapshot, dateThirdMonthQuerySnapshot, dateFourthMonthQuerySnapshot, monthlyQuerySnapshot] = await Promise.all([
+            isDateFirstMonth,
+            isDateSecondMonth,
+            isDateThirdMonth,
+            isDateFourthMonth,
+            isMonthly
+        ]);
+
+        const dateFirstMonthArray = dateFirstMonthQuerySnapshot.docs;
+        const dateSecondMonthArray = dateSecondMonthQuerySnapshot.docs;
+        const dateThirdMonthArray = dateThirdMonthQuerySnapshot.docs;
+        const dateFourthMonthArray = dateFourthMonthQuerySnapshot.docs;
+        const monthlyBudgetArray = monthlyQuerySnapshot.docs;
+
+        const budgetsArray = dateFirstMonthArray.concat(dateSecondMonthArray, dateThirdMonthArray, dateFourthMonthArray, monthlyBudgetArray)
+
+        return budgetsArray;
+    }
+    
+    const data = {
+        labels: [
+            calculateMonthAndYear(3).datePreviousMonth.toString().substring(4, 7),
+            calculateMonthAndYear(2).datePreviousMonth.toString().substring(4, 7),
+            calculateMonthAndYear(1).datePreviousMonth.toString().substring(4, 7),
+            calculateMonthAndYear(0).datePreviousMonth.toString().substring(4, 7)
+        ],
+        datasets: [{
+            data: [ 
+                calculateBudgets(budgets, 3, type),
+                calculateBudgets(budgets, 2, type),
+                calculateBudgets(budgets, 1, type),
+                calculateBudgets(budgets, 0, type)
+            ],
+        }]
+    }
+
+    useEffect(() => {
+        setTotalIncomes(calculateBudgets(budgets, 0, "incomes") + calculateBudgets(budgets, 1, "incomes") + calculateBudgets(budgets, 2, "incomes") + calculateBudgets(budgets, 3, "incomes"))
+        setTotalExpenses(calculateBudgets(budgets, 0, "expenses") + calculateBudgets(budgets, 1, "expenses") + calculateBudgets(budgets, 2, "expenses") + calculateBudgets(budgets, 3, "expenses"))
+    }, [budgets])
 
     return (
         <View  className="flex-1" style={{ backgroundColor: theme.background }}>
@@ -90,7 +171,15 @@ const HomeScreen = () => {
                 </View>
             </View>
 
-            <ScrollView className="flex-1 flex flex-col px-6 py-8">
+            <ScrollView 
+                className="flex-1 flex flex-col px-6 py-8"
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+            >
                 {
                     quote && (
                         <View className="flex flex-col">
@@ -116,6 +205,67 @@ const HomeScreen = () => {
                         </View>
                     )
                 }
+
+                <View className="flex flex-row items-center justify-between mt-8">
+                    <Text className="text-lg" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>Budgets</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('BudgetCategories')}>
+                        <Text className="text-sm" style={{ color: theme.secondary, fontFamily: "Montserrat-Medium" }}>See all</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View className="flex">
+                    <View className="flex flex-row items-center justify-start flex-wrap pt-2">
+                        <TouchableOpacity 
+                            className="flex flex-col items-center justify-center rounded-2xl shadow-sm w-[155px] h-20 m-2"
+                            style={{ backgroundColor: type === "incomes" ? theme.primary : theme.accent }}
+                            onPress={() => setType("incomes")}
+                        >
+                            <Text className="text-lg text-green-500" style={{ fontFamily: "Montserrat-SemiBold" }}>
+                                { setRightCurrency(user, totalIncomes) }
+                            </Text>
+
+                            <Text className="text-sm" style={{ color: type === "incomes" ? "white" : theme.text, fontFamily: "Montserrat-Medium" }}>Incomes</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity 
+                            className="flex flex-col items-center justify-center rounded-2xl shadow-sm w-[155px] h-20 m-2"
+                            style={{ backgroundColor: type === "expenses" ? theme.primary : theme.accent }}
+                            onPress={() => setType("expenses")}
+                        >
+                            <Text className="text-lg text-red-500" style={{ fontFamily: "Montserrat-SemiBold" }}>
+                                { setRightCurrency(user, totalExpenses) }
+                            </Text>
+
+                            <Text className="text-sm" style={{ color: type === "expenses" ? "white" : theme.text, fontFamily: "Montserrat-Medium" }}>Expenses</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+                <View 
+                    className="flex flex-col mt-2 mx-2 p-4 items-center justify-center rounded-2xl shadow-sm"
+                    style={{ backgroundColor: theme.accent }}
+                >
+                    <BarChart
+                        data={data}
+                        width={300}
+                        height={180}
+                        chartConfig={{
+                            backgroundGradientFrom: theme.accent,
+                            backgroundGradientTo: theme.accent,
+                            decimalPlaces: 0,
+                            color: (opacity = 1) => `#4D7A80`,
+                        }}
+                        bezier
+                    />
+                </View>
+
+                <View className="flex flex-row items-center justify-between mt-8">
+                    <Text className="text-lg" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>Goals</Text>
+
+                    <TouchableOpacity onPress={() => navigation.navigate('Goals')}>
+                        <Text className="text-sm" style={{ color: theme.secondary, fontFamily: "Montserrat-Medium" }}>See all</Text>
+                    </TouchableOpacity>
+                </View>
             </ScrollView>
 
             <View className="flex-1 flex flex-row items-center justify-center absolute bottom-5 right-5">

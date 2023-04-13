@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { UserContext } from '../context/UserContext';
+import firebase from '../config/firebase';
 
 // Stack Screens
 import AuthStackScreens from './AuthStackScreens';
@@ -37,6 +38,17 @@ const AppStackScreens = () => {
     const AppStack = createStackNavigator();
     const [user] = useContext(UserContext);
     const [viewedOnBoarding, setViewedOnBoarding] = useState(false)
+    // const [authenticated, setAuthenticated] = useState(true);
+
+    // useEffect(() => {
+    //     return firebase.auth().onAuthStateChanged((user) => {
+    //         if (user) {
+    //             setAuthenticated(true);
+    //         } else {
+    //             setAuthenticated(false);
+    //         }
+    //     });
+    // }, []);
 
     const checkOnBoarding = async () => {
         try {

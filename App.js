@@ -48,14 +48,16 @@ export default function App() {
     SplashScreen.hideAsync();
   }
 
-
   return (
     <ThemeContext.Provider value={Theme[darkMode ? 'dark' : 'light']}>
       <FireBaseProvider>
         <UserProvider>
           <NavigationContainer theme={darkMode ? DarkTheme : DefaultTheme}>
             <AppStackScreens />
-            <StatusBar barStyle={darkMode ? 'light-content' : 'dark-content'} />
+            <StatusBar 
+              barStyle={darkMode ? 'light-content' : 'dark-content'} 
+              backgroundColor={darkMode ? '#000' : '#fff'}
+            />
           </NavigationContainer>
         </UserProvider>
       </FireBaseProvider>

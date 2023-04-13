@@ -270,7 +270,7 @@ const BudgetCategoriesScreen = () => {
 
             <ScrollView className="flex-1">
                 <View className="flex flex-row items-center justify-between px-6">
-                    <Text className="text-2xl font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>Incomes</Text>
+                    <Text className="text-lg font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>Incomes</Text>
                     <TouchableOpacity 
                         className="flex flex-row items-center justify-between"
                         onPress={() => {
@@ -320,7 +320,7 @@ const BudgetCategoriesScreen = () => {
                     />
                 </View>
 
-                <View className="flex flex-row items-center justify-between p-6">
+                {/* <View className="flex flex-row items-center justify-between p-6">
                     <View
                         className="w-full rounded-full"
                         style={{ 
@@ -328,10 +328,10 @@ const BudgetCategoriesScreen = () => {
                             height: 1
                         }}
                     />
-                </View>
+                </View> */}
 
-                <View className="flex flex-row items-center justify-between px-6">
-                    <Text className="text-2xl font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>Expenses</Text>
+                <View className="flex flex-row items-center justify-between px-6 pt-4">
+                    <Text className="text-lg font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>Expenses</Text>
                     <TouchableOpacity 
                         className="flex flex-row items-center justify-between"
                         onPress={() => {

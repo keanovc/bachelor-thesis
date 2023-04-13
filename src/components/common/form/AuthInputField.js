@@ -12,6 +12,7 @@ const AuthInputField = ({
     autoCapitalize,
     autoCompleteType,
     autoCorrect,
+    keyboardType,
     secureTextEntry = false,
     login = false,
 }) => {
@@ -46,6 +47,7 @@ const AuthInputField = ({
             autoCapitalize={autoCapitalize}
             autoCompleteType={autoCompleteType}
             autoCorrect={autoCorrect}
+            keyboardType={keyboardType}
             secureTextEntry={secureTextEntry}
         />
     )

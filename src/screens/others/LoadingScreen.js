@@ -1,15 +1,12 @@
 import { View, Text, Image, Animated } from 'react-native'
 import React, { useEffect, useContext } from 'react'
-import LotteView from 'lottie-react-native'
 
 import { UserContext } from '../../context/UserContext'
 import { FireBaseContext } from '../../context/FireBaseContext'
-import ThemeContext from '../../context/ThemeContext'
 
 const LoadingScreen = () => {
     const [_, setUser] = useContext(UserContext)
     const firebase = useContext(FireBaseContext)
-    const { theme } = useContext(ThemeContext)
 
     const fadeInAnimation = new Animated.Value(0)
     const fadeOutAnimation = new Animated.Value(1)

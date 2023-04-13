@@ -1,6 +1,5 @@
 import { View, Text, Modal, TouchableOpacity, FlatList } from 'react-native'
 import React, { useContext, useState, useEffect } from 'react'
-import Emoji from 'react-native-emoji';
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 
