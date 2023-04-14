@@ -1,4 +1,4 @@
-import { View, Text, Image, SafeAreaView, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, Image, SafeAreaView, Alert, TouchableOpacity } from 'react-native'
 import React, { useContext, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
@@ -20,6 +20,7 @@ const ProfileScreen = () => {
     const [fullname, setFullname] = useState(user.fullname)
     const [username, setUsername] = useState(user.username)
     const [email, setEmail] = useState(user.email)
+    const [loading, setLoading] = useState(false)
 
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -58,22 +59,41 @@ const ProfileScreen = () => {
     }
 
     const onSubmit = () => {
-        firebase.updateProfile({
-            fullname,
-            username,
-            email,
-            profilePicture,
-        })
+        setLoading(true)
 
-        setUser({
-            ...user,
-            fullname,
-            username,
-            email,
-            profilePicture,
-        })
+        try {
+            firebase.updateProfile({
+                profilePicture,
+                fullname,
+                username,
+                email
+            })
+            
+            setUser({
+                ...user,
+                profilePicture,
+                fullname,
+                username,
+                email
+            })
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
 
         navigation.goBack()
+    }
+
+    const deleteAccount = () => {
+        try {
+            firebase.deleteAccount()
+        }
+        catch (error) {
+            console.log(error)
+        }
+
+        navigation.navigate("SignIn")
     }
 
     return (
@@ -189,13 +209,34 @@ const ProfileScreen = () => {
                         </Text>}
                     </View>
 
-                    <View className="mt-8">
+                    <View className="flex flex-col items-center justify-center mt-8">
                         <LargeButton
                             handleSubmit={handleSubmit}
                             onSubmit={onSubmit}
-                            loading={false}
+                            loading={loading}
                             text="Update"
                         />
+
+                        <TouchableOpacity
+                            className="mt-2 w-80 h-12 rounded-md flex items-center justify-center"
+                            onPress={
+                                () => Alert.alert(
+                                    "Delete Account",
+                                    "Are you sure you want to delete your account?",
+                                    [
+                                        {
+                                            text: "Cancel",
+                                            onPress: () => console.log("Cancel Pressed"),
+                                            style: "cancel"
+                                        },
+                                        { text: "OK", onPress: () => deleteAccount() }
+                                    ],
+                                    { cancelable: false }
+                                )
+                            }
+                        >
+                            <Text className="text-center text-red-500 underline" style={{ fontFamily: "Montserrat-Bold" }}>Delete</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>

@@ -28,6 +28,9 @@ const HomeScreen = () => {
 
     const budgetsRef = firebase.firestore().collection("users").doc(user.uid).collection("budgets")
     const [budgets, setBudgets] = useState([])
+
+    const goalsRef = firebase.firestore().collection("users").doc(user.uid).collection("goals")
+    const [goals, setGoals] = useState([])
     
     const [type, setType] = useState("incomes")
 
@@ -78,7 +81,7 @@ const HomeScreen = () => {
 
     useEffect(() => {
         axiosGetQuote()
-
+        
         getIsDateOrMonthlyIsTrue().then((budgetsArray) => {
             const budgets = budgetsArray.map((doc) => {
                 const data = doc.data();
@@ -88,6 +91,21 @@ const HomeScreen = () => {
             setBudgets(budgets);
         });
     }, [])
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            getIsDateOrMonthlyIsTrue().then((budgetsArray) => {
+                const budgets = budgetsArray.map((doc) => {
+                    const data = doc.data();
+                    const id = doc.id;
+                    return { id, ...data };
+                });
+                setBudgets(budgets);
+            });
+        });
+
+        return unsubscribe;
+    }, [navigation]);
 
     async function getIsDateOrMonthlyIsTrue() {
         const isDateFirstMonth = budgetsRef.where("date", "==", calculateMonthAndYear(0).dateMonthAndYear).get();
@@ -136,6 +154,19 @@ const HomeScreen = () => {
         setTotalIncomes(calculateBudgets(budgets, 0, "incomes") + calculateBudgets(budgets, 1, "incomes") + calculateBudgets(budgets, 2, "incomes") + calculateBudgets(budgets, 3, "incomes"))
         setTotalExpenses(calculateBudgets(budgets, 0, "expenses") + calculateBudgets(budgets, 1, "expenses") + calculateBudgets(budgets, 2, "expenses") + calculateBudgets(budgets, 3, "expenses"))
     }, [budgets])
+
+    useEffect(() => {
+        goalsRef
+        .where("moneySaved", "==", 0)
+        .onSnapshot((querySnapshot) => {
+            const goals = querySnapshot.docs.map((doc) => {
+                const data = doc.data();
+                const id = doc.id;
+                return { id, ...data };
+            });
+            setGoals(goals);
+        });
+    }, [])
 
     return (
         <View  className="flex-1" style={{ backgroundColor: theme.background }}>
@@ -193,7 +224,13 @@ const HomeScreen = () => {
 
                             <View className="px-4">
                                 <Text className="text-sm" style={{ color: theme.text, fontFamily: "Montserrat-MediumItalic" }}>
-                                    {quote.quote}
+                                    {
+                                        quote.quote.length > 120 
+                                        ?
+                                            quote.quote.substring(0, 100) + "..." 
+                                        :
+                                            quote.quote
+                                    }
                                 </Text>
 
                                 <View className="w-8 h-0.5 rounded-full mt-1" style={{ backgroundColor: theme.secondary }} />
@@ -243,28 +280,102 @@ const HomeScreen = () => {
 
                 <View 
                     className="flex flex-col mt-2 mx-2 p-4 items-center justify-center rounded-2xl shadow-sm"
-                    style={{ backgroundColor: theme.accent }}
+                    style={{ backgroundColor: data.datasets[0].data.reduce((a, b) => a + b, 0) === 0 ? theme.secondary : theme.accent }}
                 >
                     <BarChart
                         data={data}
                         width={300}
                         height={180}
                         chartConfig={{
-                            backgroundGradientFrom: theme.accent,
-                            backgroundGradientTo: theme.accent,
+                            backgroundGradientFrom: data.datasets[0].data.reduce((a, b) => a + b, 0) === 0 ? theme.secondary : theme.accent,
+                            backgroundGradientTo: data.datasets[0].data.reduce((a, b) => a + b, 0) === 0 ? theme.secondary : theme.accent,
                             decimalPlaces: 0,
-                            color: (opacity = 1) => `#4D7A80`,
+                            color: data.datasets[0].data.reduce((a, b) => a + b, 0) === 0 ? (opacity = 0.5) => `rgba(255, 255, 255, ${opacity})` : (opacity = 1) => `#4D7A80`,
                         }}
                         bezier
+                        fromZero
                     />
+                    
+                    {
+                        data.datasets[0].data.reduce((a, b) => a + b, 0) === 0 && (
+                            <View className="absolute items-center justify-center flex-1">
+                                <Text className="text-lg" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>No data</Text>
+                                <Text className="text-sm" style={{ color: theme.text, fontFamily: "Montserrat-Medium" }}>Add some budgets</Text>
+
+                                <TouchableOpacity
+                                    onPress={() => navigation.navigate('BudgetCategories')}
+                                    className="flex flex-row items-center justify-center mt-2 px-4 py-2 rounded-xl shadow-sm"
+                                    style={{ backgroundColor: theme.primary }}
+                                >
+                                    <Text className="text-sm" style={{ color: "white", fontFamily: "Montserrat-Medium" }}>Add Budgets</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )
+                    }
                 </View>
 
                 <View className="flex flex-row items-center justify-between mt-8">
-                    <Text className="text-lg" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>Goals</Text>
+                    <Text className="text-lg" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>New Goals</Text>
 
-                    <TouchableOpacity onPress={() => navigation.navigate('Goals')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('GoalsCategories')}>
                         <Text className="text-sm" style={{ color: theme.secondary, fontFamily: "Montserrat-Medium" }}>See all</Text>
                     </TouchableOpacity>
+                </View>
+
+                <View className="mt-2 mb-32">
+                    {
+                        goals.length === 0 ? (
+                            <TouchableOpacity
+                                className="flex flex-row items-center justify-center mx-2 my-2 px-12 py-6 rounded-xl shadow-sm"
+                                style={{ backgroundColor: theme.secondary }}
+                                onPress={() => navigation.navigate('GoalsCategories')}
+                            >
+                                <Ionicons name="add-circle" size={24} color={theme.primary} />
+                                <Text className="text-lg ml-4" style={{ color: theme.primary, fontFamily: "Montserrat-SemiBold" }}>Add a new goal</Text>
+                            </TouchableOpacity>
+                        ) : (
+                            goals.map((goal, index) => (
+                                <View
+                                    key={index}
+                                    className="flex flex-row items-center justify-between mx-2 my-2 px-12 py-2 rounded-xl shadow-sm"
+                                    style={{ backgroundColor: theme.accent }}
+                                >
+                                    <Emoji name={goal.icon} style={{ fontSize: 30 }} />
+        
+                                    <View className="flex flex-col ml-6">
+                                        <Text className="text-sm font-bold" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>{goal.name}</Text>
+        
+                                        <Text className="text-xs mt-2" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>{setRightCurrency(user, goal.moneySaved)}</Text>
+        
+                                        <View className="flex flex-row items-center justify-center h-1">
+                                            <View 
+                                                className="h-full rounded-full"
+                                                style={{ 
+                                                    backgroundColor: theme.primary,
+                                                    width: `${goal.moneySaved / goal.money * 100}%`
+                                                }}
+                                            ></View>
+        
+                                            <View
+                                                className="h-full rounded-full"
+                                                style={{
+                                                    backgroundColor: theme.background,
+                                                    width: `${100 - goal.moneySaved / goal.money * 100}%`
+                                                }}
+                                            ></View>
+                                        </View>
+        
+                                        <View className="flex flex-row items-center justify-between mt-1">
+                                            <Text className="text-xs" style={{ color: theme.text, fontFamily: "Montserrat-Light" }}>
+                                                {goal.date}    
+                                            </Text>
+                                            <Text className="text-xs" style={{ color: "lightgray", fontFamily: "Montserrat-Light" }}>{setRightCurrency(user, goal.money)}</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                            ))
+                        )
+                    }
                 </View>
             </ScrollView>
 

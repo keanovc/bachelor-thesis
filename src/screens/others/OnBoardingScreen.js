@@ -26,10 +26,10 @@ const OnBoardingScreen = () => {
         } else {
             try {
                 AsyncStorage.setItem('@viewedOnBoarding', 'true')
-                navigation.navigate('Auth')
             } catch (e) {
                 console.log(e)
             }
+            navigation.navigate('Auth')
         }
     }
 
@@ -39,7 +39,7 @@ const OnBoardingScreen = () => {
     }
 
     return (
-        <SafeAreaView className="flex-1 items-center justify-center bg-white">
+        <SafeAreaView className="flex-1 items-center justify-center bg-[#F5F8FE]">
             <FlatList 
                 data={slides}
                 renderItem={({item}) => <OnBoardingItem item={item} />}

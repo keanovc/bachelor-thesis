@@ -67,6 +67,9 @@ const SignUpScreen = ({ navigation }) => {
                 username,
                 email,
                 password,
+                symbol: "$",
+                symbolBefore: true,
+                valuta: "USD",
                 profilePicture
             }
 

@@ -62,28 +62,30 @@ const BudgetCategoryModal = ({ closeModal, category, type }) => {
     }
     
     const deleteCategory = () => {
-        budgetCategoriesRef
-            .doc(category.id)
-            .delete()
-            .then(_doc => {
-                setCategoryName("")
-                closeModal()
-            })
-            .catch((error) => {
-                alert(error)
-            })
-
         budgetsRef
             .where("categoryId", "==", category.id)
             .get()
             .then((querySnapshot) => {
-                querySnapshot.forEach((doc) => {
-                    doc.ref.delete()
-                })
-                closeModal()
-            })
-            .catch((error) => {
-                alert(error)
+                if (querySnapshot.size > 0) {
+                    Alert.alert(
+                        "Error",
+                        "You cannot delete a category that is used in a budget",
+                        [
+                            { text: "OK", onPress: () => console.log("OK Pressed") }
+                        ],
+                        { cancelable: false }
+                    )
+                } else {
+                    budgetCategoriesRef
+                        .doc(category.id)
+                        .delete()
+                        .then(_doc => {
+                            closeModal()
+                        })
+                        .catch((error) => {
+                            alert(error)
+                        })
+                }
             }
         )
     }

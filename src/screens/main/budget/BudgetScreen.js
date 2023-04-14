@@ -7,6 +7,7 @@ import { UserContext } from '../../../context/UserContext'
 import ThemeContext from '../../../context/ThemeContext'
 import { firebase } from '../../../config/firebase'
 import { BudgetModal, BudgetItem, IconButton } from '../../../components'
+import { calculateDateRange } from '../../../utils/calculateDateRange'
 
 const BudgetScreen = ({ route }) => {
     const { category, date, } = route.params
@@ -45,8 +46,16 @@ const BudgetScreen = ({ route }) => {
                 const newBudgets = []
                 querySnapshot.forEach((doc) => {
                     const budget = doc.data()
-                    budget.id = doc.id
-                    newBudgets.push(budget)
+                    if (budget.monthly) {
+                        const dateRange = calculateDateRange(budget.startDate, budget.endDate)
+                        if (dateRange.includes(date)) {
+                            budget.id = doc.id
+                            newBudgets.push(budget)
+                        }
+                    } else {
+                        budget.id = doc.id
+                        newBudgets.push(budget)
+                    }
                 })
                 setBudgets(newBudgets)
             })
@@ -110,20 +119,30 @@ const BudgetScreen = ({ route }) => {
             </View>
 
             <View className="flex-1 px-6 pt-4">
-                <FlatList
-                    data={budgets}
-                    keyExtractor={(item) => item.id}
-                    renderItem={({ item }) => (
-                        <BudgetItem
-                            item={item}
-                            category={category}
-                            loading={() => setLoading(!loading)}
-                            edit={editVisible}
-                            date={date}
-                            user={user}
+                {
+                    budgets.length > 0 ? (
+                        <FlatList
+                            data={budgets}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({ item }) => (
+                                <BudgetItem
+                                    item={item}
+                                    category={category}
+                                    loading={() => setLoading(!loading)}
+                                    edit={editVisible}
+                                    date={date}
+                                    user={user}
+                                />
+                            )}
                         />
-                    )}
-                />
+                    ) : (
+                        <View className="flex justify-center items-center mt-6">
+                            <Text style={{ color: theme.text, fontFamily: "Montserrat-Medium" }}>
+                                No {category.type} added
+                            </Text>
+                        </View>
+                    )
+                }
 
                 {
                     category.id !== "goals" ? (

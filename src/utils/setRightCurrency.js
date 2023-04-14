@@ -1,3 +1,9 @@
 export const setRightCurrency = (user, amount) => {
-    return user.symbolBefore ? user.symbol + " " + amount : amount + " " + user.symbol
+    const formattedAmount = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+    
+    return user.symbolBefore 
+    ? 
+        user.symbol + " " + formattedAmount 
+    : 
+        formattedAmount + " " + user.symbol
 }

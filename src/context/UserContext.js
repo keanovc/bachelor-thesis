@@ -4,6 +4,9 @@ const UserContext = createContext([{}, () => {}])
 
 const UserProvider = (props) => {
     const [state, setState] = useState({
+        symbol: '',
+        symbolBefore: '',
+        valuta: '',
         fullname: '',
         username: '',
         email: '',

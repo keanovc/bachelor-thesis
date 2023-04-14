@@ -10,11 +10,11 @@ import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
 import { firebase } from '../../../config/firebase'
 import { BudgetCategoryModal, BudgetCategoriesCard, IconButton } from '../../../components'
+import { calculateDateRange } from '../../../utils/calculateDateRange'
 
 const BudgetCategoriesScreen = () => {
     const theme = useContext(ThemeContext)
-    const [user, setUser] = useContext(UserContext)
-    const navigation = useNavigation()
+    const [user] = useContext(UserContext)
 
     const [modalVisible, setModalVisible] = useState(false)
     const [editVisible, setEditVisible] = useState(false)
@@ -88,10 +88,23 @@ const BudgetCategoriesScreen = () => {
             .then(results => {
                 results.forEach((doc) => {
                     const budget = doc.data()
-                    if (budget.type === 'incomes') {
-                        totalIncomes += budget.money
+                    if (budget.monthly) {
+                        const dateRange = calculateDateRange(budget.startDate, budget.endDate)
+                        if (dateRange.includes(date)) {
+                            if (budget.type === 'incomes') {
+                                totalIncomes += budget.money
+                            } else {
+                                totalExpenses += budget.money
+                            }
+                        }
                     } else {
-                        totalExpenses += budget.money
+                        if (budget.date === date) {
+                            if (budget.type === 'incomes') {
+                                totalIncomes += budget.money
+                            } else {
+                                totalExpenses += budget.money
+                            }
+                        }
                     }
                 })
 
@@ -107,15 +120,7 @@ const BudgetCategoriesScreen = () => {
 
     useEffect(() => {
         getBudgets()
-    }, [date])
-
-    useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            getBudgets()
-        });
-
-        return unsubscribe;
-    }, [navigation]);
+    }, [date, budgetCategories])
 
     return (
         <SafeAreaView className="flex-1"
@@ -319,16 +324,6 @@ const BudgetCategoriesScreen = () => {
                         keyExtractor={item => item.name}
                     />
                 </View>
-
-                {/* <View className="flex flex-row items-center justify-between p-6">
-                    <View
-                        className="w-full rounded-full"
-                        style={{ 
-                            backgroundColor: theme.primary,
-                            height: 1
-                        }}
-                    />
-                </View> */}
 
                 <View className="flex flex-row items-center justify-between px-6 pt-4">
                     <Text className="text-lg font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>Expenses</Text>

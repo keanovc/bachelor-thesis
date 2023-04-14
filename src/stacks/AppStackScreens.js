@@ -38,17 +38,6 @@ const AppStackScreens = () => {
     const AppStack = createStackNavigator();
     const [user] = useContext(UserContext);
     const [viewedOnBoarding, setViewedOnBoarding] = useState(false)
-    // const [authenticated, setAuthenticated] = useState(true);
-
-    // useEffect(() => {
-    //     return firebase.auth().onAuthStateChanged((user) => {
-    //         if (user) {
-    //             setAuthenticated(true);
-    //         } else {
-    //             setAuthenticated(false);
-    //         }
-    //     });
-    // }, []);
 
     const checkOnBoarding = async () => {
         try {
@@ -63,19 +52,18 @@ const AppStackScreens = () => {
 
     useEffect(() => {
         checkOnBoarding()
-    }, [])
+    }, [user.isLoggedIn])
 
-    return (
-        <AppStack.Navigator screenOptions={{ headerShown: false }} >
-            {user.isLoggedIn === null ? (
+    if (user.isLoggedIn === null) {
+        return (
+            <AppStack.Navigator screenOptions={{ headerShown: false }}>
                 <AppStack.Screen name="Loading" component={LoadingScreen} />
-            ) : !viewedOnBoarding ? (
-                <>
-                    <AppStack.Screen name="OnBoarding" component={OnBoardingScreen} />
-                    <AppStack.Screen name="Auth" component={AuthStackScreens} />
-                </>
-            ) : user.isLoggedIn ? (
-                <>
+            </AppStack.Navigator>
+        )
+    } else if (user.isLoggedIn) {
+        return (
+            <>
+                <AppStack.Navigator screenOptions={{ headerShown: false }}>
                     {/* Main */}
                     <AppStack.Screen name="Main" component={MainStackScreen} />
 
@@ -103,12 +91,17 @@ const AppStackScreens = () => {
                     <AppStack.Screen name="ValutaSelector" component={ValutaSelectorScreen} />
                     <AppStack.Screen name="About" component={AboutScreen} />
                     <AppStack.Screen name="FAQ" component={FAQScreen} />
-                </>
-            ) : (
+                </AppStack.Navigator>
+            </>
+        )
+    } else {
+        return (
+            <AppStack.Navigator screenOptions={{ headerShown: false }}>
+                {viewedOnBoarding ? null : <AppStack.Screen name="OnBoarding" component={OnBoardingScreen} />}
                 <AppStack.Screen name="Auth" component={AuthStackScreens} />
-            )}
-        </AppStack.Navigator>
-    )
+            </AppStack.Navigator>
+        )
+    }
 }
 
 export default AppStackScreens

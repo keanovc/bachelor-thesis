@@ -21,26 +21,25 @@ const ValutaSelectorScreen = () => {
 
     const currencyCodes = getSupportedCurrencies()
 
-    // async on submit
-    const onSubmit = async () => {
+    const onSubmit = () => {
         try {
-            await firebase.updateProfile({
-                valuta,
-                symbol,
-                symbolBefore
-            })
-            
-            setUser({
-                ...user,
-                valuta,
-                symbol,
-                symbolBefore
+            firebase.updateCurrency({
+                symbol: symbol,
+                symbolBefore: symbolBefore,
+                valuta: valuta,
             })
 
-            navigation.goBack()
+            setUser({
+                ...user,
+                symbol: symbol,
+                symbolBefore: symbolBefore,
+                valuta: valuta,
+            })
         } catch (error) {
             console.log(error)
         }
+
+        navigation.goBack()
     }
 
     return (

@@ -2,6 +2,7 @@ import { View, Text, SafeAreaView, ScrollView, Modal, TouchableOpacity } from 'r
 import React, { useContext, useState, useEffect } from 'react'
 import DatePicker, { getToday } from 'react-native-modern-datepicker'
 import { Ionicons } from '@expo/vector-icons'
+import { calculateDateRange } from '../../../utils/calculateDateRange'
 
 import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
@@ -69,7 +70,18 @@ const GoalsCategoriesScreen = () => {
     }, [])
 
     const currentMonth = getToday().toString().substring(0, 4) + " " + getToday().toString().substring(5, 7)
-    const monthlyBudgets = budgets.filter(budget => budget.monthly === true || budget.date === currentMonth)
+    const monthlyBudgets = budgets.filter(budget => {
+        if (budget.monthly) {
+            const dateRange = calculateDateRange(budget.startDate, budget.endDate)
+            if (dateRange.includes(currentMonth)) {
+                return budget
+            }
+        } else {
+            if (budget.date === currentMonth) {
+                return budget
+            }
+        }
+    })
 
     const [totalBudget, setTotalBudget] = useState(0)
 
@@ -120,13 +132,21 @@ const GoalsCategoriesScreen = () => {
                 </View>
             </View>
 
-            <ScrollView className="flex mx-auto w-11/12">
-                <View className="flex flex-row items-center justify-start flex-wrap">
-                    {goalsCategories.map((category, index) => (
-                        <GoalsCategoriesCard key={index} category={category} edit={editVisible} totalBudget={totalBudget} />
-                    ))}
-                </View>
-            </ScrollView>
+            {
+                goalsCategories.length > 0 ? (
+                    <ScrollView className="flex mx-auto w-11/12">
+                        <View className="flex flex-row items-center justify-start flex-wrap">
+                            {goalsCategories.map((category, index) => (
+                                <GoalsCategoriesCard key={index} category={category} edit={editVisible} totalBudget={totalBudget} />
+                            ))}
+                        </View>
+                    </ScrollView>
+                ) : (
+                    <View className="flex flex-col items-center justify-center mt-4">
+                        <Text style={{ color: theme.text, fontFamily: "Montserrat-Medium" }}>You don't have any goals categories yet.</Text>
+                    </View>
+                )
+            }
 
             <View className="absolute bottom-0 right-0 m-4">
                 <TouchableOpacity onPress={() => setModalVisible(true)}>

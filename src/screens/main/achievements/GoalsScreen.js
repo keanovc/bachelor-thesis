@@ -138,19 +138,29 @@ const GoalsScreen = ({ route }) => {
                 </View>
             </View>
 
-            <FlatList
-                data={
-                    filterGoals.id === 1 ? goals :
-                    filterGoals.id === 2 ? goals.filter(goal => goal.moneySaved === 0) :
-                    filterGoals.id === 3 ? goals.filter(goal => goal.moneySaved > 0 && goal.moneySaved < goal.money) :
-                    filterGoals.id === 4 ? goals.filter(goal => goal.moneySaved === goal.money) :
-                    goals
-                }
-                numColumns={1}
-                renderItem={({ item }) => <GoalItem goal={item} category={category} edit={editVisible} totalBudget={totalBudget} />}
-                keyExtractor={(item) => item.id}
-                className="mt-4"
-            />
+            {
+                goals.length > 0 ? (
+                    <FlatList
+                        data={
+                            filterGoals.id === 1 ? goals :
+                            filterGoals.id === 2 ? goals.filter(goal => goal.moneySaved === 0) :
+                            filterGoals.id === 3 ? goals.filter(goal => goal.moneySaved > 0 && goal.moneySaved < goal.money) :
+                            filterGoals.id === 4 ? goals.filter(goal => goal.moneySaved === goal.money) :
+                            goals
+                        }
+                        numColumns={1}
+                        renderItem={({ item }) => <GoalItem goal={item} category={category} edit={editVisible} totalBudget={totalBudget} />}
+                        keyExtractor={(item) => item.id}
+                        className="mt-4"
+                    />
+                ) : (
+                    <View className="flex flex-col items-center justify-center mt-4">
+                        <Text style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>
+                            No goals yet
+                        </Text>
+                    </View>
+                )
+            }
             
 
             <View className="absolute bottom-10 right-5 m-4">

@@ -44,12 +44,7 @@ const SettingsScreen = () => {
             const userInfo = await firebase.getUserInfo(uid)
 
             setUser({
-                isLoggedIn: true,
-                email: userInfo.email,
-                uid: uid,
-                username: userInfo.username,
-                fullname: userInfo.fullname,
-                profilePicture: userInfo.profilePicture,
+                ...user,
             })
 
             navigation.navigate("Profile")
@@ -101,13 +96,25 @@ const SettingsScreen = () => {
                         modalVisible ? { opacity: 0.2 } : { opacity: 1 }
                     }
                 >
-                    <View className="flex-row items-center justify-start mt-4">
-                        <IconButton
-                            onPress={() => navigation.goBack()}
-                            icon="chevron-back"
-                        />
+                    <View className="mt-4 flex flex-row justify-between items-center">
+                        <View className="flex-row items-center justify-start">
+                            <IconButton
+                                onPress={() => navigation.goBack()}
+                                icon="chevron-back"
+                            />
 
-                        <Text className="text-3xl ml-4" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>Settings</Text>
+                            <Text className="text-3xl ml-4" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>Settings</Text>
+                        </View>
+
+                        <TouchableOpacity className="
+                                flex-row items-center justify-center
+                                w-10 h-10 rounded-md mr-4
+                            "
+                            style={{ backgroundColor: theme.accent }}
+                            onPress={() => logOut()}
+                        >
+                            <Ionicons name="log-out" size={24} color="red" />
+                        </TouchableOpacity>
                     </View>
 
                     {/* Account Edit */}
@@ -219,22 +226,11 @@ const SettingsScreen = () => {
                         {/* Notifications */}
                         <View>
                             <SettingsItem
-                                title="Notifications"
+                                title="Clear Onboarding"
                                 onPress={clearOnBoarding}
                                 iconBackgroundColor="#FFEDE0"
                                 iconColor="orange"
-                                icon="notifications"
-                            />
-                        </View>
-                        
-                        {/* Log Out */}
-                        <View>
-                            <SettingsItem
-                                title="Log Out"
-                                onPress={logOut}
-                                iconBackgroundColor="#FFE0E0"
-                                iconColor="red"
-                                icon="log-out"
+                                icon="alert-circle"
                             />
                         </View>
                     </View>

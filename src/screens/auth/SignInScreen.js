@@ -1,4 +1,4 @@
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, KeyboardAvoidingView, ScrollView, Image, SafeAreaView } from 'react-native'
+import { View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, Image, SafeAreaView } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { useForm, Controller } from "react-hook-form";
 import ThemeContext from '../../context/ThemeContext'

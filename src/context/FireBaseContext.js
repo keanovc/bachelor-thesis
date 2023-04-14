@@ -22,6 +22,9 @@ const FireBase = {
                     const uid = FireBase.getCurrentUser().uid;
 
                     await firebase.firestore().collection('users').doc(uid).set({
+                        symbol: user.symbol,
+                        symbolBefore: user.symbolBefore,
+                        valuta: user.valuta,
                         fullname: user.fullname,
                         username: user.username,
                         email: user.email,
@@ -29,6 +32,9 @@ const FireBase = {
                     });
 
                     return {
+                        symbol: user.symbol,
+                        symbolBefore: user.symbolBefore,
+                        valuta: user.valuta,
                         fullname: user.fullname,
                         username: user.username,
                         email: user.email,
@@ -97,28 +103,53 @@ const FireBase = {
 
             await FireBase.getCurrentUser().updateEmail(user.email).then(async () => {
                 await firebase.firestore().collection('users').doc(uid).update({
-                    symbol: user.symbol,
-                    symbolBefore: user.symbolBefore,
-                    valuta: user.valuta,
-                    fullname: user.fullname,
-                    username: user.username,
-                    email: user.email,
-                    profilePicture: profilePictureUrl,
+                    ...user,
                 });
             }).catch((error) => {
                 console.log(error);
             });
 
             return {
-                symbol: user.symbol,
-                symbolBefore: user.symbolBefore,
-                valuta: user.valuta,
-                fullname: user.fullname,
-                username: user.username,
-                email: user.email,
+                ...user,
                 uid,
                 profilePicture: profilePictureUrl,
             }
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    updateCurrency: async (user) => {
+        try {
+            const uid = FireBase.getCurrentUser().uid;
+
+            await firebase.firestore().collection('users').doc(uid).update({
+                ...user,
+            });
+
+            return {
+                ...user,
+                uid,
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    forgotPassword: async (email) => {
+        try {
+            await firebase.auth().sendPasswordResetEmail(email);
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    deleteAccount: async () => {
+        try {
+            const uid = FireBase.getCurrentUser().uid;
+
+            await firebase.firestore().collection('users').doc(uid).delete();
+            await FireBase.getCurrentUser().delete();
         } catch (error) {
             console.log(error);
         }

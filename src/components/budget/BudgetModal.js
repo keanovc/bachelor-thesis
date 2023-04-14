@@ -2,10 +2,12 @@ import { View, Text, KeyboardAvoidingView, TouchableOpacity, SafeAreaView, TextI
 import React, { useContext, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import NumericInput from 'react-native-numeric-input'
+import { getToday } from 'react-native-modern-datepicker'
 
 import ThemeContext from '../../context/ThemeContext'
 import { UserContext } from '../../context/UserContext'
 import { firebase } from '../../config/firebase'
+import DateModal from '../../components/common/modal/DateModal'
 
 const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
     const [user, setUser] = useContext(UserContext)
@@ -18,6 +20,11 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
     const [budgetMoney, setBudgetMoney] = useState(budget ? budget.money : 0)
 
     const [monthly, setMonthly] = useState(budget ? budget.monthly : false)
+    const [startDate, setStartDate] = useState(budget ? budget.startDate : getToday().toString().substring(0, 4) + " " + getToday().toString().substring(5, 7))
+    const [endDate, setEndDate] = useState(budget ? budget.endDate : "")
+
+    const [showStartDate, setShowStartDate] = useState(false)
+    const [showEndDate, setShowEndDate] = useState(false)
 
     const createBudget = () => {
         const timestamp = firebase.firestore.FieldValue.serverTimestamp()
@@ -30,6 +37,8 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
             createdAt: timestamp,
         }
         monthly ? data.date = null : data.date = date
+        monthly ? data.startDate = startDate : data.startDate = null
+        monthly ? data.endDate = endDate : data.endDate = null
         budgetRef
             .add(data)
             .then(() => {
@@ -59,7 +68,8 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
             createdAt: timestamp,
         }
         monthly ? data.date = null : data.date = date
-        console.log(data)
+        monthly ? data.startDate = startDate : data.startDate = null
+        monthly ? data.endDate = endDate : data.endDate = null
         budgetRef
             .doc(budget.id)
             .update(data)
@@ -200,6 +210,65 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
                             <Text className="text-md" style={{ fontFamily: "Montserrat-Medium", color: monthly ? "#fff" : theme.text }}>Monthly</Text>
                         </TouchableOpacity>
                     </View>
+
+                    {
+                        showStartDate ? (
+                            <DateModal
+                                selected={startDate}
+                                onDateChange={(date) => {
+                                    setStartDate(date)
+                                    setShowStartDate(false)
+                                }}
+                            />
+                        ) : showEndDate ? (
+                            <DateModal
+                                selected={endDate}
+                                onDateChange={(date) => {
+                                    setEndDate(date)
+                                    setShowEndDate(false)
+                                }}
+                            />
+                        ) : null
+                    }
+
+                    {
+                        monthly ? (
+                            <View>
+                                <Text
+                                    className="mt-8 ml-4 text-lg"
+                                    style={{
+                                        fontFamily: "Montserrat-Medium",
+                                        color: theme.text,
+                                    }}
+                                >
+                                    Start Date & End Date
+                                </Text>
+
+                                <View
+                                    className="w-80 bg-gray-300 mt-2"
+                                    style={{ height: 2, backgroundColor: theme.primary }}
+                                />
+
+                                <View className="flex flex-row mt-4 items-center justify-between mx-9">
+                                    <TouchableOpacity
+                                        onPress={() => setShowStartDate(true)}
+                                        className="w-36 h-12 rounded-md flex items-center justify-center shadow-sm"
+                                        style={{ backgroundColor: theme.input }}
+                                    >
+                                        <Text className="text-md" style={{ fontFamily: "Montserrat-Medium", color: theme.text }}>{startDate}</Text>
+                                    </TouchableOpacity>
+                                    
+                                    <TouchableOpacity
+                                        onPress={() => setShowEndDate(true)}
+                                        className="w-36 h-12 rounded-md flex items-center justify-center shadow-sm"
+                                        style={{ backgroundColor: theme.input }}
+                                    >
+                                        <Text className="text-md" style={{ fontFamily: "Montserrat-Medium", color: theme.text }}>{endDate}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        ) : null
+                    }
 
                     {
                         budget ? (

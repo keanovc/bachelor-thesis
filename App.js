@@ -56,7 +56,7 @@ export default function App() {
             <AppStackScreens />
             <StatusBar 
               barStyle={darkMode ? 'light-content' : 'dark-content'} 
-              backgroundColor={darkMode ? '#000' : '#fff'}
+              backgroundColor={darkMode ? '#121212' : '#F5F8FE'}
             />
           </NavigationContainer>
         </UserProvider>
