@@ -42,10 +42,10 @@ const ForgotPasswordScreen = () => {
                 <View className="px-10 w-full">
                     <View className="mt-6">
                         <Text className="text-2xl text-gray-800" style={{ fontFamily: "Montserrat-Medium" }} >
-                            Welcome back.
+                            Forgot Password
                         </Text>
                         <Text className="text-gray-400 text-xs" style={{ fontFamily: "Montserrat-Regular" }}>
-                            Bring clarity to your financial future
+                            Enter your email address to receive a link to reset your password.
                         </Text>
                     </View>
 
