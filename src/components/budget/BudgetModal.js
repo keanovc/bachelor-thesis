@@ -3,6 +3,7 @@ import React, { useContext, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import NumericInput from 'react-native-numeric-input'
 import { getToday } from 'react-native-modern-datepicker'
+import { calculateMonthAndYear } from '../../utils/calculateMonthAndYear'
 
 import ThemeContext from '../../context/ThemeContext'
 import { UserContext } from '../../context/UserContext'
@@ -81,18 +82,45 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
                 alert(error)
             })
     }
+
+    // take the date and minus one month but if the month is 1 then minus one year and set the month to 12
+    const getPreviousMonth = (date) => {
+        const month = date.substring(5, 7)
+        const year = date.substring(0, 4)
+        if (month === "01") {
+            return (parseInt(year) - 1).toString() + " 12"
+        } else {
+            return year + " " + (parseInt(month) - 1).toString().padStart(2, "0")
+        }
+    }
+
     
     const deleteBudget = () => {
-        budgetRef
-            .doc(budget.id)
-            .delete()
-            .then(() => {
-                loading()
-                closeModal()
-            })
-            .catch((error) => {
-                alert(error)
-            })
+        if (budget.monthly) {
+            budgetRef
+                .doc(budget.id)
+                .update({
+                    endDate: getPreviousMonth(date)
+                })
+                .then(() => {
+                    loading()
+                    closeModal()
+                })
+                .catch((error) => {
+                    alert(error)
+                })
+        } else {
+            budgetRef
+                .doc(budget.id)
+                .delete()
+                .then(() => {
+                    loading()
+                    closeModal()
+                })
+                .catch((error) => {
+                    alert(error)
+                })
+        }
     }
 
     return (
