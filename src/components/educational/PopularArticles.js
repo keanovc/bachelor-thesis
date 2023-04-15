@@ -23,7 +23,7 @@ const PopularArticles = ({
 
     const { data: dataAll, isLoading, error, refetch } = useFetch(`topfeeds/${selectedCategory}/hot`, 
     {
-        count: 1,
+        count: 2,
         after: 0,
     });
 

@@ -43,7 +43,10 @@ const ValutaSelectorScreen = () => {
     }
 
     return (
-        <SafeAreaView className="flex-1">
+        <SafeAreaView 
+            className="flex-1"
+            style={{ backgroundColor: theme.background }}
+        >
             <View className="px-6">
                 <View className="flex flex-row items-center">
                     <IconButton

@@ -227,7 +227,7 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
                             className="w-36 h-12 rounded-md flex items-center justify-center shadow-sm"
                             style={{ backgroundColor: monthly ? theme.input : theme.primary }}
                         >
-                            <Text className="text-md" style={{ fontFamily: "Montserrat-Medium", color: monthly ? theme.text : "#fff" }}>Once</Text>
+                            <Text className="text-sm" style={{ fontFamily: "Montserrat-Medium", color: monthly ? theme.text : "#fff" }}>Once</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -235,7 +235,7 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
                             className="w-36 h-12 rounded-md flex items-center justify-center shadow-sm"
                             style={{ backgroundColor: monthly ? theme.primary : theme.input }}
                         >
-                            <Text className="text-md" style={{ fontFamily: "Montserrat-Medium", color: monthly ? "#fff" : theme.text }}>Monthly</Text>
+                            <Text className="text-sm" style={{ fontFamily: "Montserrat-Medium", color: monthly ? "#fff" : theme.text }}>Monthly</Text>
                         </TouchableOpacity>
                     </View>
 

@@ -8,8 +8,6 @@ import Markdown from 'react-native-easy-markdown';
 const ArticleDetails = ({ article, content }) => {
     const theme = useContext(ThemeContext)
 
-    console.log(content)
-
     return (
         <View className="flex px-8">
             <View className="flex flex-row items-center justify-between mt-4">

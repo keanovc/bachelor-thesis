@@ -33,6 +33,8 @@ import LanguageSelectorScreen from '../screens/main/settings/LanguageSelectorScr
 import ValutaSelectorScreen from '../screens/main/settings/ValutaSelectorScreen';
 import AboutScreen from '../screens/main/settings/AboutScreen';
 import FAQScreen from '../screens/main/settings/FAQScreen';
+import TermsOfServiceScreen from '../screens/main/settings/TermsOfServiceScreen';
+import PrivacyPolicyScreen from '../screens/main/settings/PrivacyPolicyScreen';
 
 const AppStackScreens = () => {
     const AppStack = createStackNavigator();
@@ -91,6 +93,8 @@ const AppStackScreens = () => {
                     <AppStack.Screen name="ValutaSelector" component={ValutaSelectorScreen} />
                     <AppStack.Screen name="About" component={AboutScreen} />
                     <AppStack.Screen name="FAQ" component={FAQScreen} />
+                    <AppStack.Screen name="TermsOfService" component={TermsOfServiceScreen} />
+                    <AppStack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
                 </AppStack.Navigator>
             </>
         )

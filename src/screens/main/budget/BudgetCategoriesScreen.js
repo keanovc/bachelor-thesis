@@ -146,7 +146,7 @@ const BudgetCategoriesScreen = () => {
                     onPress={() => setToggle(!toggle)}
                     className="flex flex-row items-center justify-center"
                 >
-                    <Text className="text-2xl font-bold mr-2" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>
+                    <Text className="text-lg font-bold mr-2" style={{ color: theme.primary, fontFamily: "Montserrat-Bold" }}>
                         {
                             date ? 
                                 months[date.toString().substring(5, 8) - 1]
@@ -155,7 +155,7 @@ const BudgetCategoriesScreen = () => {
                         }
                     </Text>
 
-                    <Text className="text-2xl font-bold mr-2" style={{ color: theme.primary, fontFamily: "Montserrat-Regular" }}>
+                    <Text className="text-lg font-bold mr-2" style={{ color: theme.primary, fontFamily: "Montserrat-Regular" }}>
                         {
                             date ? 
                                 date.toString().substring(0, 4)

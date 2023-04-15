@@ -1,12 +1,12 @@
 import { View, Text, Image, TouchableOpacity, Switch, SafeAreaView, ActivityIndicator, ScrollView } from 'react-native'
 import React, { useContext, useState } from 'react'
 import { EventRegister } from 'react-native-event-listeners'
-import ThemeContext from '../../../context/ThemeContext'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { useForm } from "react-hook-form";
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
 import { FireBaseContext } from '../../../context/FireBaseContext'
 import { SettingsItem, ProfileSignIn, IconButton } from '../../../components';
@@ -198,17 +198,6 @@ const SettingsScreen = () => {
                                     transform: [{ scaleX: 0.8 }, { scaleY: 0.8 }]
                                 }}
                                 className="-mr-2"
-                            />
-                        </View>
-
-                        {/* Language Selector */}
-                        <View>
-                            <SettingsItem
-                                title="Language"
-                                onPress={() => navigation.navigate('LanguageSelector')}
-                                iconBackgroundColor="#E0FFE5"
-                                iconColor="green"
-                                icon="language"
                             />
                         </View>
 

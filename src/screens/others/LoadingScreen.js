@@ -52,7 +52,6 @@ const LoadingScreen = () => {
             className="flex-1 items-center justify-center bg-[#F5F8FE]"
         >
             <Animated.View
-                // fade in and when done fade out
                 style={{
                     opacity: fadeInAnimation,
                     transform: [

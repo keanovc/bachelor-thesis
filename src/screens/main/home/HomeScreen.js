@@ -233,7 +233,7 @@ const HomeScreen = () => {
                                     }
                                 </Text>
 
-                                <View className="w-8 h-0.5 rounded-full mt-1" style={{ backgroundColor: theme.secondary }} />
+                                <View className="w-8 h-0.5 rounded-full mt-2" style={{ backgroundColor: theme.secondary }} />
                             
                                 <Text className="text-xs mt-1" style={{ color: theme.secondary, fontFamily: "Montserrat-Medium" }}>
                                     {quote.author}

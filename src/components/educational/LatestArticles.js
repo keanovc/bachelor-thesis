@@ -23,7 +23,7 @@ const LatestArticles = ({
 
     const { data: dataAll, isLoading, error, refetch } = useFetch(`topfeeds/${selectedCategory}/new`, 
     {
-        count: 1,
+        count: 2,
         after: 0,
     });
 

@@ -51,7 +51,7 @@ const EducationalScreen = () => {
         },
     ]
     
-    const [selectedCategory, setSelectedCategory] = useState(filterCategories[1].search)
+    const [selectedCategory, setSelectedCategory] = useState(filterCategories[0].search)
 
     return (
         <SafeAreaView 

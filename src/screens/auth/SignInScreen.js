@@ -8,13 +8,13 @@ import { FireBaseContext } from '../../context/FireBaseContext'
 import { AuthInputField, LargeButton } from '../../components/index'
 
 const SignInScreen = ({ navigation }) => {
+    const firebase = useContext(FireBaseContext)
+    const [_, setUser] = useContext(UserContext)
+    const theme = useContext(ThemeContext)
+
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
-    const theme = useContext(ThemeContext)
-
-    const firebase = useContext(FireBaseContext)
-    const [_, setUser] = useContext(UserContext)
 
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -119,6 +119,7 @@ const SignInScreen = ({ navigation }) => {
                                             autoCompleteType='password'
                                             autoCorrect={false}
                                             secureTextEntry={true}
+                                            keyboardType='default'
                                             login={true}
                                         />
                                     )}
