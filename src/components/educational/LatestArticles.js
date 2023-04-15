@@ -23,7 +23,7 @@ const LatestArticles = ({
 
     const { data: dataAll, isLoading, error, refetch } = useFetch(`topfeeds/${selectedCategory}/new`, 
     {
-        count: 2,
+        count: 1,
         after: 0,
     });
 
@@ -37,9 +37,18 @@ const LatestArticles = ({
         const baseUrl = `https://medium2.p.rapidapi.com/`;
         const endpoint = `article/`;
 
-        const promises = dataIds.map((id) => 
-            fetch(baseUrl + endpoint + id, { headers }).then(response => response.json()) 
-        );
+        // const promises = dataIds.map((id) => 
+        //     fetch(baseUrl + endpoint + id, { headers }).then(response => response.json()) 
+        // );
+
+        const promises = dataIds.map(async (id) => {
+            const response = await fetch(baseUrl + endpoint + id, {
+                method: "GET",
+                headers: headers,
+            });
+            const data = await response.json();
+            return data;
+        });
 
         const articles = await Promise.all(promises);
         setData(articles);

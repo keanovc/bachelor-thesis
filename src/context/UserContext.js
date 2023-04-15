@@ -4,6 +4,7 @@ const UserContext = createContext([{}, () => {}])
 
 const UserProvider = (props) => {
     const [state, setState] = useState({
+        darkMode: false,
         symbol: '',
         symbolBefore: '',
         valuta: '',

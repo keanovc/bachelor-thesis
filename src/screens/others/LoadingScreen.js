@@ -1,5 +1,7 @@
 import { View, Text, Image, Animated } from 'react-native'
 import React, { useEffect, useContext } from 'react'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { EventRegister } from 'react-native-event-listeners'
 
 import { UserContext } from '../../context/UserContext'
 import { FireBaseContext } from '../../context/FireBaseContext'
@@ -13,10 +15,16 @@ const LoadingScreen = () => {
 
     useEffect(() => {
         setTimeout(async () => {
+            // const user = await AsyncStorage.getItem('user').then((user) => {
+            //     return user ? JSON.parse(user) : null
+            // })
+
             const user = await firebase.getCurrentUser()
 
             if (user) {
                 const userInfo = await firebase.getUserInfo(user.uid)
+
+                // EventRegister.emit('toggleTheme', userInfo.darkMode)
 
                 setUser({
                     isLoggedIn: true,

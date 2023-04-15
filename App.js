@@ -47,7 +47,7 @@ export default function App() {
   } else {
     SplashScreen.hideAsync();
   }
-
+  
   return (
     <ThemeContext.Provider value={Theme[darkMode ? 'dark' : 'light']}>
       <FireBaseProvider>

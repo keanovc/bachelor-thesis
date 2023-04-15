@@ -40,8 +40,6 @@ const SettingsScreen = () => {
 
         try {
             await firebase.signInWithEmailAndPassword(email, password)
-            const uid = firebase.getCurrentUser().uid
-            const userInfo = await firebase.getUserInfo(uid)
 
             setUser({
                 ...user,
@@ -56,10 +54,12 @@ const SettingsScreen = () => {
         }
     }
 
-    const logOut = () => {
+    const logOut = async () => {
         const loggedOut = firebase.logOut()
         
         if (loggedOut) {
+            await AsyncStorage.removeItem('user')
+
             setUser(state => ({ ...state, isLoggedIn: false }))
         }
     } 
@@ -69,6 +69,23 @@ const SettingsScreen = () => {
             await AsyncStorage.removeItem('@viewedOnBoarding')
         } catch (e) {
             console.log(e)
+        }
+    }
+
+    const toggleDarkMode = async () => {
+        setDarkMode(!darkMode)
+        EventRegister.emit('toggleTheme', !darkMode)
+
+        try {
+            firebase.updateCurrency({
+                darkMode: !darkMode,
+            })
+
+            setUser({
+                ...user,
+            })
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -185,9 +202,8 @@ const SettingsScreen = () => {
                                 value={
                                     theme.theme === 'dark' ? true : false
                                 }
-                                onValueChange={(value) => {
-                                    setDarkMode(value)
-                                    EventRegister.emit('toggleTheme', value)
+                                onValueChange={() => {
+                                    toggleDarkMode()
                                 }}
                                 trackColor={{ 
                                     false: "#ffffff", 

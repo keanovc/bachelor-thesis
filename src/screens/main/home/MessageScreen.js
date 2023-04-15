@@ -3,7 +3,7 @@ import React, { useState, useContext } from 'react'
 import axios from 'axios'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
-import { GiftedChat, Bubble, InputToolbar } from 'react-native-gifted-chat'
+import { GiftedChat, Bubble, InputToolbar, SystemMessage } from 'react-native-gifted-chat'
 
 import env from '../../../config/env'
 import ThemeContext from '../../../context/ThemeContext'
@@ -23,15 +23,12 @@ const MessageScreen = () => {
 
     const handleSend = async (newMessages = []) => {
         try {
-            // Get the user's message
             const userMessage = newMessages[0]
 
-            // Add the user's message to the messages state
             setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages))
             const messageText = userMessage.text.toLowerCase()
             const keywords = ['finance', 'money', 'bank', 'account', 'loan', 'credit', 'debit', 'card', 'transaction', 'transfer', 'withdraw', 'deposit', 'balance', 'check', 'bill', 'payment', 'loan', 'mortgage', 'insurance', 'invest', 'investing', 'investor', 'stock', 'bond', 'mutual fund', '401k', 'retirement', 'retire', 'retirement plan', 'retirement account', 'pension', 'pension plan', 'pension account', 'social security', 'tax', 'taxes', 'tax return', 'tax refund', 'tax preparation', 'tax preparation service', 'tax preparation company', 'tax preparation firm', 'tax preparation office', 'tax preparation business', 'tax preparation agency', 'tax preparation agent', 'tax preparation accountant', 'tax preparation advisor', 'tax preparation consultant', 'tax preparation expert',]
         
-            // Check if the user's message contains any of the keywords
             if (!keywords.some(keyword => messageText.includes(keyword))) {
                 const botMessage = {
                     _id: new Date().getTime() + 1,
@@ -48,7 +45,6 @@ const MessageScreen = () => {
                 return
             }
 
-            // Send a request to the API
             setLoading(true)
             const response = await axios.post(API_URL, {
                 prompt: `Given the following context: ${messageText}`,
@@ -212,6 +208,50 @@ const MessageScreen = () => {
                                 elevation: 5,
                             }}
                         />
+                    )}
+                    renderChatEmpty={() => (
+                        <View className="flex-1 items-center justify-center">
+                            <View 
+                                className="w-3/4 items-center justify-center"
+                                style={{ transform: [{ scaleY: -1 }], }}
+                            >
+                                <Image
+                                    className="w-24 h-24"
+                                    source={require('../../../../assets/images/robot-placeholder.png')}
+                                />
+
+                                <Text className="text-center mt-2 text-lg" style={{ color: theme.text, fontFamily: "Montserrat-SemiBold" }}>Ask Visional Bot a finance question:</Text>
+
+                                <View 
+                                    className="flex-row items-center justify-center mt-2 px-4 py-2 rounded-lg shadow-sm"
+                                    style={{ backgroundColor: theme.accent }}
+                                >
+                                    <Text className="text-sm" style={{ color: theme.text, fontFamily: "Montserrat-Regular" }}>What is the best way to save money?</Text>
+                                </View>
+
+                                <TouchableOpacity
+                                    className="flex-row items-center justify-center mt-2 px-4 py-2 rounded-lg shadow-sm"
+                                    style={{ backgroundColor: theme.accent }}
+                                    onPress={() => handleSend({ text: "Which insurance should I get?" }, true)}
+                                >
+                                    <Text className="text-sm" style={{ color: theme.text, fontFamily: "Montserrat-Regular" }}>Which insurance should I get?</Text>
+                                </TouchableOpacity>
+
+                                <View
+                                    className="flex-row items-center justify-center mt-2 px-4 py-2 rounded-lg shadow-sm"
+                                    style={{ backgroundColor: theme.accent }}
+                                >
+                                    <Text className="text-sm" style={{ color: theme.text, fontFamily: "Montserrat-Regular" }}>What is the best way to invest?</Text>
+                                </View>
+
+                                <View
+                                    className="flex-row items-center justify-center mt-2 px-4 py-2 rounded-lg shadow-sm"
+                                    style={{ backgroundColor: theme.accent }}
+                                >
+                                    <Text className="text-sm" style={{ color: theme.text, fontFamily: "Montserrat-Regular" }}>...</Text>
+                                </View>
+                            </View>
+                        </View>
                     )}
                 />
             </View>

@@ -58,11 +58,11 @@ const ProfileScreen = () => {
         }
     }
 
-    const onSubmit = () => {
+    const onSubmit = async () => {
         setLoading(true)
 
         try {
-            firebase.updateProfile({
+            await firebase.updateProfile({
                 profilePicture,
                 fullname,
                 username,

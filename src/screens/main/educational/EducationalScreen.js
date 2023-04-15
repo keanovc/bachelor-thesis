@@ -91,9 +91,9 @@ const EducationalScreen = () => {
                         </View>
                     </View>
 
-                    {/* <PopularArticles selectedCategory={selectedCategory} />
+                    {/* <PopularArticles selectedCategory={selectedCategory} /> */}
 
-                    <LatestArticles selectedCategory={selectedCategory} /> */}
+                    {/* <LatestArticles selectedCategory={selectedCategory} /> */}
                 </View>
             </ScrollView>
         </SafeAreaView>

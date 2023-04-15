@@ -9,53 +9,47 @@ const FireBase = {
     },
 
     createUserWithEmailAndPassword: async (user) => {
-        try {
-            await firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
-                .then(async () => {
-                    let profilePictureUrl = "default"
+        await firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
+            .then(async () => {
+                let profilePictureUrl = "default"
 
-                    if (user.profilePicture !== undefined) {
-                        const profilePicture = await FireBase.uploadProfilePicture(user.profilePicture);
-                        profilePictureUrl = await profilePicture.ref.getDownloadURL();
-                    }
-                    
-                    const uid = FireBase.getCurrentUser().uid;
-
-                    await firebase.firestore().collection('users').doc(uid).set({
-                        symbol: user.symbol,
-                        symbolBefore: user.symbolBefore,
-                        valuta: user.valuta,
-                        fullname: user.fullname,
-                        username: user.username,
-                        email: user.email,
-                        profilePicture: profilePictureUrl,
-                    });
-
-                    return {
-                        symbol: user.symbol,
-                        symbolBefore: user.symbolBefore,
-                        valuta: user.valuta,
-                        fullname: user.fullname,
-                        username: user.username,
-                        email: user.email,
-                        uid,
-                        profilePicture: profilePictureUrl,
-                    }
-                })
-                .catch(error => {
-                    if (error.code === 'auth/email-already-in-use') {
-                      console.log('That email address is already in use!');
-                    }
+                if (user.profilePicture !== undefined) {
+                    const profilePicture = await FireBase.uploadProfilePicture(user.profilePicture);
+                    profilePictureUrl = await profilePicture.ref.getDownloadURL();
+                }
                 
-                    if (error.code === 'auth/invalid-email') {
-                      console.log('That email address is invalid!');
-                    }
-                
-                    console.error(error);
+                const uid = FireBase.getCurrentUser().uid;
+
+                await firebase.firestore().collection('users').doc(uid).set({
+                    symbol: user.symbol,
+                    symbolBefore: user.symbolBefore,
+                    valuta: user.valuta,
+                    fullname: user.fullname,
+                    username: user.username,
+                    email: user.email,
+                    profilePicture: profilePictureUrl,
                 });
-        } catch (error) {
-            console.log(error);
-        }
+
+                return {
+                    symbol: user.symbol,
+                    symbolBefore: user.symbolBefore,
+                    valuta: user.valuta,
+                    fullname: user.fullname,
+                    username: user.username,
+                    email: user.email,
+                    uid,
+                    profilePicture: profilePictureUrl,
+                }
+            })
+            .catch(error => {
+                if (error.code === 'auth/email-already-in-use') {
+                    alert('That email address is already in use!');
+                }
+            
+                if (error.code === 'auth/invalid-email') {
+                    alert('That email address is invalid!');
+                }
+            });
     },
 
     uploadProfilePicture: async (image) => {

@@ -10,9 +10,7 @@ import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
 import { firebase } from '../../../config/firebase'
 import env from '../../../config/env'
-import { calculateMonthAndYear } from '../../../utils/calculateMonthAndYear'
-import { calculateBudgets } from '../../../utils/calculateBudgets'
-import { setRightCurrency } from '../../../utils/setRightCurrency'
+import { calculateMonthAndYear, calculateBudgets, setRightCurrency } from '../../../utils'
 
 const HomeScreen = () => {
     const API_KEY = env.QUOTES_API_KEY
@@ -76,35 +74,20 @@ const HomeScreen = () => {
     const onRefresh = useCallback(() => {
         setRefreshing(true)
         axiosGetQuote()
+        getBudgets()
         setRefreshing(false)
     }, [])
 
     useEffect(() => {
         axiosGetQuote()
-        
-        getIsDateOrMonthlyIsTrue().then((budgetsArray) => {
-            const budgets = budgetsArray.map((doc) => {
-                const data = doc.data();
-                const id = doc.id;
-                return { id, ...data };
-            });
-            setBudgets(budgets);
-        });
+        getBudgets()
+        getGoals()
     }, [])
 
     useEffect(() => {
-        const unsubscribe = navigation.addListener('focus', () => {
-            getIsDateOrMonthlyIsTrue().then((budgetsArray) => {
-                const budgets = budgetsArray.map((doc) => {
-                    const data = doc.data();
-                    const id = doc.id;
-                    return { id, ...data };
-                });
-                setBudgets(budgets);
-            });
+        navigation.addListener('focus', () => {
+            getBudgets()
         });
-
-        return unsubscribe;
     }, [navigation]);
 
     async function getIsDateOrMonthlyIsTrue() {
@@ -132,6 +115,30 @@ const HomeScreen = () => {
 
         return budgetsArray;
     }
+
+    const getBudgets = () => {
+        getIsDateOrMonthlyIsTrue().then((budgetsArray) => {
+            const budgets = budgetsArray.map((doc) => {
+                const data = doc.data();
+                const id = doc.id;
+                return { id, ...data };
+            });
+            setBudgets(budgets);
+        });
+    }
+
+    const getGoals = () => {
+        goalsRef
+        .where("moneySaved", "==", 0)
+        .onSnapshot((querySnapshot) => {
+            const goals = querySnapshot.docs.map((doc) => {
+                const data = doc.data();
+                const id = doc.id;
+                return { id, ...data };
+            });
+            setGoals(goals);
+        });
+    }
     
     const data = {
         labels: [
@@ -154,19 +161,6 @@ const HomeScreen = () => {
         setTotalIncomes(calculateBudgets(budgets, 0, "incomes") + calculateBudgets(budgets, 1, "incomes") + calculateBudgets(budgets, 2, "incomes") + calculateBudgets(budgets, 3, "incomes"))
         setTotalExpenses(calculateBudgets(budgets, 0, "expenses") + calculateBudgets(budgets, 1, "expenses") + calculateBudgets(budgets, 2, "expenses") + calculateBudgets(budgets, 3, "expenses"))
     }, [budgets])
-
-    useEffect(() => {
-        goalsRef
-        .where("moneySaved", "==", 0)
-        .onSnapshot((querySnapshot) => {
-            const goals = querySnapshot.docs.map((doc) => {
-                const data = doc.data();
-                const id = doc.id;
-                return { id, ...data };
-            });
-            setGoals(goals);
-        });
-    }, [])
 
     return (
         <View  className="flex-1" style={{ backgroundColor: theme.background }}>

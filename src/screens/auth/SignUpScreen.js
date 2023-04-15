@@ -8,18 +8,19 @@ import ThemeContext from '../../context/ThemeContext'
 import { FireBaseContext } from '../../context/FireBaseContext'
 import { UserContext } from '../../context/UserContext'
 import { AuthInputField, LargeButton } from '../../components/index'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignUpScreen = ({ navigation }) => {
+    const theme = useContext(ThemeContext)
+    const firebase = useContext(FireBaseContext)
+    const [_, setUser] = useContext(UserContext)
+
     const [fullname, setFullname] = useState('')
     const [username, setUsername] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const [profilePicture, setProfilePicture] = useState()
-    const theme = useContext(ThemeContext)
-
-    const firebase = useContext(FireBaseContext)
-    const [_, setUser] = useContext(UserContext)
 
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -80,6 +81,7 @@ const SignUpScreen = ({ navigation }) => {
             setUser({
                 ...createdUser,
                 uid: uid,
+                darkMode: false,
                 username: userInfo.username,
                 fullname: userInfo.fullname,
                 email: userInfo.email,
@@ -89,6 +91,19 @@ const SignUpScreen = ({ navigation }) => {
                 profilePicture: userInfo.profilePicture,
                 isLoggedIn: true
             })
+
+            // await AsyncStorage.setItem('user', JSON.stringify({
+            //     isLoggedIn: true,
+            //     uid: uid,
+            //     username: userInfo.username,
+            //     fullname: userInfo.fullname,
+            //     email: userInfo.email,
+            //     symbol: userInfo.symbol,
+            //     symbolBefore: userInfo.symbolBefore,
+            //     valuta: userInfo.valuta,
+            //     profilePicture: userInfo.profilePicture,
+            //     darkMode: userInfo.darkMode,
+            // }))
         } catch (error) {
             alert(error.message)
         } finally {
@@ -112,7 +127,7 @@ const SignUpScreen = ({ navigation }) => {
                             Create an account!
                         </Text>
                         <Text className="text-gray-400 text-xs" style={{ fontFamily: "Montserrat-Regular" }}>
-                            Bring clarity to your financial future
+                            Sign up to get started
                         </Text>
 
                         <TouchableOpacity 
@@ -144,6 +159,7 @@ const SignUpScreen = ({ navigation }) => {
                                         autoCapitalize='none'
                                         autoCompleteType='username'
                                         autoCorrect={false}
+                                        keyboardType={'default'}
                                         login={true}
                                     />
                                 )}
@@ -171,6 +187,7 @@ const SignUpScreen = ({ navigation }) => {
                                         autoCapitalize='none'
                                         autoCompleteType='username'
                                         autoCorrect={false}
+                                        keyboardType={'default'}
                                         login={true}
                                     />
                                 )}
@@ -199,6 +216,7 @@ const SignUpScreen = ({ navigation }) => {
                                         autoCapitalize='none'
                                         autoCompleteType='email'
                                         autoCorrect={false}
+                                        keyboardType={'email-address'}
                                         login={true}
                                     />
                                 )}
