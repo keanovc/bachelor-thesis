@@ -7,47 +7,17 @@ import Emoji from 'react-native-emoji';
 import ThemeContext from '../../context/ThemeContext'
 import { UserContext } from '../../context/UserContext'
 import { firebase } from '../../config/firebase'
+import { icons, colors } from '../../constants/index'
 
 const GoalsCategoryModal = ({ closeModal, category }) => {
-    const [user, setUser] = useContext(UserContext)
+    const [user] = useContext(UserContext)
     const theme = useContext(ThemeContext)
-    const navigation = useNavigation()
 
     const goalsCategoriesRef = firebase.firestore().collection("users").doc(user.uid).collection('goalsCategories')
 
     const [categoryName, setCategoryName] = useState(category ? category.name : "")
-
-    const backgroundColors = [
-        "#9b5fe0",
-        "#16a4d8",
-        "#60dbe8",
-        "#8bd346",
-        "#efdf48",
-        "#f9a52c",
-        "#d64e12",
-    ]
-
-    const [categoryColor, setCategoryColor] = useState(category ? category.color : backgroundColors[0])
-
-    const iconNames = [
-        "basketball",
-        "beer",
-        "book",
-        "bus",
-        "car",
-        "moneybag",
-        "football",
-        "video_game",
-        "gift",
-        "golf",
-        "musical_note",
-        "heart",
-        "house",
-        "ice_cream",
-        "iphone",
-    ]
-
-    const [categoryIcon, setCategoryIcon] = useState(category ? category.icon : iconNames[0])
+    const [categoryColor, setCategoryColor] = useState(category ? category.color : colors[0])
+    const [categoryIcon, setCategoryIcon] = useState(category ? category.icon : icons[0])
 
     const createCategory = () => {
         const timestamp = firebase.firestore.FieldValue.serverTimestamp()
@@ -103,21 +73,19 @@ const GoalsCategoryModal = ({ closeModal, category }) => {
             })
     }
 
-    const renderColors = () => {
-        return backgroundColors.map(color => {
-            return (
-                <TouchableOpacity
-                    key={color}
-                    style={{ backgroundColor: color }}
-                    onPress={() => setCategoryColor(color)}
-                    className="w-8 h-8 rounded-md m-2 flex items-center justify-center"
-                >
-                    {categoryColor === color && (
-                        <Ionicons name="checkmark" size={24} color="#fff" />
-                    )}
-                </TouchableOpacity>
-            )
-        })
+    const renderColors = (color) => {
+        return (
+            <TouchableOpacity
+                key={color}
+                style={{ backgroundColor: color }}
+                onPress={() => setCategoryColor(color)}
+                className="w-12 h-12 rounded-md m-2 flex items-center justify-center"
+            >
+                {categoryColor === color && (
+                    <Ionicons name="checkmark" size={24} color="#fff" />
+                )}
+            </TouchableOpacity>
+        )
     }
 
     const renderIcons = (icon) => {
@@ -191,8 +159,14 @@ const GoalsCategoryModal = ({ closeModal, category }) => {
                         style={{ height: 2, backgroundColor: theme.primary }}
                     />
 
-                    <View className="flex flex-row items-center justify-center mt-2">
-                        {renderColors()}
+                    <View className="flex flex-row items-center justify-center mt-2 px-7">
+                        <FlatList
+                            data={colors}
+                            renderItem={({ item }) => renderColors(item)}
+                            keyExtractor={item => item}
+                            horizontal={true}
+                            showsHorizontalScrollIndicator={false}
+                        />
                     </View>
 
                     <Text 
@@ -212,7 +186,7 @@ const GoalsCategoryModal = ({ closeModal, category }) => {
 
                     <View className="flex flex-row items-center justify-center mt-2 px-7">
                         <FlatList
-                            data={iconNames}
+                            data={icons}
                             renderItem={({ item }) => renderIcons(item)}
                             keyExtractor={item => item}
                             horizontal={true}

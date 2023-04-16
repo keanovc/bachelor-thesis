@@ -30,7 +30,7 @@ const LatestArticleCard = ({ article }) => {
                         </Text>
 
                         <Text className="text-xs text-gray-500" style={{ color: theme.text, fontFamily: "Montserrat-Light" }}>
-                            { article.subtitle.length > 30 ? article.subtitle.substring(0, 30) + "..." : article.subtitle }
+                            { article.subtitle.length > 25 ? article.subtitle.substring(0, 25) + "..." : article.subtitle }
                         </Text>
                     </View>
                 </View>

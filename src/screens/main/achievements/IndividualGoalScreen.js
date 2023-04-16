@@ -183,6 +183,8 @@ const IndividualGoalScreen = ({ route }) => {
                                     textDefaultColor: theme.text,
                                     textHeaderColor: theme.text,
                                 }}
+                                minimumDate={getToday()}
+                                current={goal.date}
                             />
                         </View>
                     </View>

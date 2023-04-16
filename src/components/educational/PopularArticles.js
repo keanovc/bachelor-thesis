@@ -23,7 +23,7 @@ const PopularArticles = ({
 
     const { data: dataAll, isLoading, error, refetch } = useFetch(`topfeeds/${selectedCategory}/hot`, 
     {
-        count: 1,
+        count: 3,
         after: 0,
     });
 
@@ -37,7 +37,11 @@ const PopularArticles = ({
         const baseUrl = `https://medium2.p.rapidapi.com/`;
         const endpoint = `article/`;
 
-        const promises = dataIds.map(async (id) => {
+        if (!dataIds || dataIds.length === 0) {
+            return;
+        }
+
+        const promises = dataIds?.map(async (id) => {
             const response = await fetch(baseUrl + endpoint + id, {
                 method: "GET",
                 headers: headers,
@@ -51,11 +55,13 @@ const PopularArticles = ({
     }
 
     useEffect(() => {
-        getArticlesInfo();
+        getArticlesInfo()
     }, [dataIds])
 
     useEffect(() => {
-        refetch()
+        if (dataIds.length > 0) {
+            refetch()
+        }
     }, [selectedCategory])
 
     return (

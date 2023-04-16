@@ -10,7 +10,7 @@ import { UserContext } from '../../context/UserContext'
 import { firebase } from '../../config/firebase'
 
 const GoalModal = ({ category, closeModal, goal }) => {
-    const [user, setUser] = useContext(UserContext)
+    const [user] = useContext(UserContext)
     const theme = useContext(ThemeContext)
     const startDate = getToday()
 
@@ -252,6 +252,7 @@ const GoalModal = ({ category, closeModal, goal }) => {
                                         textDefaultColor: theme.text,
                                         textHeaderColor: theme.text,
                                     }}
+                                    minimumDate={getToday()}
                                 />
                             </View>
                         </View>

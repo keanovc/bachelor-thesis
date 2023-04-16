@@ -1,5 +1,5 @@
-import { View, Text, SafeAreaView, TouchableOpacity, FlatList, Modal, Keyboard } from 'react-native'
-import React, { useContext, useState, useEffect } from 'react'
+import { View, Text, SafeAreaView, TouchableOpacity, FlatList, Modal, Keyboard, RefreshControl } from 'react-native'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 
@@ -9,11 +9,11 @@ import { firebase } from '../../../config/firebase'
 import { GoalModal, GoalItem, IconButton } from '../../../components'
 
 const GoalsScreen = ({ route }) => {
+    const { category, totalBudget } = route.params
     const [user] = useContext(UserContext)
     const theme = useContext(ThemeContext)
     const navigation = useNavigation()
-
-    const { category, totalBudget } = route.params
+    const [refreshing, setRefreshing] = useState(false)
 
     const [goals, setGoals] = useState([])
     const goalsRef = firebase.firestore().collection('users').doc(user.uid).collection('goals')
@@ -56,7 +56,7 @@ const GoalsScreen = ({ route }) => {
 
     const [filterGoals, setFilterGoals] = useState(filter[0])
 
-    useEffect(() => {
+    const getGoals = () => {
         goalsRef
             .orderBy("createdAt", "desc")
             .where("categoryId", "==", category.id)
@@ -81,6 +81,16 @@ const GoalsScreen = ({ route }) => {
                     console.log(error)
                 }
             )
+    }
+
+    useEffect(() => {
+        getGoals()
+    }, [])
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true)
+        getGoals()
+        setRefreshing(false)
     }, [])
 
     return (
@@ -152,6 +162,12 @@ const GoalsScreen = ({ route }) => {
                         renderItem={({ item }) => <GoalItem goal={item} category={category} edit={editVisible} totalBudget={totalBudget} />}
                         keyExtractor={(item) => item.id}
                         className="mt-4"
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                            />
+                        }
                     />
                 ) : (
                     <View className="flex flex-col items-center justify-center mt-4">

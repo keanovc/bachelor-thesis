@@ -9,7 +9,7 @@ import { firebase } from '../../config/firebase'
 import { icons, colors } from '../../constants/index'
 
 const BudgetCategoryModal = ({ closeModal, category, type }) => {
-    const [user, setUser] = useContext(UserContext)
+    const [user] = useContext(UserContext)
     const theme = useContext(ThemeContext)
 
     const budgetCategoriesRef = firebase.firestore().collection("users").doc(user.uid).collection("budgetCategories")

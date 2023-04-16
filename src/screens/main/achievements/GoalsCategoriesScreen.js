@@ -1,25 +1,28 @@
-import { View, Text, SafeAreaView, ScrollView, Modal, TouchableOpacity } from 'react-native'
-import React, { useContext, useState, useEffect } from 'react'
-import DatePicker, { getToday } from 'react-native-modern-datepicker'
+import { View, Text, SafeAreaView, ScrollView, Modal, TouchableOpacity, RefreshControl } from 'react-native'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
+import { getToday } from 'react-native-modern-datepicker'
 import { Ionicons } from '@expo/vector-icons'
 
-import { calculateDateRange } from '../../../utils/calculateDateRange'
 import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
 import { firebase } from '../../../config/firebase'
 import { GoalsCategoryModal, GoalsCategoriesCard, IconButton } from '../../../components'
-import { setRightCurrency } from '../../../utils/setRightCurrency'
+import { setRightCurrency, calculateDateRange } from '../../../utils'
 
 const GoalsCategoriesScreen = () => {
     const theme = useContext(ThemeContext)
     const [user] = useContext(UserContext)
     const [modalVisible, setModalVisible] = useState(false)
     const [editVisible, setEditVisible] = useState(false)
+    const [refreshing, setRefreshing] = useState(false)
 
     const [goalsCategories, setGoalsCategories] = useState([])
     const goalsCategoriesRef = firebase.firestore().collection("users").doc(user.uid).collection('goalsCategories')
 
-    useEffect(() => {
+    const budgetsRef = firebase.firestore().collection("users").doc(user.uid).collection('budgets')
+    const [budgets, setBudgets] = useState([])
+
+    const getGoalsCategories = () => {
         goalsCategoriesRef
             .onSnapshot(
                 querySnapshot => {
@@ -41,12 +44,9 @@ const GoalsCategoriesScreen = () => {
                     alert(error)
                 }
             )
-    }, [])
+    }
 
-    const budgetsRef = firebase.firestore().collection("users").doc(user.uid).collection('budgets')
-    const [budgets, setBudgets] = useState([])
-
-    useEffect(() => {
+    const getBudgets = () => {
         budgetsRef
             .onSnapshot(
                 querySnapshot => {
@@ -67,6 +67,11 @@ const GoalsCategoriesScreen = () => {
                     alert(error)
                 }
             )
+    }
+    
+    useEffect(() => {
+        getGoalsCategories()
+        getBudgets()
     }, [])
 
     const currentMonth = getToday().toString().substring(0, 4) + " " + getToday().toString().substring(5, 7)
@@ -86,6 +91,10 @@ const GoalsCategoriesScreen = () => {
     const [totalBudget, setTotalBudget] = useState(0)
 
     useEffect(() => {
+        calculateTotalBudget()
+    }, [monthlyBudgets])
+
+    const calculateTotalBudget = () => {
         let totalIncome = 0
         let totalExpense = 0
         monthlyBudgets.forEach(budget => {
@@ -96,7 +105,15 @@ const GoalsCategoriesScreen = () => {
             }
         })
         setTotalBudget(totalIncome - totalExpense)
-    }, [monthlyBudgets])
+    }
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true)
+        calculateTotalBudget()
+        getGoalsCategories()
+        getBudgets()
+        setRefreshing(false)
+    }, [refreshing])
 
     return (
         <SafeAreaView className="flex-1"
@@ -134,7 +151,15 @@ const GoalsCategoriesScreen = () => {
 
             {
                 goalsCategories.length > 0 ? (
-                    <ScrollView className="flex mx-auto w-11/12">
+                    <ScrollView 
+                        className="flex mx-auto w-11/12"
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={refreshing}
+                                onRefresh={onRefresh}
+                            />
+                        }
+                    >
                         <View className="flex flex-row items-center justify-start flex-wrap">
                             {goalsCategories.map((category, index) => (
                                 <GoalsCategoriesCard key={index} category={category} edit={editVisible} totalBudget={totalBudget} />

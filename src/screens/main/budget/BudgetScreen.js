@@ -1,5 +1,5 @@
-import { View, Text, Modal, TouchableOpacity, FlatList } from 'react-native'
-import React, { useContext, useState, useEffect } from 'react'
+import { View, Text, Modal, TouchableOpacity, FlatList, RefreshControl } from 'react-native'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 
@@ -7,16 +7,17 @@ import { UserContext } from '../../../context/UserContext'
 import ThemeContext from '../../../context/ThemeContext'
 import { firebase } from '../../../config/firebase'
 import { BudgetModal, BudgetItem, IconButton } from '../../../components'
-import { calculateDateRange } from '../../../utils/calculateDateRange'
+import { calculateDateRange } from '../../../utils'
 
 const BudgetScreen = ({ route }) => {
-    const { category, date, } = route.params
+    const { category, date } = route.params
     const theme = useContext(ThemeContext)
     const navigation = useNavigation()
     const [user] = useContext(UserContext)
 
     const [modalVisible, setModalVisible] = useState(false)
     const [editVisible, setEditVisible] = useState(false)
+    const [refreshing, setRefreshing] = useState(false)
 
     const budgetsRef = firebase.firestore().collection("users").doc(user.uid).collection("budgets")
     const [budgets, setBudgets] = useState([])
@@ -40,7 +41,7 @@ const BudgetScreen = ({ route }) => {
         return budgetsArray;
     }
 
-    useEffect(() => {
+    const getBudgets = () => {
         getIsDateOrMonthlyIsTrue()
             .then((querySnapshot) => {
                 const newBudgets = []
@@ -59,7 +60,20 @@ const BudgetScreen = ({ route }) => {
                 })
                 setBudgets(newBudgets)
             })
+            .catch((error) => {
+                alert(error)
+            })
+    }
+
+    useEffect(() => {
+        getBudgets()
     }, [loading])
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true)
+        getBudgets()
+        setRefreshing(false)
+    }, [])
 
     return (
         <View className="flex-1" style={{ backgroundColor: theme.background }}>
@@ -134,6 +148,12 @@ const BudgetScreen = ({ route }) => {
                                     user={user}
                                 />
                             )}
+                            refreshControl={
+                                <RefreshControl
+                                    refreshing={refreshing}
+                                    onRefresh={onRefresh}
+                                />
+                            }
                         />
                     ) : (
                         <View className="flex justify-center items-center mt-6">

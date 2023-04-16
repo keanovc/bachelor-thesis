@@ -10,6 +10,16 @@ const EducationalScreen = () => {
 
     const filterCategories = [
         {
+            name: "Entrepreneurship",
+            icon: "new",
+            search: "entrepreneurship"
+        },
+        {
+            name: "Self Improvement",
+            icon: "star",
+            search: "self-improvement"
+        },
+        {
             name: "Marketing",
             icon: "rocket",
             search: "marketing"
@@ -18,11 +28,6 @@ const EducationalScreen = () => {
             name: "Work",
             icon: "briefcase",
             search: "work"
-        },
-        {
-            name: "Entrepreneurship",
-            icon: "new",
-            search: "entrepreneurship"
         },
         {
             name: "Mental Health",
@@ -38,11 +43,6 @@ const EducationalScreen = () => {
             name: "Money",
             icon: "moneybag",
             search: "money"
-        },
-        {
-            name: "Self Improvement",
-            icon: "star",
-            search: "self-improvement"
         },
         {
             name: "Education",
@@ -91,9 +91,9 @@ const EducationalScreen = () => {
                         </View>
                     </View>
 
-                    {/* <PopularArticles selectedCategory={selectedCategory} /> */}
+                    <PopularArticles selectedCategory={selectedCategory} />
 
-                    {/* <LatestArticles selectedCategory={selectedCategory} /> */}
+                    <LatestArticles selectedCategory={selectedCategory} />
                 </View>
             </ScrollView>
         </SafeAreaView>

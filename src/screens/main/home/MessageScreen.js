@@ -27,7 +27,21 @@ const MessageScreen = () => {
 
             setMessages(previousMessages => GiftedChat.append(previousMessages, newMessages))
             const messageText = userMessage.text.toLowerCase()
-            const keywords = ['finance', 'money', 'bank', 'account', 'loan', 'credit', 'debit', 'card', 'transaction', 'transfer', 'withdraw', 'deposit', 'balance', 'check', 'bill', 'payment', 'loan', 'mortgage', 'insurance', 'invest', 'investing', 'investor', 'stock', 'bond', 'mutual fund', '401k', 'retirement', 'retire', 'retirement plan', 'retirement account', 'pension', 'pension plan', 'pension account', 'social security', 'tax', 'taxes', 'tax return', 'tax refund', 'tax preparation', 'tax preparation service', 'tax preparation company', 'tax preparation firm', 'tax preparation office', 'tax preparation business', 'tax preparation agency', 'tax preparation agent', 'tax preparation accountant', 'tax preparation advisor', 'tax preparation consultant', 'tax preparation expert',]
+            const keywords = [
+                'finance', 'money', 'bank', 'account', 'loan',
+                'credit', 'debit', 'card', 'wallet', 'invest',
+                'investment', 'stock', 'bond', 'mutual', 'fund',
+                'insurance', 'retirement', 'tax', 'budget',
+                'budgeting', 'saving', 'savings', 'spending',
+                'spend', 'expense', 'expenses', 'income', 'incomes',
+                'paycheck', 'paychecks', 'economic', 'economics',
+                'financial', 'financials', 'financially', 'portfolio',
+                'asset', 'assets', 'liability', 'liabilities',
+                'debt', 'debts', 'cash', 'flow', 'cashflows',
+                'risk', 'risks', 'risk management', 'opportunity',
+                'opportunities', 'cost', 'costs', 'living',
+                'market', 'markets', 'exchange', 'exchanges',
+            ]
         
             if (!keywords.some(keyword => messageText.includes(keyword))) {
                 const botMessage = {

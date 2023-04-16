@@ -1,5 +1,5 @@
-import { View, Text, SafeAreaView, Dimensions, FlatList, TouchableOpacity, ScrollView, Modal } from 'react-native'
-import React, { useContext, useState, useEffect } from 'react'
+import { View, Text, SafeAreaView, FlatList, TouchableOpacity, ScrollView, Modal, RefreshControl } from 'react-native'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import DatePicker, { getToday } from 'react-native-modern-datepicker'
 import { ProgressChart } from 'react-native-chart-kit'
 import { Ionicons } from '@expo/vector-icons'
@@ -8,7 +8,7 @@ import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
 import { firebase } from '../../../config/firebase'
 import { BudgetCategoryModal, BudgetCategoriesCard, IconButton } from '../../../components'
-import { calculateDateRange } from '../../../utils/calculateDateRange'
+import { calculateDateRange } from '../../../utils'
 
 const BudgetCategoriesScreen = () => {
     const theme = useContext(ThemeContext)
@@ -16,6 +16,7 @@ const BudgetCategoriesScreen = () => {
 
     const [modalVisible, setModalVisible] = useState(false)
     const [editVisible, setEditVisible] = useState(false)
+    const [refreshing, setRefreshing] = useState(false)
 
     const [type, setType] = useState('')
     const [date, setDate] = useState(getToday().toString().substring(0, 4) + " " + getToday().toString().substring(5, 7))
@@ -41,7 +42,7 @@ const BudgetCategoriesScreen = () => {
         "December",
     ]
 
-    useEffect(() => {
+    const getBudgetCategories = () => {
         budgetCategoriesRef
             .orderBy("createdAt", "desc")
             .onSnapshot(
@@ -58,6 +59,10 @@ const BudgetCategoriesScreen = () => {
                     console.log(error)
                 }
             )
+    }
+
+    useEffect(() => {
+        getBudgetCategories()
     }, [])
 
     async function getIsDateOrMonthlyIsTrue() {
@@ -119,6 +124,13 @@ const BudgetCategoriesScreen = () => {
     useEffect(() => {
         getBudgets()
     }, [date, budgetCategories])
+
+    const onRefresh = useCallback(() => {
+        setRefreshing(true)
+        getBudgetCategories()
+        getBudgets()
+        setRefreshing(false)
+    }, [])
 
     return (
         <SafeAreaView className="flex-1"
@@ -271,7 +283,15 @@ const BudgetCategoriesScreen = () => {
                 </View>
             </View>
 
-            <ScrollView className="flex-1">
+            <ScrollView 
+                className="flex-1"
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+            >
                 <View className="flex flex-row items-center justify-between px-6">
                     <Text className="text-lg font-bold" style={{ color: theme.text, fontFamily: "Montserrat-Bold" }}>Incomes</Text>
                     <TouchableOpacity 
