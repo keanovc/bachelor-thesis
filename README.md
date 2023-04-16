@@ -34,11 +34,13 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://immoa.herokuapp.com/)
+<p align="center">
+  <img src="./assets/images/preview.png" alt="Preview" width="100%">
+</p>
 
 ### Website URL
 
-[immoa.herokuapp.com](https://immoa.herokuapp.com/)
+<a href="exp://exp.host/@keanovc/bachelor-thesis" target="_blank">exp://exp.host/@keanovc/bachelor-thesis</a>
 
     
 ### User
