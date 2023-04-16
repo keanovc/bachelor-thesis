@@ -38,27 +38,21 @@
   <img src="./assets/images/preview.png" alt="Preview" width="400px">
 </p>
 
-### Website URL
+The topic of financial independence is relevant because it is becoming increasingly important to handle money wisely. Many young people are unaware of the financial responsibilities that come with standing on their own two feet and it is therefore necessary to provide them with the right tools and knowledge.
+
+The concept behind my media product is an app called Visional, which helps young people manage their money. The app offers comprehensive budgeting and spending tracking, educational resources, goal setting and an AI chatbot to answer questions.
+
+My target audience is young people aged between 18 and 24 who want an independent and financial future. I chose this target group because they are at a critical time in their lives and this period can determine their financial future. Visional offers them the opportunity to manage their money wisely and guide them towards financial independence.
+
+### Expo URL
 
 <a href="exp://exp.host/@keanovc/bachelor-thesis" target="_blank">exp://exp.host/@keanovc/bachelor-thesis</a>
 
     
 ### User
 
-    Email: oliviadore@gmail.com	
-    Password: olivia123
-
-
-### Realtor
-
-    Email: realtor@gmail.com
-    Password: realtor123
-
-
-### Admin
-
-    Email: admin@gmail.com
-    Password: admin123
+    Email: test@gmail.com
+    password: test1234
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
