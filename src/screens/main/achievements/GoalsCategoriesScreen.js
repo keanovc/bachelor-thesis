@@ -2,8 +2,8 @@ import { View, Text, SafeAreaView, ScrollView, Modal, TouchableOpacity } from 'r
 import React, { useContext, useState, useEffect } from 'react'
 import DatePicker, { getToday } from 'react-native-modern-datepicker'
 import { Ionicons } from '@expo/vector-icons'
-import { calculateDateRange } from '../../../utils/calculateDateRange'
 
+import { calculateDateRange } from '../../../utils/calculateDateRange'
 import ThemeContext from '../../../context/ThemeContext'
 import { UserContext } from '../../../context/UserContext'
 import { firebase } from '../../../config/firebase'

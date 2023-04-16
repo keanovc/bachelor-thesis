@@ -13,10 +13,8 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
-        <li><a href="#website-url">Website URL</a></li>
+        <li><a href="#website-url">Expo URL</a></li>
         <li><a href="#user">User</a></li>
-        <li><a href="#realtor">Realtor</a></li>
-        <li><a href="#admin">Admin</a></li>
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
@@ -44,10 +42,13 @@ The concept behind my media product is an app called Visional, which helps young
 
 My target audience is young people aged between 18 and 24 who want an independent and financial future. I chose this target group because they are at a critical time in their lives and this period can determine their financial future. Visional offers them the opportunity to manage their money wisely and guide them towards financial independence.
 
+<br />
+
 ### Expo URL
 
 <a href="exp://exp.host/@keanovc/bachelor-thesis" target="_blank">exp://exp.host/@keanovc/bachelor-thesis</a>
 
+<br />
     
 ### User
 
@@ -63,12 +64,17 @@ My target audience is young people aged between 18 and 24 who want an independen
 
 This list includes the tools I used to create this application. I used:
 
+* [React Native](https://reactnative.dev/)
+* [React Navigation](https://reactnavigation.org/)
 * [React](https://reactjs.org/)
-* [Typescript](https://www.typescriptlang.org/)
-* [Tailwind](https://tailwindcss.com/)
-* [Sass](https://sass-lang.com/)
-* [React Icons](https://react-icons.github.io/react-icons/)
-* [React Router](https://reacttraining.com/react-router/)
+* [Tailwind CSS](https://tailwindcss.com/)
+* [Expo](https://expo.io/)
+* [Firebase](https://firebase.google.com/)
+* [Ionicons](https://ionicons.com/)
+* [Icons8](https://icons8.com/)
+* [Open AI API](https://platform.openai.com/docs/api-reference)
+* [Rapid API](https://rapidapi.com/)
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -83,13 +89,32 @@ To get a local copy up and running follow these simple example steps.
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/gdmgent-2122-mobdev2/eindopdracht-keanovc.git
+   git clone https://github.com/keanovc/bachelor-thesis.git
    ```
 2. Change to the directory
     ```sh
-    cd eindopdracht-keanovc
+    cd bachelor-thesis
     ```
 
 3. Install NPM packages
    ```sh
-... (32 regels over)
+   npx expo install
+    ```
+
+4. Fill in the .env files
+
+5. Run the app
+    ```sh
+    npx expo start
+    ```
+
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+
+
+## Author
+
+Keano Van Cuyck - [@keanovancuyck](https://www.linkedin.com/in/keano-van-cuyck-8696441bb/) - keanvanc@student.arteveldehs.be
+
+<p align="right">(<a href="#top">back to top</a>)</p>
