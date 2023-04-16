@@ -35,7 +35,7 @@
 ## About The Project
 
 <p align="center">
-  <img src="./assets/images/preview.png" alt="Preview" width="100%">
+  <img src="./assets/images/preview.png" alt="Preview" width="400px">
 </p>
 
 ### Website URL
