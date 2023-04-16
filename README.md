@@ -102,7 +102,7 @@ To get a local copy up and running follow these simple example steps.
 
 3. Install NPM packages
    ```sh
-   npx expo install
+   npm install
     ```
 
 4. Fill in the .env files

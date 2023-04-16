@@ -28,7 +28,7 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
     const [showEndDate, setShowEndDate] = useState(false)
 
     const createBudget = () => {
-        if (startDate > endDate) {
+        if (monthly && startDate > endDate) {
             Alert.alert(
                 "Error",
                 "Start date cannot be greater than end date",
@@ -77,7 +77,7 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
     }
 
     const editBudget = () => {
-        if (startDate > endDate) {
+        if (monthly && startDate > endDate) {
             Alert.alert(
                 "Error",
                 "Start date cannot be greater than end date",
@@ -325,7 +325,7 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
                                         style={{ backgroundColor: theme.input }}
                                     >
                                         <Text className="text-md" style={{ fontFamily: "Montserrat-Medium", color: theme.text }}>
-                                            {endDate ? endDate : "End Date"}
+                                            {endDate ? endDate : "Select"}
                                         </Text>
                                     </TouchableOpacity>
                                 </View>
