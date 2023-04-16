@@ -36,11 +36,13 @@
   <img src="./assets/images/preview.png" alt="Preview" width="400px">
 </p>
 
-The topic of financial independence is relevant because it is becoming increasingly important to handle money wisely. Many young people are unaware of the financial responsibilities that come with standing on their own two feet and it is therefore necessary to provide them with the right tools and knowledge.
+Welcome to Visional, an innovative financial management app designed to help young people achieve financial independence.
 
-The concept behind my media product is an app called Visional, which helps young people manage their money. The app offers comprehensive budgeting and spending tracking, educational resources, goal setting and an AI chatbot to answer questions.
+In today's world, it is becoming increasingly important to handle money wisely, and many young people are unaware of the financial responsibilities that come with standing on their own two feet. Our app provides the right tools and knowledge to manage money effectively, ensuring that our users can develop a strong financial foundation for a secure future.
 
-My target audience is young people aged between 18 and 24 who want an independent and financial future. I chose this target group because they are at a critical time in their lives and this period can determine their financial future. Visional offers them the opportunity to manage their money wisely and guide them towards financial independence.
+Visional offers comprehensive budgeting and spending tracking, educational resources, goal setting, and an AI chatbot to answer any questions. The app is designed specifically for young people aged between 18 and 24, providing them with the necessary guidance and support during a critical time in their lives.
+
+We believe that financial independence is achievable for everyone, regardless of their current financial situation, and we're committed to empowering young people to take control of their finances. With Visional, they can manage their money wisely and confidently, setting themselves up for a bright and secure financial future.
 
 <br />
 
