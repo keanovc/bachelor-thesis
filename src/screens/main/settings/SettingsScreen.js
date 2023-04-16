@@ -227,17 +227,6 @@ const SettingsScreen = () => {
                                 icon="card"
                             />
                         </View>
-
-                        {/* Notifications */}
-                        {/* <View>
-                            <SettingsItem
-                                title="Clear Onboarding"
-                                onPress={clearOnBoarding}
-                                iconBackgroundColor="#FFEDE0"
-                                iconColor="orange"
-                                icon="alert-circle"
-                            />
-                        </View> */}
                     </View>
 
                     {/* Help */}
