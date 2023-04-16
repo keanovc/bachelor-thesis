@@ -48,7 +48,7 @@ We believe that financial independence is achievable for everyone, regardless of
 
 ### Expo URL
 
-First install the Expo Go app on your phone. Then fill in the following URL in the app:
+First install the Expo Go app on your phone. Then fill in the following URL in the browser:
 
 <a href="exp://exp.host/@keanovc/bachelor-thesis" target="_blank">exp://exp.host/@keanovc/bachelor-thesis</a>
 

@@ -156,8 +156,8 @@ const SignUpScreen = ({ navigation }) => {
                                         value={fullname}
                                         setValue={setFullname}
                                         placeholder="Full Name"
-                                        autoCapitalize='none'
-                                        autoCompleteType='username'
+                                        autoCapitalize='words'
+                                        autoCompleteType='name'
                                         autoCorrect={false}
                                         keyboardType={'default'}
                                         login={true}

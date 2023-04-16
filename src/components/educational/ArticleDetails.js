@@ -1,8 +1,7 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text } from 'react-native'
 import React, { useContext } from 'react'
 
 import ThemeContext from '../../context/ThemeContext'
-import { checkImageUrl } from '../../utils/checkImageUrl'
 import Markdown from 'react-native-easy-markdown';
 
 const ArticleDetails = ({ article, content }) => {
