@@ -28,6 +28,22 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
     const [showEndDate, setShowEndDate] = useState(false)
 
     const createBudget = () => {
+        if (startDate > endDate) {
+            Alert.alert(
+                "Error",
+                "Start date cannot be greater than end date",
+                [
+                    {
+                        text: "OK",
+                        onPress: () => console.log("OK Pressed"),
+                        style: "cancel"
+                    }
+                ],
+                { cancelable: false }
+            )
+
+            return
+        }
         const timestamp = firebase.firestore.FieldValue.serverTimestamp()
         const data = {
             name: budgetName,
@@ -61,6 +77,22 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
     }
 
     const editBudget = () => {
+        if (startDate > endDate) {
+            Alert.alert(
+                "Error",
+                "Start date cannot be greater than end date",
+                [
+                    {
+                        text: "OK",
+                        onPress: () => console.log("OK Pressed"),
+                        style: "cancel"
+                    }
+                ],
+                { cancelable: false }
+            )
+
+            return
+        }
         const timestamp = firebase.firestore.FieldValue.serverTimestamp()
         const data = {
             name: budgetName,
@@ -250,6 +282,7 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
                             />
                         ) : showEndDate ? (
                             <DateModal
+                                startDate={startDate}
                                 selected={endDate}
                                 onDateChange={(date) => {
                                     setEndDate(date)
@@ -291,7 +324,9 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
                                         className="w-36 h-12 rounded-md flex items-center justify-center shadow-sm"
                                         style={{ backgroundColor: theme.input }}
                                     >
-                                        <Text className="text-md" style={{ fontFamily: "Montserrat-Medium", color: theme.text }}>{endDate}</Text>
+                                        <Text className="text-md" style={{ fontFamily: "Montserrat-Medium", color: theme.text }}>
+                                            {endDate ? endDate : "End Date"}
+                                        </Text>
                                     </TouchableOpacity>
                                 </View>
                             </View>
@@ -333,9 +368,9 @@ const BudgetModal = ({ category, closeModal, budget, date, loading }) => {
                         ) : (
                             <View className="flex flex-row mt-8 items-center justify-center">
                                 <TouchableOpacity 
-                                    disabled={budgetName === ""}
+                                    disabled={budgetName === "" || budgetMoney === 0 || (monthly && !endDate)}
                                     className="p-4 w-80 bg-gray-300 rounded-md"
-                                    style={{ backgroundColor: theme.primary, opacity: budgetName === "" ? 0.5 : 1 }}
+                                    style={{ backgroundColor: theme.primary, opacity: budgetName === "" || budgetMoney === 0 || (monthly && !endDate) ? 0.5 : 1 }}
                                     onPress={createBudget}
                                 >
                                     <Text className="text-center text-white" style={{ fontFamily: "Montserrat-Bold" }}>Create</Text>

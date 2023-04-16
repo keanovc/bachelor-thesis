@@ -229,7 +229,7 @@ const SettingsScreen = () => {
                         </View>
 
                         {/* Notifications */}
-                        <View>
+                        {/* <View>
                             <SettingsItem
                                 title="Clear Onboarding"
                                 onPress={clearOnBoarding}
@@ -237,7 +237,7 @@ const SettingsScreen = () => {
                                 iconColor="orange"
                                 icon="alert-circle"
                             />
-                        </View>
+                        </View> */}
                     </View>
 
                     {/* Help */}

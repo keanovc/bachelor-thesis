@@ -4,6 +4,7 @@ import DatePicker from 'react-native-modern-datepicker'
 import { useContext } from 'react'
 
 const DateModal = ({
+    startDate,
     selected,
     onDateChange,
 }) => {
@@ -30,6 +31,7 @@ const DateModal = ({
                             textDefaultColor: theme.text,
                             textHeaderColor: theme.text,
                         }}
+                        minimumDate={startDate}
                     />
                 </View>
             </View>
