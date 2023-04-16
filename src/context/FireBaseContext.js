@@ -9,15 +9,15 @@ const FireBase = {
     },
 
     createUserWithEmailAndPassword: async (user) => {
+        let profilePictureUrl = "default"
+
+        if (user.profilePicture !== undefined) {
+            const profilePicture = await FireBase.uploadProfilePicture(user.profilePicture);
+            profilePictureUrl = await profilePicture.ref.getDownloadURL();
+        }
+        
         await firebase.auth().createUserWithEmailAndPassword(user.email, user.password)
             .then(async () => {
-                let profilePictureUrl = "default"
-
-                if (user.profilePicture !== undefined) {
-                    const profilePicture = await FireBase.uploadProfilePicture(user.profilePicture);
-                    profilePictureUrl = await profilePicture.ref.getDownloadURL();
-                }
-                
                 const uid = FireBase.getCurrentUser().uid;
 
                 await firebase.firestore().collection('users').doc(uid).set({
@@ -55,9 +55,9 @@ const FireBase = {
     uploadProfilePicture: async (image) => {
         const response = await fetch(image);
         const blob = await response.blob();
-        const filename = image.substring(image.lastIndexOf('/') + 1);
+        const filename = new Date().getTime();
 
-        var ref = firebase.storage().ref().child('profilePictures/' + filename).put(blob);
+        var ref = await firebase.storage().ref().child('profilePictures/' + filename).put(blob);
         return ref;
     },
 

@@ -3,7 +3,6 @@ import React, { useContext, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import NumericInput from 'react-native-numeric-input'
 import { getToday } from 'react-native-modern-datepicker'
-import { calculateMonthAndYear } from '../../utils/calculateMonthAndYear'
 
 import ThemeContext from '../../context/ThemeContext'
 import { UserContext } from '../../context/UserContext'

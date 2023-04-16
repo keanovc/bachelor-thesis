@@ -141,7 +141,7 @@ const ProfileScreen = () => {
                                     value={fullname}
                                     setValue={setFullname}
                                     placeholder="Enter your full name"
-                                    autoCapitalize='none'
+                                    autoCapitalize='words'
                                     autoCompleteType='fullname'
                                     autoCorrect={false}
                                 />
@@ -199,6 +199,7 @@ const ProfileScreen = () => {
                                     autoCapitalize='none'
                                     autoCompleteType='email'
                                     autoCorrect={false}
+                                    keyboardType='email-address'
                                 />
                             )}
                             name="email"

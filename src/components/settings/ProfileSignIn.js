@@ -64,6 +64,7 @@ const ProfileSignIn = ({
                                     autoCapitalize='none'
                                     autoCompleteType='email'
                                     autoCorrect={false}
+                                    keyboardType='email-address'
                                 />
                             )}
                             name="email"

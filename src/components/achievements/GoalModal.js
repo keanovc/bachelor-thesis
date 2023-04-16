@@ -8,6 +8,7 @@ import Emoji from 'react-native-emoji';
 import ThemeContext from '../../context/ThemeContext'
 import { UserContext } from '../../context/UserContext'
 import { firebase } from '../../config/firebase'
+import { icons } from '../../constants/index'
 
 const GoalModal = ({ category, closeModal, goal }) => {
     const [user] = useContext(UserContext)
@@ -19,28 +20,9 @@ const GoalModal = ({ category, closeModal, goal }) => {
     const [goalName, setGoalName] = useState(goal ? goal.name : "")
     const [goalMoney, setGoalMoney] = useState(goal ? goal.money : 0)
     const [goalDate, setGoalDate] = useState(goal ? goal.date : startDate)
+    const [goalIcon, setGoalIcon] = useState(goal ? goal.icon : icons[0])
 
     const [openDateModal, setOpenDateModal] = useState(false)
-
-    const iconNames = [
-        "basketball",
-        "beer",
-        "book",
-        "bus",
-        "car",
-        "moneybag",
-        "football",
-        "video_game",
-        "gift",
-        "golf",
-        "musical_note",
-        "heart",
-        "house",
-        "ice_cream",
-        "iphone",
-    ]
-
-    const [goalIcon, setGoalIcon] = useState(goal ? goal.icon : iconNames[0])
 
     const createGoal = () => {
         const timestamp = firebase.firestore.FieldValue.serverTimestamp()
@@ -171,7 +153,7 @@ const GoalModal = ({ category, closeModal, goal }) => {
 
                     <View className="flex flex-row items-center justify-center mt-2 px-7">
                         <FlatList
-                            data={iconNames}
+                            data={icons}
                             renderItem={({ item }) => renderIcons(item)}
                             keyExtractor={item => item}
                             horizontal={true}

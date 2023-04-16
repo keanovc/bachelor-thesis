@@ -2,7 +2,6 @@ import { View, Text, TouchableOpacity, KeyboardAvoidingView, ScrollView, Image, 
 import React, { useState, useContext } from 'react'
 import { useForm, Controller } from "react-hook-form";
 import { EventRegister } from 'react-native-event-listeners'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import ThemeContext from '../../context/ThemeContext'
 import { UserContext } from '../../context/UserContext'
@@ -47,19 +46,6 @@ const SignInScreen = ({ navigation }) => {
             })
 
             EventRegister.emit('toggleTheme', userInfo.darkMode)
-
-            // await AsyncStorage.setItem('user', JSON.stringify({
-            //     isLoggedIn: true,
-            //     uid: uid,
-            //     username: userInfo.username,
-            //     fullname: userInfo.fullname,
-            //     email: userInfo.email,
-            //     symbol: userInfo.symbol,
-            //     symbolBefore: userInfo.symbolBefore,
-            //     valuta: userInfo.valuta,
-            //     profilePicture: userInfo.profilePicture,
-            //     darkMode: userInfo.darkMode,
-            // }))
         } catch (error) {
             alert(error.message)
         } finally {

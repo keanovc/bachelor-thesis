@@ -1,4 +1,4 @@
-import { View, Image, Text, TextInput, TouchableOpacity, ActivityIndicator, Platform, ScrollView, KeyboardAvoidingView, SafeAreaView } from 'react-native'
+import { View, Image, Text, TouchableOpacity, Platform, ScrollView, KeyboardAvoidingView, SafeAreaView } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
@@ -8,7 +8,6 @@ import ThemeContext from '../../context/ThemeContext'
 import { FireBaseContext } from '../../context/FireBaseContext'
 import { UserContext } from '../../context/UserContext'
 import { AuthInputField, LargeButton } from '../../components/index'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignUpScreen = ({ navigation }) => {
     const theme = useContext(ThemeContext)
@@ -91,21 +90,8 @@ const SignUpScreen = ({ navigation }) => {
                 profilePicture: userInfo.profilePicture,
                 isLoggedIn: true
             })
-
-            // await AsyncStorage.setItem('user', JSON.stringify({
-            //     isLoggedIn: true,
-            //     uid: uid,
-            //     username: userInfo.username,
-            //     fullname: userInfo.fullname,
-            //     email: userInfo.email,
-            //     symbol: userInfo.symbol,
-            //     symbolBefore: userInfo.symbolBefore,
-            //     valuta: userInfo.valuta,
-            //     profilePicture: userInfo.profilePicture,
-            //     darkMode: userInfo.darkMode,
-            // }))
         } catch (error) {
-            alert(error.message)
+            console.log(error.message)
         } finally {
             setLoading(false)
         }
